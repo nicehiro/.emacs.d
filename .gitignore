@@ -1,2 +1,5 @@
 /epkgs/
 *~
+eln-cache/
+transient/
+var/
