@@ -3,3 +3,5 @@
 eln-cache/
 transient/
 var/
+.DS_Store
+librime/

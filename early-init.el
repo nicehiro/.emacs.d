@@ -1,4 +1,4 @@
-;;; early-init.el --- earliest birds
+;;; early-init.el --- earliest birds  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -15,11 +15,10 @@
 
 
 ;;; Font setting
-
 (defvar font-list
   (cond
    ((eq system-type 'darwin)
-    '(("SF Mono" . 16) ("Monaco" . 16) ("Menlo" . 16)))
+    '(("Iosevka" . 16) ("Roboto Mono" . 16) ("Operator Mono SSm" . 16) ("SF Mono" . 16) ("Monaco" . 16) ("Menlo" . 16)))
    ((eq system-type 'windows-nt)
     '(("SF Mono" . 16) ("Consolas" . 16) ("Cascadia Mono" . 16)))
    (t
@@ -70,4 +69,4 @@
   (add-hook 'after-init-hook fn))
 
 ;;; End:
-;;; Early-Init.el ends here
+;;; early-init.el ends here

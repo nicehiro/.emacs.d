@@ -86,6 +86,9 @@
 [submodule "git-timemachine"]
 	path = lib/git-timemachine
 	url = git@gitlab.com:pidu/git-timemachine.git
+[submodule "go-translate"]
+	path = lib/go-translate
+	url = git@github.com:lorniu/go-translate.git
 [submodule "highlight-escape-sequences"]
 	path = lib/highlight-escape-sequences
 	url = git@github.com:dgutov/highlight-escape-sequences.git
@@ -101,6 +104,9 @@
 [submodule "marginalia"]
 	path = lib/marginalia
 	url = git@github.com:minad/marginalia.git
+[submodule "minions"]
+	path = lib/minions
+	url = git@github.com:tarsius/minions.git
 [submodule "move-dup"]
 	path = lib/move-dup
 	url = git@github.com:wyuenho/move-dup.git
@@ -116,6 +122,9 @@
 [submodule "parsebib"]
 	path = lib/parsebib
 	url = git@github.com:joostkremers/parsebib.git
+[submodule "posframe"]
+	path = lib/posframe
+	url = git@github.com:tumashu/posframe.git
 [submodule "pyvenv"]
 	path = lib/pyvenv
 	url = git@github.com:jorgenschaefer/pyvenv.git
@@ -125,6 +134,12 @@
 [submodule "rainbow-delimiters"]
 	path = lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git
+[submodule "rainbow-identifiers"]
+	path = lib/rainbow-identifiers
+	url = git@github.com:Fanael/rainbow-identifiers.git
+[submodule "recursion-indicator"]
+	path = lib/recursion-indicator
+	url = git@github.com:minad/recursion-indicator.git
 [submodule "rime"]
 	path = lib/rime
 	url = git@github.com:DogLooksGood/emacs-rime.git
@@ -137,12 +152,18 @@
 [submodule "switch-window"]
 	path = lib/switch-window
 	url = git@github.com:dimitri/switch-window.git
+[submodule "telega"]
+	path = lib/telega
+	url = git@github.com:zevlg/telega.el.git
 [submodule "tempel"]
 	path = lib/tempel
 	url = git@github.com:minad/tempel.git
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git
+[submodule "valign"]
+	path = lib/valign
+	url = git@github.com:casouri/valign.git
 [submodule "vertico"]
 	path = lib/vertico
 	url = git@github.com:minad/vertico.git
