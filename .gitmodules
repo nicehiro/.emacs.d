@@ -4,6 +4,9 @@
 [submodule "all-the-icons"]
 	path = lib/all-the-icons
 	url = git@github.com:domtronn/all-the-icons.el.git
+[submodule "async"]
+	path = lib/async
+	url = git@github.com:jwiegley/emacs-async.git
 [submodule "auctex"]
 	path = lib/auctex
 	url = git@github.com:emacsmirror/auctex.git
@@ -52,6 +55,12 @@
 [submodule "diredfl"]
 	path = lib/diredfl
 	url = git@github.com:purcell/diredfl.git
+[submodule "doom-modeline"]
+	path = lib/doom-modeline
+	url = git@github.com:seagle0128/doom-modeline.git
+[submodule "doom-themes"]
+	path = lib/doom-themes
+	url = git@github.com:doomemacs/themes.git
 [submodule "emacsql"]
 	path = lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
@@ -59,6 +68,9 @@
 [submodule "embark"]
 	path = lib/embark
 	url = git@github.com:oantolin/embark.git
+[submodule "envrc"]
+	path = lib/envrc
+	url = git@github.com:purcell/envrc.git
 [submodule "epkg"]
 	path = lib/epkg
 	url = git@github.com:emacscollective/epkg.git
@@ -80,6 +92,9 @@
 [submodule "flyspell-correct"]
 	path = lib/flyspell-correct
 	url = git@github.com:d12frosted/flyspell-correct.git
+[submodule "ghub"]
+	path = lib/ghub
+	url = git@github.com:magit/ghub.git
 [submodule "git-link"]
 	path = lib/git-link
 	url = git@github.com:sshaw/git-link.git
@@ -95,18 +110,30 @@
 [submodule "highlight-quoted"]
 	path = lib/highlight-quoted
 	url = git@github.com:Fanael/highlight-quoted.git
+[submodule "inheritenv"]
+	path = lib/inheritenv
+	url = git@github.com:purcell/inheritenv.git
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = https://github.com/jdtsmith/kind-icon
+[submodule "lib/ef-themes"]
+	path = lib/ef-themes
+	url = git@github.com:protesilaos/ef-themes.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git
 [submodule "marginalia"]
 	path = lib/marginalia
 	url = git@github.com:minad/marginalia.git
+[submodule "markdown-mode"]
+	path = lib/markdown-mode
+	url = git@github.com:jrblevin/markdown-mode.git
 [submodule "minions"]
 	path = lib/minions
 	url = git@github.com:tarsius/minions.git
+[submodule "modus-themes"]
+	path = lib/modus-themes
+	url = git@github.com:emacsmirror/modus-themes.git
 [submodule "move-dup"]
 	path = lib/move-dup
 	url = git@github.com:wyuenho/move-dup.git
@@ -116,9 +143,24 @@
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
+[submodule "org-bars"]
+	path = lib/org-bars
+	url = git@github.com:tonyaldon/org-bars.git
+[submodule "org-download"]
+	path = lib/org-download
+	url = git@github.com:abo-abo/org-download.git
+[submodule "org-modern"]
+	path = lib/org-modern
+	url = git@github.com:minad/org-modern.git
 [submodule "org-roam"]
 	path = lib/org-roam
 	url = git@github.com:org-roam/org-roam.git
+[submodule "org-roam-server"]
+	path = lib/org-roam-server
+	url = git@github.com:emacsattic/org-roam-server.git
+[submodule "org-roam-ui"]
+	path = lib/org-roam-ui
+	url = git@github.com:org-roam/org-roam-ui.git
 [submodule "parsebib"]
 	path = lib/parsebib
 	url = git@github.com:joostkremers/parsebib.git
@@ -146,6 +188,12 @@
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git
+[submodule "shrink-path"]
+	path = lib/shrink-path
+	url = git@gitlab.com:bennya/shrink-path.el.git
+[submodule "simple-httpd"]
+	path = lib/simple-httpd
+	url = git@github.com:skeeto/emacs-web-server.git
 [submodule "super-save"]
 	path = lib/super-save
 	url = git@github.com:bbatsov/super-save.git
@@ -158,6 +206,15 @@
 [submodule "tempel"]
 	path = lib/tempel
 	url = git@github.com:minad/tempel.git
+[submodule "tree-sitter"]
+	path = lib/tree-sitter
+	url = git@github.com:emacs-tree-sitter/elisp-tree-sitter.git
+[submodule "tree-sitter-langs"]
+	path = lib/tree-sitter-langs
+	url = git@github.com:emacs-tree-sitter/tree-sitter-langs.git
+[submodule "treepy"]
+	path = lib/treepy
+	url = git@github.com:volrath/treepy.el.git
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git
@@ -170,6 +227,12 @@
 [submodule "visual-fill-column"]
 	path = lib/visual-fill-column
 	url = https://codeberg.org/joostkremers/visual-fill-column.git
+[submodule "vterm"]
+	path = lib/vterm
+	url = git@github.com:akermu/emacs-libvterm.git
+[submodule "websocket"]
+	path = lib/websocket
+	url = git@github.com:ahyatt/emacs-websocket.git
 [submodule "which-key"]
 	path = lib/which-key
 	url = git@github.com:justbur/emacs-which-key.git
