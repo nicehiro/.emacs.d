@@ -18,7 +18,7 @@
 (defvar font-list
   (cond
    ((eq system-type 'darwin)
-    '(("Iosevka" . 16) ("Roboto Mono" . 16) ("Operator Mono SSm" . 16) ("SF Mono" . 16) ("Monaco" . 16) ("Menlo" . 16)))
+    '(("Iosevka" . 16) ("Roboto Mono" . 16) ("Operator Mono SSm" . 16) ("SF Mono" . 16) ("Monaco" . 16) ("Menlo" . 16) ("Hack" . 16)))
    ((eq system-type 'windows-nt)
     '(("SF Mono" . 16) ("Consolas" . 16) ("Cascadia Mono" . 16)))
    (t

@@ -42,13 +42,16 @@
   (setq use-package-compute-statistics t)
   (require 'use-package))
 
+(use-package epkg)
+
 (use-package no-littering)
 
 (use-package custom
   :config
   (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
-    (load custom-file)))
+    (load custom-file))
+  (setq enable-local-variables :all))
 
 (progn ; `ns-win'
   (when *is-a-mac*
@@ -88,40 +91,38 @@
 
 ;;; Theme
 
-(use-package color-theme-sanityinc-tomorrow
-  :hook (after-init . reapply-themes)
-  :bind ("C-c t b" . sanityinc-tomorrow-themes-toggle)
-  :custom
-  (custom-safe-themes t)
-  (custom-enabled-themes '(sanityinc-tomorrow-night))
-  :preface
-  (defun reapply-themes ()
-    "Forcibly load the themes listed in `custom-enabled-themes'."
-    (dolist (theme custom-enabled-themes)
-      (unless (custom-theme-p theme)
-        (load-theme theme)))
-    (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+(use-package modus-themes
+  :ensure
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-region '(bg-only no-extend))
 
-  (defun light ()
-    "Activate a light color theme."
-    (interactive)
-    (setq custom-enabled-themes '(sanityinc-tomorrow-day))
-    (reapply-themes))
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
+  :config
+  ;; Load the theme of your choice:
+  ;; (modus-themes-load-operandi) ;; OR (modus-themes-load-vivendi)
+  :bind ("<f5>" . modus-themes-toggle))
 
-  (defun dark ()
-    "Activate a dark color theme."
-    (interactive)
-    (setq custom-enabled-themes '(sanityinc-tomorrow-night))
-    (reapply-themes))
+(use-package ef-themes
+  :load-path "lib/ef-themes/"
+  :config
+  ;; Disable all other themes to avoid awkward blending:
+  (mapc #'disable-theme custom-enabled-themes)
 
-  (defun sanityinc-tomorrow-themes-toggle ()
-    "Toggle between `sanityinc-tomorrow-bright' and `sanityinc-tomorrow-day'."
-    (interactive)
-    (if (eq (car custom-enabled-themes) 'sanityinc-tomorrow-night)
-        (light)
-      (dark))
-    (if (featurep 'kind-icon)
-        (kind-icon-reset-cache))))
+  ;; Load the theme of choice:
+  (load-theme 'ef-spring :no-confirm)
+
+  ;; The themes we provide:
+  ;;
+  ;; Light: `ef-day', `ef-light', `ef-spring', `ef-summer'.
+  ;; Dark:  `ef-autumn', `ef-dark', `ef-night', `ef-winter'.
+  ;;
+  ;; Also those which are optimized for deuteranopia (red-green color
+  ;; deficiency): `ef-deuteranopia-dark', `ef-deuteranopia-light'.
+  )
 
 ;;; Dired mode
 
@@ -199,39 +200,25 @@
 
 (progn ; `modeline'
   (setq mode-line-percent-position '(-3 "%p"))
-  (setq mode-line-position-column-line-format '(" %l,%c")) ; Emacs 28
-  (defun mode-line-evil ()
-    "Evil state info for modeline."
-    (upcase (symbol-name (symbol-value 'evil-state))))
-  (defun mode-line-right ()
-    "Modeline right info."
-    (let* ((rhs '((:eval mode-name)
-                  "  "
-                  (:eval (vc-git-branches))
-                  (:eval mode-line-end-spaces)))
-           (rhs-str (format-mode-line rhs))
-           (rhs-w (string-width rhs-str)))
-      (format "%s%s"
-              (propertize " " 'display `((space :align-to (- (+ right right-fringe right-margin) (+ 3 ,rhs-w)))))
-              rhs-str)))
+  (setq mode-line-position-column-line-format '(" %l,%c"))
+  (setq mode-line-compact nil)
   (setq-default mode-line-format
                 '("%e"
                   mode-line-front-space
-                  "✎ "
-                  (:eval (when (fboundp 'rime-lighter) (rime-lighter)))
-                  " "
-                  (:eval (mode-line-evil))
-                  "  "
-                  ;; mode-line-evil
-                  ;; mode-line-modified
-                  ;; mode-line-remote
-                  ;; mode-line-frame-identification
+                  mode-line-mule-info
+                  mode-line-client
+                  mode-line-modified
+                  mode-line-remote
+                  mode-line-frame-identification
                   mode-line-buffer-identification
                   "  "
                   mode-line-position
+                  mode-line-modes
+                  "  "
+                  (vc-mode vc-mode)
+                  "  "
                   mode-line-misc-info
-                  (:eval (mode-line-right))
-                  )))
+                  mode-line-end-spaces)))
 
 (use-package minions
   :config
@@ -287,11 +274,14 @@
   (orderless-component-separator #'orderless-escapable-split-on-space))
 
 (use-package vertico
+  :demand t
   :custom (vertico-cycle t)
   :config (vertico-mode))
 
 (use-package vertico-directory
   :load-path "lib/vertico/extensions"
+  :after vertico
+  :demand t
   :bind
   (:map
    vertico-map
@@ -772,6 +762,8 @@ Call a second time to restore the original window configuration."
   (org-src-fontify-natively t)
   (org-src-preserve-indentation t)
   (org-src-tab-acts-natively t)
+  (org-indent-mode t)
+  (org-image-actual-width nil) ;; set this first for #+attr_org :width works
   :config
   ;; org latex code render size
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
@@ -793,6 +785,7 @@ Call a second time to restore the original window configuration."
   (setq org-agenda-start-on-weekday nil)
   (setq org-deadline-warning-days 14)
   (setq org-use-speed-commands t)
+  (setq org-agenda-start-day "+0d")
   (setq org-todo-keywords
         '(
           (sequence "IDEA(i)" "TODO(t)" "STARTED(s)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
@@ -812,6 +805,11 @@ Call a second time to restore the original window configuration."
             (agenda ""
                     ((org-agenda-overriding-header "Today's agenda")
                      (org-agenda-span 'day)
+                     (org-agenda-toggle-deadlines)))
+            (agenda ""
+                    ((org-agenda-overriding-header "Future's agenda(One week)")
+                     (org-agenda-start-day "+1d")
+                     (org-agenda-span 7)
                      (org-agenda-toggle-deadlines)))
             (todo "READ"
                   ((org-agenda-overriding-header "Reading List:")))
@@ -842,7 +840,7 @@ Call a second time to restore the original window configuration."
 
   ;; Babel
   (org-babel-do-load-languages
-   'org-babel-load-languages
+   'org-babel-load-languags
    `((emacs-lisp . t)
      (haskell . nil)))
   (defun my/org-babel-execute-src-block (&optional _arg info _params)
@@ -874,9 +872,52 @@ Call a second time to restore the original window configuration."
                              template-file))
       (message "Convert finish: %s" docx-file))))
 
-(use-package valign
+(use-package appt ;; appointment for org agenda
   :config
-  (setq valign-fancy-bar t))
+  (defun hiro/notify (title msg)
+    "Send notification with `msg' and `title'."
+    (ns-do-applescript (format "display notification \"%s\" with title \"%s\""
+                               msg title)))
+
+  (setq appt-time-msg-list nil    ;; clear existing appt list
+        appt-display-interval '5  ;; warn every 5 minutes from t - appt-message-warning-time
+        appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
+        appt-display-mode-line t     ;; don't show in the modeline
+        appt-display-format 'window)   ;; pass warnings to the designated window function
+
+  (defun hiro/appt-display-native (min-to-app new-time msg)
+    (hiro/notify
+     (format "Appointment in %s minutes" min-to-app) ; Title
+     (format "%s" msg)))
+
+  (setq appt-disp-window-function (function hiro/appt-display-native))
+  (appt-activate 1)                ;; activate appointment notification
+
+  ;; Agenda-to-appointent hooks
+  (org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
+  (run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
+  (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
+  )
+
+(use-package org-download
+  :config
+  ;; Drag-and-drop to `dired`
+  (add-hook 'dired-mode-hook 'org-download-enable))
+
+(use-package markdown-mode
+  :mode (("\\.md\\.html\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode)))
+
+(use-package org-modern
+  :config
+  (global-org-modern-mode))
+
+(use-package org-bars
+  :hook (org-mode . org-bars-mode)
+  :config
+  (setq org-bars-stars '(:empty "◉"
+                                :invisible "▶"
+                                :visible "▼")))
 
 (use-package writeroom-mode
   :hook (org-mode . prose-mode)
@@ -885,9 +926,9 @@ Call a second time to restore the original window configuration."
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
-This enables or modifies a number of settings so that the
-experience of editing prose is a little more like that of a
-typical word processor."
+    This enables or modifies a number of settings so that the
+    experience of editing prose is a little more like that of a
+    typical word processor."
     :init-value nil :lighter " Prose" :keymap nil
     (if prose-mode
         (progn
@@ -920,6 +961,46 @@ typical word processor."
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0)))))
 
+;;; Blog writing
+(use-package org-static-blog
+  :load-path "lib/org-static-blog"
+  :config
+  (require 'oc-csl)
+  (setq org-static-blog-publish-title "Fangyuan's Blog")
+  (setq org-static-blog-publish-url "https://nicehiro.github.io")
+  (setq org-static-blog-publish-directory "~/Projects/blog/")
+  (setq org-static-blog-posts-directory "~/Projects/blog/posts/")
+  (setq org-static-blog-drafts-directory "~/Projects/blog/drafts/")
+  (setq org-export-with-toc nil)
+  (setq org-export-with-section-numbers t)
+  (setq org-static-blog-index-length 5)
+  (setq org-static-blog-enable-tags t)
+  (setq org-static-blog-use-preview t)
+
+  (setq org-static-blog-page-header
+        "<meta name=\"author\" content=\"Fangyuan\">
+    <meta name=\"referrer\" content=\"no-referrer\">
+    <link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />
+    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.15.4/css/solid.css\" integrity=\"sha384-Tv5i09RULyHKMwX0E8wJUqSOaXlyu3SQxORObAI08iUwIalMmN5L6AvlPX2LMoSE\" crossorigin=\"anonymous\"/>
+    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.15.4/css/fontawesome.css\" integrity=\"sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7\" crossorigin=\"anonymous\"/>
+    <link rel=\"icon\" href=\"static/favicon.ico\">")
+
+  (setq org-static-blog-page-preamble
+        "<div>
+    <a href=\"https://nicehiro.github.io\">Fangyuan's Blog</a>
+    ◌
+    <a href=\"archive.html\">Archive</a>
+    ◌
+    <a href=\"about.html\">About</a>
+    ◌
+    <a href=\"rss.xml\">RSS</a>
+    </div>")
+
+  (setq org-static-blog-page-postamble
+        "<div id=blog-tail><center><span>Powered by Org-mode and Emacs</center></div>"))
+
+;;; Note taking
+
 (use-package org-roam
   :diminish
   :bind (("C-c n a" . org-id-get-create)
@@ -947,9 +1028,14 @@ typical word processor."
                  (window-width . 0.33)
                  (window-height . fit-window-to-buffer))))
 
-(use-package markdown-mode
-  :mode (("\\.md\\.html\\'" . markdown-mode)
-         ("README\\.md\\'" . gfm-mode)))
+(use-package org-roam-dailies
+  :load-path "lib/org-roam/extensions/")
+
+(use-package org-roam-ui)
+
+;;; Terminal config
+
+(use-package vterm)
 
 ;;; Programming languages support
 
@@ -959,9 +1045,9 @@ typical word processor."
   :config
   (setq initial-scratch-message
         (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n"
-                ";; stay hungry, stay foolish\n"
-                ";; write more, but shorter\n"
-                ";; no day but toady\n\n"))
+    ";; stay hungry, stay foolish\n"
+    ";; write more, but shorter\n"
+    ";; no day but toady\n\n"))
   :preface
   (defun sanityinc/maybe-set-bundled-elisp-readonly ()
     "If this elisp appears to be part of Emacs, then disallow editing."
@@ -989,13 +1075,14 @@ typical word processor."
 (use-package pyvenv
   :hook (python-mode . pyvenv-mode)
   :config
-  (setq pyvenv-post-activate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter
-                      (concat pyvenv-virtual-env
-                              (if (eq system-type 'windows-nt)
-                                  "scripts/python"
-                                "bin/python")))))))
+  (setenv "WORKON_HOME" "/usr/local/Caskroom/miniconda/base/envs/")
+  (add-hook 'pyvenv-post-activate-hooks
+            (lambda ()
+              (setq python-shell-interpreter
+                    (concat pyvenv-virtual-env
+                            (if (eq system-type 'windows-nt)
+                                "scripts/python"
+                              "bin/python"))))))
 
 ;;; Scitific research config
 
@@ -1105,6 +1192,17 @@ and download pdf to user-specified directory."
         bibtex-files hiro/bib-libraries
         org-ref-bibtex-hydra-key-binding (kbd "H-b"))
   (define-key bibtex-mode-map (kbd "H-b") 'org-ref-bibtex-hydra/body))
+
+;;; LSP config
+
+
+;;; Treesitter
+
+;; (use-package tree-sitter
+;;   :config
+;;   (global-tree-sitter-mode))
+
+;; (use-package tree-sitter-langs)
 
 ;;; Miscellaneous config
 

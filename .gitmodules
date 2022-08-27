@@ -1,6 +1,9 @@
 [submodule "aggressive-indent"]
 	path = lib/aggressive-indent
 	url = git@github.com:Malabarba/aggressive-indent-mode.git
+[submodule "alert"]
+	path = lib/alert
+	url = git@github.com:jwiegley/alert.git
 [submodule "all-the-icons"]
 	path = lib/all-the-icons
 	url = git@github.com:domtronn/all-the-icons.el.git
@@ -119,6 +122,9 @@
 [submodule "lib/ef-themes"]
 	path = lib/ef-themes
 	url = git@github.com:protesilaos/ef-themes.git
+[submodule "lib/org-static-blog"]
+	path = lib/org-static-blog
+	url = git@github.com:nicehiro/org-static-blog.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git
@@ -152,6 +158,9 @@
 [submodule "org-modern"]
 	path = lib/org-modern
 	url = git@github.com:minad/org-modern.git
+[submodule "org-notify"]
+	path = lib/org-notify
+	url = git@github.com:p-m/org-notify.git
 [submodule "org-roam"]
 	path = lib/org-roam
 	url = git@github.com:org-roam/org-roam.git

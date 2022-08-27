@@ -5,3 +5,5 @@ transient/
 var/
 .DS_Store
 librime/
+elpa/
+etc/

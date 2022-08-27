@@ -2,16 +2,6 @@
 ;;; Commentary
 ;;; Code:
 
-;;; Telegram
-
-(use-package telega
-  :config
-  (setq telega-proxies
-        (list
-         '(:server "127.0.0.1" :port 7890 :enable t
-                   :type (:@type "proxyTypeSocks5"))
-         )))
-
 ;;; Proxy
 
 (use-package url
@@ -30,6 +20,7 @@
               ("https" . "127.0.0.1:7890")
               ("no_proxy" . "0.0.0.0"))))))
   (chunyang-toggle-url-proxy))
+
 
 (provide 'private)
 ;;; private.el ends here
