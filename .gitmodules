@@ -1,9 +1,6 @@
 [submodule "aggressive-indent"]
 	path = lib/aggressive-indent
 	url = git@github.com:Malabarba/aggressive-indent-mode.git
-[submodule "alert"]
-	path = lib/alert
-	url = git@github.com:jwiegley/alert.git
 [submodule "all-the-icons"]
 	path = lib/all-the-icons
 	url = git@github.com:domtronn/all-the-icons.el.git
@@ -158,9 +155,6 @@
 [submodule "org-modern"]
 	path = lib/org-modern
 	url = git@github.com:minad/org-modern.git
-[submodule "org-notify"]
-	path = lib/org-notify
-	url = git@github.com:p-m/org-notify.git
 [submodule "org-roam"]
 	path = lib/org-roam
 	url = git@github.com:org-roam/org-roam.git
