@@ -19,7 +19,8 @@
             '(("http" . "127.0.0.1:7890")
               ("https" . "127.0.0.1:7890")
               ("no_proxy" . "0.0.0.0"))))))
-  (chunyang-toggle-url-proxy))
+  ;; (chunyang-toggle-url-proxy)
+  )
 
 
 (provide 'private)

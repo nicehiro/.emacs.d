@@ -29,7 +29,8 @@
     (scroll-bar-mode 0))
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode 0))
-  (menu-bar-mode 1))
+  (menu-bar-mode 1)
+  (toggle-debug-on-error))
 
 (eval-and-compile ; `borg'
   (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
@@ -69,25 +70,48 @@
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
-(progn ; `font'
-  (defun hiro/larger-font ()
-    "Larger font."
+(progn ; `fontset'
+  (defun font-installed-p (font)
+    "Check if the FONT is available."
+    (find-font (font-spec :name font)))
+
+  (defun change-font ()
+    "Change the font of frame from an available `font-list'."
     (interactive)
-    (if-let ((size (--find (> it hiro-font-size) hiro-font-sizes)))
-        (progn (setq hiro-font-size size)
-               (hiro-load-font)
-               (message "Font size: %s" hiro-font-size))
-      (message "Using largest font")))
-  (defun hiro/smaller-font ()
-    "Smaller font."
-    (interactive)
-    (if-let ((size (--find (< it hiro-font-size) (reverse hiro-font-sizes))))
-        (progn (setq hiro-font-size size)
-               (hiro-load-font)
-               (message "Font size: %s" hiro-font-size))
-      (message "Using smallest font")))
-  (global-set-key (kbd "M-+") 'hiro/larger-font)
-  (global-set-key (kbd "M--") 'hiro/smaller-font))
+    (let* (available-fonts font-name font-size font-set)
+      (dolist (font font-list (setq available-fonts (nreverse available-fonts)))
+        (when (font-installed-p (car font))
+          (push font available-fonts)))
+      (if (not available-fonts)
+          (message "No fonts from the chosen set are available")
+        (if (called-interactively-p 'interactive)
+            (let* ((chosen (assoc-string (completing-read "What font to use? " available-fonts nil t)
+                                         available-fonts)))
+              (setq font-name (car chosen) font-size (read-number "Font size: " (cdr chosen))))
+          (setq font-name (caar available-fonts) font-size (cdar available-fonts)))
+        (setq font-set (format "%s-%d" font-name font-size))
+        (set-frame-font font-set nil t)
+        (add-to-list 'default-frame-alist (cons 'font font-set)))))
+
+  (when window-system
+    (change-font)
+    (cl-loop for font in '("Microsoft Yahei" "PingFang SC" "Noto Sans Mono CJK SC")
+             when (font-installed-p font)
+             return (dolist (charset '(kana han hangul cjk-misc bopomofo))
+                      (set-fontset-font t charset font)))
+    (cl-loop for font in '("Segoe UI Emoji" "Apple Color Emoji" "Noto Color Emoji")
+             when (font-installed-p font)
+             return (set-fontset-font t 'unicode font nil 'append))
+    (dolist (font '("HanaMinA" "HanaMinB"))
+      (when (font-installed-p font)
+        (set-fontset-font t 'unicode font nil 'append)))))
+
+;; Change global font size easily
+
+(use-package default-text-scale
+  :bind (("C-M-=" . default-text-scale-increase)
+         ("C-M--" . default-text-scale-decrease)
+         ("C-M-0" . default-text-scale-reset)))
 
 ;;; Theme
 
@@ -110,10 +134,10 @@
   :load-path "lib/ef-themes/"
   :config
   ;; Disable all other themes to avoid awkward blending:
-  (mapc #'disable-theme custom-enabled-themes)
+  ;; (mapc #'disable-theme custom-enabled-themes)
 
   ;; Load the theme of choice:
-  (load-theme 'ef-spring :no-confirm)
+  ;; (load-theme 'ef-spring :no-confirm)
 
   ;; The themes we provide:
   ;;
@@ -123,6 +147,14 @@
   ;; Also those which are optimized for deuteranopia (red-green color
   ;; deficiency): `ef-deuteranopia-dark', `ef-deuteranopia-light'.
   )
+
+(defun hiro/disable-themes ()
+  "Disable all enabled themes."
+  (mapc #'disable-theme custom-enabled-themes))
+
+(defadvice load-theme (before disable-themes-first activate)
+  "Load theme after disbale all other loaded themes."
+  (hiro/disable-themes))
 
 ;;; Dired mode
 
@@ -161,40 +193,6 @@
   :hook (emacs-lisp-mode . flymake-mode)
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
-
-;;; vim bindings
-
-(use-package evil
-  :init
-  (setq evil-want-C-d-scroll t)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-mode-line-format nil)
-  :bind (:map
-	 evil-insert-state-map
-	 ("C-n" . nil)
-	 ("C-p" . nil)
-	 :map
-	 evil-normal-state-map
-	 ("C-n" . nil)
-	 ("C-p" . nil))
-  :config
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (setq ns-option-modifier 'super)
-  :hook
-  ((prog-mode . evil-mode))
-  :config
-  (evil-set-initial-state 'eldoc-mode 'emacs)
-  (evil-set-initial-state 'special-mode 'emacs)
-  (evil-set-initial-state 'Info-mode 'emacs)
-  (evil-set-initial-state 'ebib-index-mode 'emacs)
-  (evil-set-initial-state 'ebib-entry-mode 'emacs)
-  (evil-set-initial-state 'elfeed-search-mode 'emacs)
-  (evil-set-initial-state 'elfeed-show-mode 'emacs)
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-initial-state 'telega-chat-mode 'emacs)
-  (evil-set-initial-state 'telega-root-mode 'emacs))
 
 ;;; Modeline
 
@@ -450,6 +448,7 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 (use-package tempel
+  :custom (tempel-trigger-prefix "<")
   :bind (("M-+" . tempel-complete)
          ("M-*" . tempel-insert)
          :map tempel-map
@@ -728,9 +727,7 @@ Call a second time to restore the original window configuration."
 ;;; Text editing
 
 (use-package org
-  :bind (("C-c a" . org-agenda)
-         ("C-c l" . org-store-link)
-         ("C-c c" . org-capture)
+  :bind (("C-c l" . org-store-link)
          :map org-mode-map
          ("C-c i a" . org-id-get-create)
          ("C-c e d" . org-export-docx)
@@ -744,7 +741,8 @@ Call a second time to restore the original window configuration."
          ;; I prefer C-c C-c over C-c ' (more consistent)
          ("C-c C-c" . org-edit-src-exit))
   :bind-keymap ("C-c o" . sanityinc/org-global-prefix-map)
-  :hook (org-agenda-mode . hl-line-mode)
+  :hook ((org-agenda-mode . hl-line-mode)
+         (org-mode . variable-pitch-mode))
   :custom
   (org-modules nil) ; Faster loading
   (org-log-done 'time)
@@ -775,68 +773,6 @@ Call a second time to restore the original window configuration."
               (lambda ()
                 (add-hook
                  'window-configuration-change-hook 'org-agenda-align-tags nil t))))
-  ;; Directories settings
-  (when (file-directory-p "~/Documents/gtd/")
-    (setq org-agenda-files (list "~/Documents/gtd/")))
-  (setq org-agenda-ndays 7)
-  (setq org-agenda-show-all-dates t)
-  (setq org-agenda-skip-deadline-if-done t)
-  (setq org-agenda-skip-scheduled-if-done t)
-  (setq org-agenda-start-on-weekday nil)
-  (setq org-deadline-warning-days 14)
-  (setq org-use-speed-commands t)
-  (setq org-agenda-start-day "+0d")
-  (setq org-todo-keywords
-        '(
-          (sequence "IDEA(i)" "TODO(t)" "STARTED(s)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
-          (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(f)")
-          (sequence "|" "READ(r)")
-          (sequence "|" "BLOG(b)")
-          ))
-  ;; my agenda view contains follow items:
-  ;;; Ideas
-  ;;; Day views
-  ;;; Reading list
-  ;;; Blogs
-  (setq org-agenda-custom-commands
-        '(("d" "Daily agenda and Ideas"
-           ((todo "IDEA"
-                  ((org-agenda-overriding-header "Stupid but maybe interesting IDEAs:")))
-            (agenda ""
-                    ((org-agenda-overriding-header "Today's agenda")
-                     (org-agenda-span 'day)
-                     (org-agenda-toggle-deadlines)))
-            (agenda ""
-                    ((org-agenda-overriding-header "Future's agenda(One week)")
-                     (org-agenda-start-day "+1d")
-                     (org-agenda-span 7)
-                     (org-agenda-toggle-deadlines)))
-            (todo "READ"
-                  ((org-agenda-overriding-header "Reading List:")))
-            (todo "BLOG"
-                  ((org-agenda-overriding-header "Blogs:")))
-            ))))
-  ;; org capture
-  (setq org-capture-templates '(("i" "Idea"
-                                 entry (file+headline "~/Documents/gtd/ideas.org" "Someday/Maybe")
-                                 "* IDEA %?\nAdded: %U\n"
-                                 :prepend t
-                                 :kill-buffer t)
-                                ("t" "Todo"
-                                 entry (file+headline "~/Documents/gtd/inbox.org" "TODOs")
-                                 "* TODO %?\nAdded: %U\n"
-                                 :prepend t
-                                 :kill-buffer t)
-                                ("r" "Read"
-                                 entry (file+headline "~/Documents/gtd/read.org" "Reading List")
-                                 "* READ %?\nAdded: %U\n"
-                                 :prepend t
-                                 :kill-buffer t)
-                                ("b" "Blog"
-                                 entry (file+headline "~/Documents/gtd/blog.org" "Blogs")
-                                 "* BLOG %?\nAdded: %U\n"
-                                 :prepend t
-                                 :kill-buffer t)))
 
   ;; Babel
   (org-babel-do-load-languages
@@ -872,11 +808,85 @@ Call a second time to restore the original window configuration."
                              template-file))
       (message "Convert finish: %s" docx-file))))
 
+;;; Org agenda
+
+(use-package org-agenda
+  :bind
+  (("C-c a" . org-agenda)
+   ("C-c c" . org-capture))
+  :config
+  ;; Directories settings
+  (when (file-directory-p "~/Documents/gtd/")
+    (setq org-agenda-files (list "~/Documents/gtd/")))
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-scheduled-if-done t)
+  (setq org-agenda-start-on-weekday nil)
+  (setq org-deadline-warning-days 14)
+  (setq org-use-speed-commands t)
+  (setq org-agenda-start-day "+0d")
+  (setq org-todo-keywords
+        '(
+          (sequence "TODO(t)" "STARTED(s)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
+          (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(f)")
+          (sequence "|" "READ(r)")
+          (sequence "|" "BLOG(b)")
+          (sequence "|" "IDEA(i)")
+          ))
+
+  ;; my agenda view contains follow items:
+  ;;; Ideas
+  ;;; Day views
+  ;;; Reading list
+  ;;; Blogs
+  (defvar org-agenda-custom-commands nil
+    "Custom commands for org agenda.")
+  (setq org-agenda-custom-commands
+        '(("d" "Daily agenda and Ideas"
+           ((todo "IDEA"
+                  ((org-agenda-overriding-header "Stupid but maybe interesting IDEAs:")))
+            (agenda ""
+                    ((org-agenda-overriding-header "Today's agenda")
+                     (org-agenda-span 'day)
+                     (org-agenda-toggle-deadlines)))
+            (agenda ""
+                    ((org-agenda-overriding-header "Future's agenda(One week)")
+                     (org-agenda-start-day "+1d")
+                     (org-agenda-span 7)
+                     (org-agenda-toggle-deadlines)))
+            (todo "READ"
+                  ((org-agenda-overriding-header "Reading List:")))
+            (todo "BLOG"
+                  ((org-agenda-overriding-header "Blogs:")))))))
+  ;; org capture
+  (defvar org-capture-templates nil
+    "Org capture templates.")
+  (setq org-capture-templates '(("i" "Idea"
+                                 entry (file+headline "~/Documents/gtd/ideas.org" "Someday/Maybe")
+                                 "* IDEA %?\nAdded: %U\n"
+                                 :prepend t
+                                 :kill-buffer t)
+                                ("t" "Todo"
+                                 entry (file+headline "~/Documents/gtd/inbox.org" "TODOs")
+                                 "* TODO %?\nAdded: %U\n"
+                                 :prepend t
+                                 :kill-buffer t)
+                                ("r" "Read"
+                                 entry (file+headline "~/Documents/gtd/read.org" "Reading List")
+                                 "* READ %?\nAdded: %U\n"
+                                 :prepend t
+                                 :kill-buffer t)
+                                ("b" "Blog"
+                                 entry (file+headline "~/Documents/gtd/blog.org" "Blogs")
+                                 "* BLOG %?\nAdded: %U\n"
+                                 :prepend t
+                                 :kill-buffer t))))
+
+;; https://christiantietze.de/posts/2019/12/emacs-notifications/
 (use-package appt ;; appointment for org agenda
   :config
   (defun hiro/notify (title msg)
     "Send notification with `msg' and `title'."
-    (ns-do-applescript (format "display notification \"%s\" with title \"%s\""
+    (ns-do-applescript (format "display notification \"%s\" with title \"%s\" sound name \"Submarine\""
                                msg title)))
 
   (setq appt-time-msg-list nil    ;; clear existing appt list
@@ -899,10 +909,21 @@ Call a second time to restore the original window configuration."
   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
   )
 
+(use-package mixed-pitch
+  :hook (text-mode . mixed-pitch-mode)
+  :config
+  (set-face-attribute 'fixed-pitch nil :font "Monolisa")
+  (set-face-attribute 'variable-pitch nil :font "Monolisa"))
+
 (use-package org-download
   :config
   ;; Drag-and-drop to `dired`
-  (add-hook 'dired-mode-hook 'org-download-enable))
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (setq org-download-image-dir "~/Pictures/org-download/")
+  (setq org-download-image-org-width 400)
+  (setq org-download-image-latex-width 400)
+  (setq org-download-image-attr-list
+        '("#+attr_html: scale=0.8 :align center")))
 
 (use-package markdown-mode
   :mode (("\\.md\\.html\\'" . markdown-mode)
@@ -981,19 +1002,18 @@ Call a second time to restore the original window configuration."
         "<meta name=\"author\" content=\"Fangyuan\">
     <meta name=\"referrer\" content=\"no-referrer\">
     <link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />
-    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.15.4/css/solid.css\" integrity=\"sha384-Tv5i09RULyHKMwX0E8wJUqSOaXlyu3SQxORObAI08iUwIalMmN5L6AvlPX2LMoSE\" crossorigin=\"anonymous\"/>
-    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.15.4/css/fontawesome.css\" integrity=\"sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7\" crossorigin=\"anonymous\"/>
+    <script src=\"https://kit.fontawesome.com/4afcf67bd2.js\" crossorigin=\"anonymous\"></script>
     <link rel=\"icon\" href=\"static/favicon.ico\">")
 
   (setq org-static-blog-page-preamble
         "<div>
     <a href=\"https://nicehiro.github.io\">Fangyuan's Blog</a>
     ◌
-    <a href=\"archive.html\">Archive</a>
+    <a href=\"archive.html\"><i class=\"fa-solid fa-box-open\"></i>Archive</a>
     ◌
-    <a href=\"about.html\">About</a>
+    <a href=\"about.html\"><i class=\"fa-solid fa-address-card\"></i> About</a>
     ◌
-    <a href=\"rss.xml\">RSS</a>
+    <a href=\"rss.xml\"><i class=\"fa-solid fa-rss\"></i> RSS</a>
     </div>")
 
   (setq org-static-blog-page-postamble
@@ -1084,7 +1104,7 @@ Call a second time to restore the original window configuration."
                                 "scripts/python"
                               "bin/python"))))))
 
-;;; Scitific research config
+;;; Scientific research config
 
 (progn ; `basic-variables'
   (defconst hiro/bib-libraries '("~/Documents/research/references.bib"))
@@ -1095,6 +1115,7 @@ Call a second time to restore the original window configuration."
   (defconst hiro/main-note-library (nth 0 hiro/note-libraries)))
 
 (use-package biblio
+  :load-path "lib/biblio.el"
   :config
   (setq biblio-download-directory hiro/main-pdf-library)
   ;; extend biblio actions
@@ -1193,6 +1214,132 @@ and download pdf to user-specified directory."
         org-ref-bibtex-hydra-key-binding (kbd "H-b"))
   (define-key bibtex-mode-map (kbd "H-b") 'org-ref-bibtex-hydra/body))
 
+(use-package org-zotxt
+  :hook
+  (org-mode . org-zotxt-mode))
+
+;;; Anki
+
+(progn ; anki
+  (require 'request)
+  ;;; anki-connect default settings
+  (defvar anki-connect-host "127.0.0.1"
+    "Anki connect server host.")
+
+  (defvar anki-connect-port "8765"
+    "Anki connect server port.")
+
+  (defvar anki-deck-name "Words"
+    "Shengci in anki deck name.")
+
+;;; copied from youdao-dictionary
+  (defun hiro-region-or-word ()
+    "Return word in region or word at point."
+    (if (derived-mode-p 'pdf-view-mode)
+        (if (pdf-view-active-region-p)
+            (mapconcat 'identity (pdf-view-active-region-text) "\n"))
+      (if (use-region-p)
+          (buffer-substring-no-properties (region-beginning)
+                                          (region-end))
+        (thing-at-point 'word t))))
+
+
+  (defun hiro-htmlize-ul (elements)
+    "Htmlize ELEMENTS to <ul> element."
+    (concat "<ul>"
+            (mapconcat
+             (lambda (element) (concat "<li>" element "</li>"))
+             elements
+             "<br>")
+            "</ul>"))
+
+  (defun hiro-htmlize-anki-back (translation basic-explains web-refs)
+    (format "<h3>Translation</h3>%s<h3>Basic Explainations</h3>%s<h3>Web References</h3>%s"
+            translation
+            basic-explains
+            web-refs))
+
+;;; most of this copied from youdao-dictionary
+  (defun hiro-format-youdao-result (json)
+    "Format result in youdao-dictionary JSON."
+    (let* ((query (assoc-default 'query json))
+           (translation (assoc-default 'translation json))
+           (_errorCode (assoc-default 'errorCode json))
+           (web (assoc-default 'web json))
+           (basic (assoc-default 'basic json))
+           (phonetic (assoc-default 'phonetic basic))
+           (translation-str (hiro-htmlize-ul translation))
+           (basic-explains-str (hiro-htmlize-ul (assoc-default 'explains basic)))
+           (web-str (concat "<ul>"
+                            (mapconcat
+                             (lambda (k-v)
+                               (format "<li> %s :: %s </li>"
+                                       (assoc-default 'key k-v)
+                                       (mapconcat 'identity (assoc-default 'value k-v) "; ")))
+                             web
+                             "")
+                            "</ul>"))
+           ;; (back (concat translation-str basic-explains-str web-str)))
+           (back (hiro-htmlize-anki-back translation-str basic-explains-str web-str)))
+      (list query back)))
+
+  (defun anki-add-card (deck front back)
+    "Add anki basic card which contains FRONT and BACK elements to the DECK."
+    (let* ((req-params (list `("note" . ,(list `("deckName" . ,deck)
+                                               '("modelName" . "Basic")
+                                               `("fields" . ,(list `("Front" . ,front)
+                                                                   `("Back" . ,back)))
+                                               `("options" . ,(list '("closeAfterAdding" . t)))
+                                               `("tags" . ,(list "Emacs")))))))
+      (request (format "%s:%s" anki-connect-host anki-connect-port)
+        :type "POST"
+        :data (json-encode (list '("action" . "guiAddCards")
+                                 '("version" . 6)
+                                 `("params" . ,req-params)))
+        :headers '(("Content-Type" . "text/json"))
+        :parser 'json-read
+        :success (cl-function
+                  (lambda (&key data &allow-other-keys)
+                    (message "result: %S" (assoc-default 'result data)))))))
+
+  ;; saved for test
+  (defun anki-test (word)
+    (let* ((json (youdao-dictionary--request word))
+           (res (hiro-format-youdao-result json))
+           (front (car res))
+           (back (car (cdr res))))
+      (progn
+        (anki-add-card anki-deck-name front back)
+        )))
+
+  ;; (anki-test "anki")
+
+  (defun anki-add-current-word-card ()
+    "Add current word to anki card."
+    (interactive)
+    (let* ((word (hiro-region-or-word))
+           (json (youdao-dictionary--request word))
+           (res (hiro-format-youdao-result json))
+           (front (car res))
+           (back (car (cdr res))))
+      (anki-add-card anki-deck-name front back)))
+
+  (defun anki-add-yanked-word-card ()
+    "Add yanked word to anki card."
+    (interactive)
+    (let* ((word (current-kill 0 t))
+           (json (youdao-dictionary--request word))
+           (res (hiro-format-youdao-result json))
+           (front (car res))
+           (back (car (cdr res))))
+      (anki-add-card anki-deck-name front back)))
+
+  ;; (global-set-key (kbd "C-c u") 'anki-add-current-word-card)
+  ;; (global-set-key (kbd "C-c t") 'anki-add-yanked-word-card)
+  )
+
+
+
 ;;; LSP config
 
 
@@ -1220,7 +1367,7 @@ and download pdf to user-specified directory."
   (add-to-list 'super-save-triggers 'switch-window)
   (setq super-save-max-buffer-size 200000)
   (setq super-save-exclude '(".gpg"))
-  (setq super-save-idle-duration 1)
+  (setq super-save-idle-duration 10)
   (setq super-save-auto-save-when-idle t)
   (setq save-silently t)
   (super-save-mode 1))
@@ -1303,7 +1450,7 @@ and download pdf to user-specified directory."
                                current-input-method)
                           "Orange"
                         rime-default-cursor-color)))
-  (setq rime-disable-predicates '(rime-predicate-evil-mode-p
+  (setq rime-disable-predicates '(;; rime-predicate-evil-mode-p
                                   rime-predicate-after-alphabet-char-p
                                   rime-predicate-prog-in-code-p
                                   rime-predicate-tex-math-or-command-p
@@ -1348,6 +1495,8 @@ and download pdf to user-specified directory."
                (float-time (time-subtract (current-time)
                                           before-user-init-time))))
             t))
+
+(setq-default line-spacing 0.2)
 
 (progn ; personalize
   (let ((file (expand-file-name "private.el" user-emacs-directory)))

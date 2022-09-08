@@ -13,9 +13,6 @@
 [submodule "beacon"]
 	path = lib/beacon
 	url = git@github.com:Malabarba/beacon.git
-[submodule "biblio"]
-	path = lib/biblio
-	url = git@github.com:cpitclaudel/biblio.el.git
 [submodule "borg"]
 	path = lib/borg
 	url = git@github.com:emacscollective/borg.git
@@ -49,6 +46,12 @@
 [submodule "dash"]
 	path = lib/dash
 	url = git@github.com:magnars/dash.el.git
+[submodule "default-text-scale"]
+	path = lib/default-text-scale
+	url = git@github.com:purcell/default-text-scale.git
+[submodule "deferred"]
+	path = lib/deferred
+	url = git@github.com:kiwanami/emacs-deferred.git
 [submodule "diff-hl"]
 	path = lib/diff-hl
 	url = git@github.com:dgutov/diff-hl.git
@@ -61,6 +64,9 @@
 [submodule "doom-themes"]
 	path = lib/doom-themes
 	url = git@github.com:doomemacs/themes.git
+[submodule "emacs-zotero"]
+	path = emacs-zotero
+	url = git@gitlab.com:fvdbeek/emacs-zotero.git
 [submodule "emacsql"]
 	path = lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
@@ -116,9 +122,18 @@
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = https://github.com/jdtsmith/kind-icon
+[submodule "lib/biblio.el"]
+	path = lib/biblio.el
+	url = git@github.com:nicehiro/biblio.el.git
 [submodule "lib/ef-themes"]
 	path = lib/ef-themes
 	url = git@github.com:protesilaos/ef-themes.git
+[submodule "lib/emacs-zotero"]
+	path = lib/emacs-zotero
+	url = git@gitlab.com:fvdbeek/emacs-zotero.git
+[submodule "lib/global-interactive-emacs"]
+	path = lib/global-interactive-emacs
+	url = git@github.com:ginqi7/global-interactive-emacs.git
 [submodule "lib/org-static-blog"]
 	path = lib/org-static-blog
 	url = git@github.com:nicehiro/org-static-blog.git
@@ -134,15 +149,24 @@
 [submodule "minions"]
 	path = lib/minions
 	url = git@github.com:tarsius/minions.git
+[submodule "mixed-pitch"]
+	path = lib/mixed-pitch
+	url = git@gitlab.com:jabranham/mixed-pitch.git
 [submodule "modus-themes"]
 	path = lib/modus-themes
 	url = git@github.com:emacsmirror/modus-themes.git
 [submodule "move-dup"]
 	path = lib/move-dup
 	url = git@github.com:wyuenho/move-dup.git
+[submodule "names"]
+	path = lib/names
+	url = git@github.com:Malabarba/names.git
 [submodule "no-littering"]
 	path = lib/no-littering
 	url = git@github.com:emacscollective/no-littering.git
+[submodule "oauth"]
+	path = lib/oauth
+	url = git@github.com:psanford/emacs-oauth.git
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
@@ -185,6 +209,9 @@
 [submodule "recursion-indicator"]
 	path = lib/recursion-indicator
 	url = git@github.com:minad/recursion-indicator.git
+[submodule "request"]
+	path = lib/request
+	url = git@github.com:tkf/emacs-request.git
 [submodule "rime"]
 	path = lib/rime
 	url = git@github.com:DogLooksGood/emacs-rime.git
@@ -248,3 +275,9 @@
 [submodule "ws-butler"]
 	path = lib/ws-butler
 	url = git@github.com:lewang/ws-butler.git
+[submodule "youdao-dictionary"]
+	path = lib/youdao-dictionary
+	url = git@github.com:xuchunyang/youdao-dictionary.el.git
+[submodule "zotxt"]
+	path = lib/zotxt
+	url = git@gitlab.com:egh/zotxt-emacs.git
