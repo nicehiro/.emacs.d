@@ -10,6 +10,9 @@
 [submodule "auctex"]
 	path = lib/auctex
 	url = git@github.com:emacsmirror/auctex.git
+[submodule "auctex-latexmk"]
+	path = lib/auctex-latexmk
+	url = git@github.com:tom-tan/auctex-latexmk.git
 [submodule "beacon"]
 	path = lib/beacon
 	url = git@github.com:Malabarba/beacon.git
@@ -19,6 +22,9 @@
 [submodule "cape"]
 	path = lib/cape
 	url = git@github.com:minad/cape.git
+[submodule "cdlatex"]
+	path = lib/cdlatex
+	url = git@github.com:cdominik/cdlatex.git
 [submodule "citar"]
 	path = lib/citar
 	url = git@github.com:emacs-citar/citar.git
@@ -136,7 +142,7 @@
 	url = git@github.com:ginqi7/global-interactive-emacs.git
 [submodule "lib/org-static-blog"]
 	path = lib/org-static-blog
-	url = git@github.com:nicehiro/org-static-blog.git
+	url = git@github.com:bastibe/org-static-blog.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git

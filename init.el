@@ -1053,6 +1053,54 @@ Call a second time to restore the original window configuration."
 
 (use-package org-roam-ui)
 
+;;; LaTeX
+;; read README.GIT && ./configure to generate .el files
+
+(use-package latex
+  :hook ((LaTeX-mode . prettify-symbols-mode))
+  :bind (:map LaTeX-mode-map
+              ("C-S-e" . latex-math-from-calc))
+  :config
+  ;; Format math as a Latex string with Calc
+  (defun latex-math-from-calc ()
+    "Evaluate `calc' on the contents of line at point."
+    (interactive)
+    (cond ((region-active-p)
+           (let* ((beg (region-beginning))
+                  (end (region-end))
+                  (string (buffer-substring-no-properties beg end)))
+             (kill-region beg end)
+             (insert (calc-eval `(,string calc-language latex
+                                          calc-prefer-frac t
+                                          calc-angle-mode rad)))))
+          (t (let ((l (thing-at-point 'line)))
+               (end-of-line 1) (kill-line 0)
+               (insert (calc-eval `(,l
+                                    calc-language latex
+                                    calc-prefer-frac t
+                                    calc-angle-mode rad))))))))
+
+(use-package preview
+  :after latex
+  :hook ((LaTeX-mode . preview-larger-previews))
+  :config
+  (defun preview-larger-previews ()
+    (setq preview-scale-function
+          (lambda () (* 1.25
+                        (funcall (preview-scale-from-face)))))))
+
+(use-package cdlatex
+  :hook (LaTeX-mode . turn-on-cdlatex)
+  :bind (:map cdlatex-mode-map
+              ("<tab>" . cdlatex-tab)))
+
+;; temporary fix for this
+;; check here https://github.com/tom-tan/auctex-latexmk/issues/44
+(provide 'tex-buf)
+(use-package auctex-latexmk
+  :config
+  (auctex-latexmk-setup))
+
 ;;; Terminal config
 
 (use-package vterm)
@@ -1065,9 +1113,9 @@ Call a second time to restore the original window configuration."
   :config
   (setq initial-scratch-message
         (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n"
-    ";; stay hungry, stay foolish\n"
-    ";; write more, but shorter\n"
-    ";; no day but toady\n\n"))
+                ";; stay hungry, stay foolish\n"
+                ";; write more, but shorter\n"
+                ";; no day but toady\n\n"))
   :preface
   (defun sanityinc/maybe-set-bundled-elisp-readonly ()
     "If this elisp appears to be part of Emacs, then disallow editing."
