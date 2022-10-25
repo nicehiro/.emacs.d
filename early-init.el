@@ -13,6 +13,8 @@
 
 (setq frame-inhibit-implied-resize t)
 
+;; Don’t compact font caches during GC.
+(setq inhibit-compacting-font-caches t)
 
 ;;; Font setting
 (defvar font-list

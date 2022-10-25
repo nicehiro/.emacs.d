@@ -58,6 +58,9 @@
 [submodule "deferred"]
 	path = lib/deferred
 	url = git@github.com:kiwanami/emacs-deferred.git
+[submodule "devdocs"]
+	path = lib/devdocs
+	url = git@github.com:astoff/devdocs.el.git
 [submodule "diff-hl"]
 	path = lib/diff-hl
 	url = git@github.com:dgutov/diff-hl.git
@@ -70,6 +73,9 @@
 [submodule "doom-themes"]
 	path = lib/doom-themes
 	url = git@github.com:doomemacs/themes.git
+[submodule "eglot"]
+	path = lib/eglot
+	url = git@github.com:joaotavora/eglot.git
 [submodule "emacs-zotero"]
 	path = emacs-zotero
 	url = git@gitlab.com:fvdbeek/emacs-zotero.git
@@ -116,21 +122,36 @@
 [submodule "go-translate"]
 	path = lib/go-translate
 	url = git@github.com:lorniu/go-translate.git
+[submodule "goto-chg"]
+	path = lib/goto-chg
+	url = git@github.com:emacs-evil/goto-chg.git
 [submodule "highlight-escape-sequences"]
 	path = lib/highlight-escape-sequences
 	url = git@github.com:dgutov/highlight-escape-sequences.git
 [submodule "highlight-quoted"]
 	path = lib/highlight-quoted
 	url = git@github.com:Fanael/highlight-quoted.git
+[submodule "hledger-mode"]
+	path = lib/hledger-mode
+	url = git@github.com:narendraj9/hledger-mode.git
+[submodule "htmlize"]
+	path = lib/htmlize
+	url = git@github.com:hniksic/emacs-htmlize.git
 [submodule "inheritenv"]
 	path = lib/inheritenv
 	url = git@github.com:purcell/inheritenv.git
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = https://github.com/jdtsmith/kind-icon
+[submodule "ledger-mode"]
+	path = lib/ledger-mode
+	url = git@github.com:ledger/ledger-mode.git
 [submodule "lib/biblio.el"]
 	path = lib/biblio.el
 	url = git@github.com:nicehiro/biblio.el.git
+[submodule "lib/carbon-theme"]
+	path = lib/carbon-theme
+	url = git@github.com:DogLooksGood/carbon-theme.git
 [submodule "lib/ef-themes"]
 	path = lib/ef-themes
 	url = git@github.com:protesilaos/ef-themes.git
@@ -197,6 +218,12 @@
 [submodule "parsebib"]
 	path = lib/parsebib
 	url = git@github.com:joostkremers/parsebib.git
+[submodule "pass"]
+	path = lib/pass
+	url = git@github.com:NicolasPetton/pass.git
+[submodule "popup"]
+	path = lib/popup
+	url = git@github.com:auto-complete/popup-el.git
 [submodule "posframe"]
 	path = lib/posframe
 	url = git@github.com:tumashu/posframe.git

@@ -25,11 +25,14 @@
   (setq inhibit-startup-buffer-menu t)
   (setq inhibit-startup-screen t)
   (setq ring-bell-function #'ignore)
-  (when (fboundp 'scroll-bar-mode)
-    (scroll-bar-mode 0))
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (set-window-scroll-bars
+               (minibuffer-window frame) 0 nil 0 nil t)))
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode 0))
   (menu-bar-mode 1)
+  (setq x-underline-at-descent-line t)
   (toggle-debug-on-error))
 
 (eval-and-compile ; `borg'
@@ -70,41 +73,82 @@
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
-(progn ; `fontset'
-  (defun font-installed-p (font)
-    "Check if the FONT is available."
-    (find-font (font-spec :name font)))
+(progn ; `fontset' ;; copied from meowmacs
+  (defvar meomacs-font-size 16
+    "Current font size.")
 
-  (defun change-font ()
-    "Change the font of frame from an available `font-list'."
-    (interactive)
-    (let* (available-fonts font-name font-size font-set)
-      (dolist (font font-list (setq available-fonts (nreverse available-fonts)))
-        (when (font-installed-p (car font))
-          (push font available-fonts)))
-      (if (not available-fonts)
-          (message "No fonts from the chosen set are available")
-        (if (called-interactively-p 'interactive)
-            (let* ((chosen (assoc-string (completing-read "What font to use? " available-fonts nil t)
-                                         available-fonts)))
-              (setq font-name (car chosen) font-size (read-number "Font size: " (cdr chosen))))
-          (setq font-name (caar available-fonts) font-size (cdar available-fonts)))
-        (setq font-set (format "%s-%d" font-name font-size))
-        (set-frame-font font-set nil t)
-        (add-to-list 'default-frame-alist (cons 'font font-set)))))
+  ;; default fonts: Lation Modern Mono
+  (defvar meomacs-fonts '((default . "Monaco")
+                          (cjk . "LXGW WenKai")
+                          (symbol . "Symbola")
+                          (fixed . "Source Code Pro")
+                          (fixed-serif . "Latin Modern Mono")
+                          (variable . "Georgia"))
+    "Fonts to use.")
+
+  (defun meomacs--get-font-family (key)
+    (alist-get key meomacs-fonts))
+
+  ;; Set default font before frame creation
+  ;; to make sure the first frame have the correct size
+  ;; (add-to-list 'default-frame-alist (cons 'font (format "%s-%s"
+  ;;                                                       (meomacs--get-font-family 'default)
+  ;;                                                       meomacs-font-size)))
+  ;; (set-frame-font (format "%s-%s" (meomacs--get-font-family 'default) meomacs-font-size))
+
+  (defun meomacs-load-font ()
+    "Load font configuration."
+    (let ((default-font (format "%s-%s"
+                                (meomacs--get-font-family 'default)
+                                meomacs-font-size))
+          (cjk-font (meomacs--get-font-family 'cjk))
+          (symbol-font (meomacs--get-font-family 'symbol))
+          (variable-font (meomacs--get-font-family 'variable))
+          (fixed-font (meomacs--get-font-family 'fixed))
+          (fixed-serif-font (meomacs--get-font-family 'fixed-serif)))
+      (set-frame-font default-font)
+      (let ((fontset (create-fontset-from-ascii-font default-font)))
+        ;; Fonts for charsets
+        (dolist (charset '(kana han hangul cjk-misc bopomofo))
+          (set-fontset-font fontset charset cjk-font))
+        (set-fontset-font fontset 'symbol symbol-font)
+        ;; Apply fontset
+        (set-frame-parameter nil 'font fontset)
+        (add-to-list 'default-frame-alist (cons 'font fontset))
+        ;; Fonts for faces
+        (set-face-attribute 'variable-pitch nil :family variable-font :height 1.0)
+        (set-face-attribute 'fixed-pitch nil :family fixed-font :height 1.0)
+        (set-face-attribute 'fixed-pitch-serif nil :family fixed-serif-font :height 1.0))))
 
   (when window-system
-    (change-font)
-    (cl-loop for font in '("Microsoft Yahei" "PingFang SC" "Noto Sans Mono CJK SC")
-             when (font-installed-p font)
-             return (dolist (charset '(kana han hangul cjk-misc bopomofo))
-                      (set-fontset-font t charset font)))
-    (cl-loop for font in '("Segoe UI Emoji" "Apple Color Emoji" "Noto Color Emoji")
-             when (font-installed-p font)
-             return (set-fontset-font t 'unicode font nil 'append))
-    (dolist (font '("HanaMinA" "HanaMinB"))
-      (when (font-installed-p font)
-        (set-fontset-font t 'unicode font nil 'append)))))
+    (meomacs-load-font))
+
+  (defvar hiro/font-size-list '(12 14 16 18 20 22))
+
+  (defun hiro/larger-font ()
+    "Larger font."
+    (interactive)
+    (if-let ((size (--find (> it meomacs-font-size) hiro/font-size-list)))
+        (progn (setq meomacs-font-size size)
+               (meomacs-load-font)
+               (message "Font size: %s" meomacs-font-size))
+      (message "Using largest font")))
+
+  (defun hiro/smaller-font ()
+    "Smaller font."
+    (interactive)
+    (if-let ((size (--find (< it meomacs-font-size) (reverse hiro/font-size-list))))
+        (progn (setq meomacs-font-size size)
+               (message "Font size: %s" meomacs-font-size)
+               (meomacs-load-font))
+      (message "Using smallest font")))
+
+  ;; Run after startup
+  (add-hook 'after-init-hook
+            (lambda ()
+              (when window-system
+                (meomacs-load-font))))
+  )
 
 ;; Change global font size easily
 
@@ -112,49 +156,6 @@
   :bind (("C-M-=" . default-text-scale-increase)
          ("C-M--" . default-text-scale-decrease)
          ("C-M-0" . default-text-scale-reset)))
-
-;;; Theme
-
-(use-package modus-themes
-  :ensure
-  :init
-  ;; Add all your customizations prior to loading the themes
-  (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
-        modus-themes-region '(bg-only no-extend))
-
-  ;; Load the theme files before enabling a theme
-  (modus-themes-load-themes)
-  :config
-  ;; Load the theme of your choice:
-  ;; (modus-themes-load-operandi) ;; OR (modus-themes-load-vivendi)
-  :bind ("<f5>" . modus-themes-toggle))
-
-(use-package ef-themes
-  :load-path "lib/ef-themes/"
-  :config
-  ;; Disable all other themes to avoid awkward blending:
-  ;; (mapc #'disable-theme custom-enabled-themes)
-
-  ;; Load the theme of choice:
-  ;; (load-theme 'ef-spring :no-confirm)
-
-  ;; The themes we provide:
-  ;;
-  ;; Light: `ef-day', `ef-light', `ef-spring', `ef-summer'.
-  ;; Dark:  `ef-autumn', `ef-dark', `ef-night', `ef-winter'.
-  ;;
-  ;; Also those which are optimized for deuteranopia (red-green color
-  ;; deficiency): `ef-deuteranopia-dark', `ef-deuteranopia-light'.
-  )
-
-(defun hiro/disable-themes ()
-  "Disable all enabled themes."
-  (mapc #'disable-theme custom-enabled-themes))
-
-(defadvice load-theme (before disable-themes-first activate)
-  "Load theme after disbale all other loaded themes."
-  (hiro/disable-themes))
 
 ;;; Dired mode
 
@@ -200,9 +201,27 @@
   (setq mode-line-percent-position '(-3 "%p"))
   (setq mode-line-position-column-line-format '(" %l,%c"))
   (setq mode-line-compact nil)
+
+  ;; (let ((active-bg (face-attribute 'mode-line :background))
+  ;;       (inactive-bg (face-attribute 'mode-line-inactive :background)))
+  ;;   (custom-set-faces
+  ;;    `(mode-line ((t :inherit variable-pitch :box (:line-width 6 :color ,active-bg) :background ,active-bg)))
+  ;;    `(mode-line-inactive ((t :inherit variable-pitch :box (:line-width 6 :color ,inactive-bg) :background ,inactive-bg)))))
+
+  (defun mode-line-evil ()
+    "Evil state info for modeline."
+    (cond
+     ((eq evil-state 'normal) "Ⓝ")
+     ((eq evil-state 'insert) "Ⓘ")
+     ((eq evil-state 'visual) "Ⓥ")
+     ((eq evil-state 'emacs) "Ⓔ")
+     (t "＃")))
+
   (setq-default mode-line-format
                 '("%e"
                   mode-line-front-space
+                  (:eval (mode-line-evil))
+                  "  "
                   mode-line-mule-info
                   mode-line-client
                   mode-line-modified
@@ -424,7 +443,9 @@
   :bind
   (:map corfu-map
         ("M-p" . corfu-doc-scroll-up)
-        ("M-n" . corfu-doc-scroll-down)))
+        ("M-n" . corfu-doc-scroll-down))
+  :config
+  (setq corfu-doc-display-within-parent-frame nil))
 
 (use-package cape
   :after corfu
@@ -440,12 +461,12 @@
   :init
   (add-to-list 'completion-at-point-functions #'cape-file))
 
-(use-package kind-icon
-  :after corfu
-  :custom
-  (kind-icon-default-face 'corfu-default)
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+;; (use-package kind-icon
+;;   :after corfu
+;;   :custom
+;;   (kind-icon-default-face 'corfu-default)
+;;   :config
+;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 (use-package tempel
   :custom (tempel-trigger-prefix "<")
@@ -541,73 +562,6 @@ Call a second time to restore the original window configuration."
   (add-to-list 'recentf-exclude no-littering-var-directory)
   (add-to-list 'recentf-exclude no-littering-etc-directory)
   (recentf-mode))
-
-;;; Save and restore editor sessions between restarts
-
-;; Save a list of open files in ~/.emacs.d/.emacs.desktop
-(use-package desktop
-  :custom
-  (desktop-auto-save-timeout 600)
-  (desktop-load-locked-desktop 'check-pid)
-  ;; Save a bunch of variables to the desktop file
-  ;; for lists specify the len of the maximal saved data also
-  (desktop-globals-to-save
-   '((comint-input-ring        . 50)
-     (compile-history          . 30)
-     desktop-missing-file-warning
-     (dired-regexp-history     . 20)
-     (extended-command-history . 30)
-     (face-name-history        . 20)
-     (file-name-history        . 100)
-     (grep-find-history        . 30)
-     (grep-history             . 30)
-     (magit-revision-history   . 50)
-     (minibuffer-history       . 50)
-     (org-clock-history        . 50)
-     (org-refile-history       . 50)
-     (org-tags-history         . 50)
-     (query-replace-history    . 60)
-     (read-expression-history  . 60)
-     (regexp-history           . 60)
-     (regexp-search-ring       . 20)
-     register-alist
-     (search-ring              . 20)
-     (kill-ring                . 20)
-     (shell-command-history    . 50)
-     tags-file-name
-     tags-table-list))
-  :config
-  (advice-add 'desktop-read :around 'sanityinc/desktop-time-restore)
-  (advice-add 'desktop-create-buffer :around 'sanityinc/desktop-time-buffer-create)
-  (desktop-save-mode 1)
-  :preface
-  (defun sanityinc/time-subtract-millis (b a)
-    (* 1000.0 (float-time (time-subtract b a))))
-
-  (defun sanityinc/desktop-time-restore (orig &rest args)
-    (let ((start-time (current-time)))
-      (prog1
-          (apply orig args)
-        (message "Desktop restored in %.2fms"
-                 (sanityinc/time-subtract-millis (current-time)
-                                                 start-time)))))
-
-  (defun sanityinc/desktop-time-buffer-create (orig ver filename &rest args)
-    (let ((start-time (current-time)))
-      (prog1
-          (apply orig ver filename args)
-        (message "Desktop: %.2fms to restore %s"
-                 (sanityinc/time-subtract-millis (current-time)
-                                                 start-time)
-                 (when filename
-                   (abbreviate-file-name filename)))))))
-
-;; Restore histories and registers after saving
-(use-package savehist
-  :config (savehist-mode))
-
-(use-package saveplace
-  :config (save-place-mode))
 
 ;;; Editing utils
 
@@ -763,6 +717,15 @@ Call a second time to restore the original window configuration."
   (org-indent-mode t)
   (org-image-actual-width nil) ;; set this first for #+attr_org :width works
   :config
+  ;; org face
+  (with-eval-after-load "org"
+    ;; Use fixed pitch for table and code
+    (custom-set-faces
+     '(org-table ((t :inherit 'fixed-pitch-serif)))
+     '(org-code ((t :inherit 'fixed-pitch-serif)))
+     '(org-block ((t :inherit 'fixed-pitch-serif)))
+     '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
+     '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
   ;; org latex code render size
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
   ;; make svg latex preview image
@@ -821,7 +784,7 @@ Call a second time to restore the original window configuration."
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
-  (setq org-deadline-warning-days 14)
+  (setq org-deadline-warning-days 16)
   (setq org-use-speed-commands t)
   (setq org-agenda-start-day "+0d")
   (setq org-todo-keywords
@@ -908,12 +871,6 @@ Call a second time to restore the original window configuration."
   (run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
   )
-
-(use-package mixed-pitch
-  :hook (text-mode . mixed-pitch-mode)
-  :config
-  (set-face-attribute 'fixed-pitch nil :font "Monolisa")
-  (set-face-attribute 'variable-pitch nil :font "Monolisa"))
 
 (use-package org-download
   :config
@@ -1152,6 +1109,8 @@ Call a second time to restore the original window configuration."
                                 "scripts/python"
                               "bin/python"))))))
 
+(use-package devdocs)
+
 ;;; Scientific research config
 
 (progn ; `basic-variables'
@@ -1386,10 +1345,19 @@ and download pdf to user-specified directory."
   ;; (global-set-key (kbd "C-c t") 'anki-add-yanked-word-card)
   )
 
-
-
 ;;; LSP config
 
+(use-package eglot
+  :bind (:map eglot-mode-map
+              ("C-c l a" . eglot-code-actions)
+              ("C-c l r" . eglot-rename)
+              ("C-c l f" . eglot-format)
+              ("C-c l d" . eldoc))
+  :config
+  (setq read-process-output-max (* 1024 1024))
+  (setq eglot-events-buffer-size 0)
+  (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+  (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer"))))
 
 ;;; Treesitter
 
@@ -1400,6 +1368,12 @@ and download pdf to user-specified directory."
 ;; (use-package tree-sitter-langs)
 
 ;;; Miscellaneous config
+
+(use-package ledger-mode
+  :init
+  (setq ledger-clear-whole-transactions 1)
+  :config
+  :mode "\\.dat\\'")
 
 (use-package which-key
   :config
@@ -1438,7 +1412,7 @@ and download pdf to user-specified directory."
   (setq gts-default-translator
         (gts-translator
          :picker (gts-prompt-picker)
-         :engines (list (gts-bing-engine) (gts-google-engine))
+         :engines (list (gts-bing-engine))
          :render (gts-buffer-render)))
 
   ;; Pick directly and use Google RPC API to translate
@@ -1518,6 +1492,10 @@ and download pdf to user-specified directory."
   :defer t
   :custom (help-window-select t)
   :config (temp-buffer-resize-mode))
+
+;;; Pass for password storage
+
+(use-package pass)
 
 ;;; Configure default locale
 

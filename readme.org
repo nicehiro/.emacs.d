@@ -2,3 +2,17 @@
 #+author: Fangyuan Wang
 
 
+1. Bootstrap borg
+#+begin_src shell
+   cd .emacs.d
+   make bootstrap-borg
+   make bootstrap
+#+end_src
+
+2. Compile AucTex
+   #+begin_src shell
+   cd .emacs.d/lib/auctex
+   ./autogen.sh
+   ./configure
+   make
+   #+end_src
