@@ -76,6 +76,12 @@
 [submodule "eglot"]
 	path = lib/eglot
 	url = git@github.com:joaotavora/eglot.git
+[submodule "elfeed"]
+	path = lib/elfeed
+	url = git@github.com:skeeto/elfeed.git
+[submodule "elfeed-score"]
+	path = lib/elfeed-score
+	url = git@github.com:sp1ff/elfeed-score.git
 [submodule "emacs-zotero"]
 	path = emacs-zotero
 	url = git@gitlab.com:fvdbeek/emacs-zotero.git
