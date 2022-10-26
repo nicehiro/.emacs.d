@@ -900,7 +900,7 @@ Call a second time to restore the original window configuration."
 (use-package writeroom-mode
   :hook (org-mode . prose-mode)
   :custom
-  (writeroom-fullscreen-effect 'maximized)
+  (writeroom-fullscreen-effect 'fullboth)
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
@@ -1359,13 +1359,11 @@ and download pdf to user-specified directory."
   (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
   (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer"))))
 
-;;; Treesitter
+;;; feed settings
 
-;; (use-package tree-sitter
-;;   :config
-;;   (global-tree-sitter-mode))
+(use-package elfeed)
 
-;; (use-package tree-sitter-langs)
+(use-package elfeed-score)
 
 ;;; Miscellaneous config
 
@@ -1393,44 +1391,6 @@ and download pdf to user-specified directory."
   (setq super-save-auto-save-when-idle t)
   (setq save-silently t)
   (super-save-mode 1))
-
-(use-package go-translate
-  :commands (gts-buffer-render)
-  :bind (("C-c t g" . gts-do-translate)
-         ("C-c t p" . go-translate-at-point)
-         ("C-c t s" . go-translate-save-kill-ring))
-  :config
-  ;; HACK: https://github.com/lorniu/go-translate/issues/31
-  (cl-defmethod gts-out :after ((_ gts-buffer-render) _)
-    (with-current-buffer gts-buffer-name
-      (read-only-mode 1)
-      (variable-pitch-mode 1)
-      (if (featurep 'sis)
-          (sis-set-english))))
-
-  (setq gts-translate-list '(("en" "zh")))
-  (setq gts-default-translator
-        (gts-translator
-         :picker (gts-prompt-picker)
-         :engines (list (gts-bing-engine))
-         :render (gts-buffer-render)))
-
-  ;; Pick directly and use Google RPC API to translate
-  (defun go-translate-at-point ()
-    (interactive)
-    (gts-translate (gts-translator
-                    :picker (gts-noprompt-picker)
-                    :engines (gts-google-rpc-engine)
-                    :render (gts-buffer-render))))
-
-  ;; Pick directly and add the results into kill-ring
-  (defun go-translate-save-kill-ring ()
-    (interactive)
-    (gts-translate (gts-translator
-                    :picker (gts-noprompt-picker)
-                    :engines (gts-google-engine
-                              :parser (gts-google-summary-parser))
-                    :render (gts-kill-ring-render)))))
 
 (use-package flyspell
   :diminish
