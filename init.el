@@ -31,6 +31,7 @@
                (minibuffer-window frame) 0 nil 0 nil t)))
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode 0))
+  (scroll-bar-mode -1)
   (menu-bar-mode 1)
   (setq x-underline-at-descent-line t)
   (toggle-debug-on-error))
@@ -78,12 +79,12 @@
     "Current font size.")
 
   ;; default fonts: Lation Modern Mono
-  (defvar meomacs-fonts '((default . "Monaco")
+  (defvar meomacs-fonts '((default . "Courier New")
                           (cjk . "LXGW WenKai")
                           (symbol . "Symbola")
                           (fixed . "Source Code Pro")
-                          (fixed-serif . "Latin Modern Mono")
-                          (variable . "Georgia"))
+                          (fixed-serif . "Robot Mono")
+                          (variable . "Alegreya"))
     "Fonts to use.")
 
   (defun meomacs--get-font-family (key)
@@ -98,6 +99,7 @@
 
   (defun meomacs-load-font ()
     "Load font configuration."
+    (interactive)
     (let ((default-font (format "%s-%s"
                                 (meomacs--get-font-family 'default)
                                 meomacs-font-size))
@@ -493,6 +495,7 @@
   :config
   (bind-key "C-x 2" (split-window-func-with-other-buffer 'split-window-vertically))
   (bind-key "C-x 3" (split-window-func-with-other-buffer 'split-window-horizontally))
+  (setq split-width-threshold 1)
   :preface
   ;; When splitting window, show (other-buffer) in the new window
   (defun split-window-func-with-other-buffer (split-function)
@@ -727,7 +730,7 @@ Call a second time to restore the original window configuration."
      '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
      '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
   ;; org latex code render size
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0))
   ;; make svg latex preview image
   (setq org-preview-latex-default-process 'dvisvgm)
   ;; Re-align tags when window shape changes
@@ -1072,6 +1075,7 @@ Call a second time to restore the original window configuration."
         (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n"
                 ";; stay hungry, stay foolish\n"
                 ";; write more, but shorter\n"
+                ";; do one thing and do it best"
                 ";; no day but toady\n\n"))
   :preface
   (defun sanityinc/maybe-set-bundled-elisp-readonly ()
@@ -1361,9 +1365,61 @@ and download pdf to user-specified directory."
 
 ;;; feed settings
 
-(use-package elfeed)
+(use-package elfeed
+  :config
+  (setq elfeed-feeds
+        '("http://export.arxiv.org/api/query?search_query=cat:cs.RO&start=0&max_results=100&sortBy=submittedDate&sortOrder=descending"
+          "http://export.arxiv.org/api/query?search_query=cat:cs.LG&start=0&max_results=100&sortBy=submittedDate&sortOrder=descending"))
 
-(use-package elfeed-score)
+  (defun concatenate-authors (authors-list)
+    "Given AUTHORS-LIST, list of plists; return string of all authors concatenated."
+    (if (> (length authors-list) 1)
+        (format "%s et al." (plist-get (nth 0 authors-list) :name))
+      (plist-get (nth 0 authors-list) :name)))
+
+  (defun my-search-print-fn (entry)
+    "Print ENTRY to the buffer."
+    (let* ((date (elfeed-search-format-date (elfeed-entry-date entry)))
+           (title (or (elfeed-meta entry :title)
+                      (elfeed-entry-title entry) ""))
+           (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
+           (entry-authors (concatenate-authors (elfeed-meta entry :authors)))
+           (title-width (- (window-width) 10
+                           elfeed-search-trailing-width))
+           (title-column (elfeed-format-column
+                          title 100
+                          :left))
+
+           (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
+           (tags-str (mapconcat
+                      (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
+                      tags ","))
+           (entry-score (elfeed-format-column (number-to-string (elfeed-score-scoring-get-score-from-entry entry)) 10 :left))
+           (authors-column (elfeed-format-column entry-authors 40 :left)))
+      (insert (propertize date 'face 'elfeed-search-date-face) " ")
+
+      (insert (propertize title-column
+                          'face title-faces 'kbd-help title) " ")
+      (insert (propertize authors-column
+                          'kbd-help entry-authors) " ")
+      (insert entry-score " ")
+      (insert "(" tags-str ")")))
+
+  (setq elfeed-search-print-entry-function #'my-search-print-fn)
+  (setq elfeed-search-date-format '("%y-%m-%d" 10 :left))
+  (setq elfeed-search-title-max-width 80)
+  (setq elfeed-search-filter "@1-week-ago +unread"))
+
+(use-package elfeed-score
+  :config
+  (elfeed-score-load-score-file "~/.emacs.d/elfeed.score")
+  (setq elfeed-score-serde-score-file "~/.emacs.d/elfeed.serde.score")
+  (elfeed-score-enable)
+  (define-key elfeed-search-mode-map "=" elfeed-score-map))
+
+(use-package elfeed-goodies
+  :config
+  (elfeed-goodies/setup))
 
 ;;; Miscellaneous config
 

@@ -13,6 +13,9 @@
 [submodule "auctex-latexmk"]
 	path = lib/auctex-latexmk
 	url = git@github.com:tom-tan/auctex-latexmk.git
+[submodule "avy"]
+	path = lib/avy
+	url = git@github.com:abo-abo/avy.git
 [submodule "beacon"]
 	path = lib/beacon
 	url = git@github.com:Malabarba/beacon.git
@@ -79,6 +82,9 @@
 [submodule "elfeed"]
 	path = lib/elfeed
 	url = git@github.com:skeeto/elfeed.git
+[submodule "elfeed-goodies"]
+	path = lib/elfeed-goodies
+	url = git@github.com:jeetelongname/elfeed-goodies.git
 [submodule "elfeed-score"]
 	path = lib/elfeed-score
 	url = git@github.com:sp1ff/elfeed-score.git
@@ -113,6 +119,9 @@
 [submodule "flymake"]
 	path = lib/flymake
 	url = git@github.com:emacsmirror/flymake.git
+[submodule "flymake-grammarly"]
+	path = lib/flymake-grammarly
+	url = git@github.com:emacs-grammarly/flymake-grammarly.git
 [submodule "flyspell-correct"]
 	path = lib/flyspell-correct
 	url = git@github.com:d12frosted/flyspell-correct.git
@@ -131,6 +140,9 @@
 [submodule "goto-chg"]
 	path = lib/goto-chg
 	url = git@github.com:emacs-evil/goto-chg.git
+[submodule "grammarly"]
+	path = lib/grammarly
+	url = git@github.com:emacs-grammarly/grammarly.git
 [submodule "highlight-escape-sequences"]
 	path = lib/highlight-escape-sequences
 	url = git@github.com:dgutov/highlight-escape-sequences.git
@@ -170,6 +182,9 @@
 [submodule "lib/org-static-blog"]
 	path = lib/org-static-blog
 	url = git@github.com:bastibe/org-static-blog.git
+[submodule "link-hint"]
+	path = lib/link-hint
+	url = git@github.com:noctuid/link-hint.el.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git
@@ -230,9 +245,15 @@
 [submodule "popup"]
 	path = lib/popup
 	url = git@github.com:auto-complete/popup-el.git
+[submodule "popwin"]
+	path = lib/popwin
+	url = git@github.com:emacsorphanage/popwin.git
 [submodule "posframe"]
 	path = lib/posframe
 	url = git@github.com:tumashu/posframe.git
+[submodule "powerline"]
+	path = lib/powerline
+	url = git@github.com:milkypostman/powerline.git
 [submodule "pyvenv"]
 	path = lib/pyvenv
 	url = git@github.com:jorgenschaefer/pyvenv.git
