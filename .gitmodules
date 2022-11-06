@@ -46,6 +46,9 @@
 [submodule "consult"]
 	path = lib/consult
 	url = git@github.com:minad/consult.git
+[submodule "consult-eglot"]
+	path = lib/consult-eglot
+	url = git@github.com:mohkale/consult-eglot.git
 [submodule "corfu"]
 	path = lib/corfu
 	url = git@github.com:minad/corfu.git
@@ -335,6 +338,12 @@
 [submodule "ws-butler"]
 	path = lib/ws-butler
 	url = git@github.com:lewang/ws-butler.git
+[submodule "yasnippet"]
+	path = lib/yasnippet
+	url = git@github.com:joaotavora/yasnippet.git
+[submodule "yasnippet-snippets"]
+	path = lib/yasnippet-snippets
+	url = git@github.com:AndreaCrotti/yasnippet-snippets.git
 [submodule "youdao-dictionary"]
 	path = lib/youdao-dictionary
 	url = git@github.com:xuchunyang/youdao-dictionary.el.git

@@ -9,3 +9,4 @@ elpa/
 etc/
 *-autoloads.el
 private.el
+librime/

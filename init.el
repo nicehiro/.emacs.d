@@ -84,7 +84,7 @@
                           (symbol . "Symbola")
                           (fixed . "Source Code Pro")
                           (fixed-serif . "Robot Mono")
-                          (variable . "Alegreya"))
+                          (variable . "Courier New"))
     "Fonts to use.")
 
   (defun meomacs--get-font-family (key)
@@ -459,6 +459,7 @@
          ("C-c p a" . cape-abbrev)
          ("C-c p i" . cape-ispell)
          ("C-c p l" . cape-line)
+         ("C-c p \\" . cape-tex)
          ("C-c p w" . cape-dict))
   :init
   (add-to-list 'completion-at-point-functions #'cape-file))
@@ -470,20 +471,24 @@
 ;;   :config
 ;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-(use-package tempel
-  :custom (tempel-trigger-prefix "<")
-  :bind (("M-+" . tempel-complete)
-         ("M-*" . tempel-insert)
-         :map tempel-map
-         ("M-]" . tempel-next)
-         ("M-[" . tempel-previous))
-  :hook ((prog-mode text-mode) . tempel-setup-capf)
-  :init
-  (defun tempel-setup-capf ()
-    "Setup completion at point."
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      completion-at-point-functions))))
+;; (use-package tempel
+;;   :custom (tempel-trigger-prefix "<")
+;;   :bind (("M-+" . tempel-complete)
+;;          ("M-*" . tempel-insert)
+;;          :map tempel-map
+;;          ("M-]" . tempel-next)
+;;          ("M-[" . tempel-previous))
+;;   :hook ((prog-mode text-mode) . tempel-setup-capf)
+;;   :init
+;;   (defun tempel-setup-capf ()
+;;     "Setup completion at point."
+;;     (setq-local completion-at-point-functions
+;;                 (cons #'tempel-expand
+;;                       completion-at-point-functions))))
+
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
 
 ;;; Working with Windows within frames
 
@@ -827,22 +832,22 @@ Call a second time to restore the original window configuration."
   (defvar org-capture-templates nil
     "Org capture templates.")
   (setq org-capture-templates '(("i" "Idea"
-                                 entry (file+headline "~/Documents/gtd/ideas.org" "Someday/Maybe")
+                                 entry (file+headline "~/Dropbox/gtd/ideas.org" "Someday/Maybe")
                                  "* IDEA %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t)
                                 ("t" "Todo"
-                                 entry (file+headline "~/Documents/gtd/inbox.org" "TODOs")
+                                 entry (file+headline "~/Dropbox/gtd/inbox.org" "TODOs")
                                  "* TODO %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t)
                                 ("r" "Read"
-                                 entry (file+headline "~/Documents/gtd/read.org" "Reading List")
+                                 entry (file+headline "~/Dropbox/gtd/read.org" "Reading List")
                                  "* READ %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t)
                                 ("b" "Blog"
-                                 entry (file+headline "~/Documents/gtd/blog.org" "Blogs")
+                                 entry (file+headline "~/Dropbox/gtd/blog.org" "Blogs")
                                  "* BLOG %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t))))
@@ -901,9 +906,10 @@ Call a second time to restore the original window configuration."
                                 :visible "▼")))
 
 (use-package writeroom-mode
-  :hook (org-mode . prose-mode)
-  :custom
-  (writeroom-fullscreen-effect 'fullboth)
+  :hook ((org-mode . prose-mode)
+         (LaTeX-mode . prose-mode))
+  ;; :custom
+  ;; (writeroom-fullscreen-effect 'fullboth)
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
@@ -941,6 +947,29 @@ Call a second time to restore the original window configuration."
       (visual-line-mode -1)
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0)))))
+
+(use-package rime
+  :config
+  (setq default-input-method 'rime)
+  (setq rime-librime-root "~/.emacs.d/librime/dist/")
+  (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/")
+  (setq rime-translate-keybindings '("C-f" "C-b" "C-n" "C-p" "C-g"))
+  (setq rime-cursor "˰")
+  (setq rime-show-candidate 'posframe)
+  (setq rime-posframe-style 'vertical)
+  (setq rime-posframe-properties (list :background-color
+                                       (frame-parameter nil 'background-color)
+                                       :foreground-color
+                                       (frame-parameter nil 'foreground-color)))
+  (setq rime-disable-predicates '(rime-predicate-evil-mode-p
+                                  rime-predicate-after-alphabet-char-p
+                                  rime-predicate-prog-in-code-p
+                                  rime-predicate-tex-math-or-command-p
+                                  rime-predicate-current-uppercase-letter-p
+                                  rime-predicate-ace-window-p
+                                  rime-predicate-after-ascii-char-p))
+
+  (global-set-key (kbd "C-\\") 'toggle-input-method))
 
 ;;; Blog writing
 (use-package org-static-blog
@@ -1059,7 +1088,8 @@ Call a second time to restore the original window configuration."
 (provide 'tex-buf)
 (use-package auctex-latexmk
   :config
-  (auctex-latexmk-setup))
+  (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 ;;; Terminal config
 
@@ -1363,6 +1393,8 @@ and download pdf to user-specified directory."
   (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
   (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer"))))
 
+(use-package consult-eglot)
+
 ;;; feed settings
 
 (use-package elfeed
@@ -1419,7 +1451,8 @@ and download pdf to user-specified directory."
 
 (use-package elfeed-goodies
   :config
-  (elfeed-goodies/setup))
+  (elfeed-goodies/setup)
+  (setq elfeed-goodies/entry-pane-position 'bottom))
 
 ;;; Miscellaneous config
 
