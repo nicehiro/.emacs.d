@@ -75,7 +75,7 @@
   (exec-path-from-shell-initialize))
 
 (progn ; `fontset' ;; copied from meowmacs
-  (defvar meomacs-font-size 16
+  (defvar meomacs-font-size 20
     "Current font size.")
 
   ;; default fonts: Lation Modern Mono
@@ -222,12 +222,14 @@
   (setq-default mode-line-format
                 '("%e"
                   mode-line-front-space
+                  (:eval (when (fboundp 'rime-lighter) (rime-lighter)))
+                  " "
                   (:eval (mode-line-evil))
                   "  "
-                  mode-line-mule-info
-                  mode-line-client
+                  ;; mode-line-mule-info
+                  ;; mode-line-client
                   mode-line-modified
-                  mode-line-remote
+                  ;; mode-line-remote
                   mode-line-frame-identification
                   mode-line-buffer-identification
                   "  "
@@ -559,6 +561,91 @@ Call a second time to restore the original window configuration."
   :custom
   (switch-window-shortcut-style 'alphabet)
   (switch-window-timeout nil))
+
+;;; Tab bar
+
+(use-package tab-bar
+  :config
+  (setq tab-bar-close-button-show nil)
+  (setq tab-bar-select-tab-modifiers "super")
+  (setq tab-bar-tab-hints t)
+
+  (global-set-key (kbd "C-c g g") 'tab-bar-switch-to-recent-tab)
+  (global-set-key (kbd "C-c g t") 'tab-bar-switch-to-next-tab)
+  (global-set-key (kbd "C-c g T") 'tab-bar-switch-to-prev-tab)
+
+  (defvar ct/circle-numbers-alist
+    '((0 . "⓪")
+      (1 . "①")
+      (2 . "②")
+      (3 . "③")
+      (4 . "④")
+      (5 . "⑤")
+      (6 . "⑥")
+      (7 . "⑦")
+      (8 . "⑧")
+      (9 . "⑨"))
+    "Alist of integers to strings of circled unicode numbers.")
+
+  (defun ct/tab-bar-tab-name-format-default (tab i)
+    (let ((current-p (eq (car tab) 'current-tab))
+          (tab-num (if (and tab-bar-tab-hints (< i 10))
+                       (alist-get i ct/circle-numbers-alist) "")))
+      (propertize
+       (concat tab-num
+               " "
+               (alist-get 'name tab)
+               (or (and tab-bar-close-button-show
+                        (not (eq tab-bar-close-button-show
+                                 (if current-p 'non-selected 'selected)))
+                        tab-bar-close-button)
+                   "")
+               " ")
+       'face (funcall tab-bar-tab-face-function tab))))
+  (setq tab-bar-tab-name-format-function #'ct/tab-bar-tab-name-format-default)
+
+  ;; Copied from https://mmk2410.org/2022/02/11/using-emacs-tab-bar-mode/
+  (defun mmk2410/tab-bar-tab-exists (name)
+    "Check if tab-bar `name' exist."
+    (member name
+	    (mapcar #'(lambda (tab) (alist-get 'name tab))
+		    (tab-bar-tabs))))
+
+  (defun mmk2410/tab-bar-new-tab (name func)
+    "Create new tab-bar `name' with buffer created by `func'."
+    (when (eq nil tab-bar-mode)
+      (tab-bar-mode))
+    (tab-bar-new-tab)
+    (tab-bar-rename-tab name)
+    (funcall func))
+
+  (defun mmk2410/tab-bar-switch-or-create (name func)
+    "Create new tab-bar if `name' not exist, otherwise switch to it."
+    (if (mmk2410/tab-bar-tab-exists name)
+        (tab-bar-switch-to-tab name)
+      (mmk2410/tab-bar-new-tab name func)))
+
+  (defun hiro/tab-bar-run-agenda ()
+    (interactive)
+    (mmk2410/tab-bar-switch-or-create
+     "Agenda"
+     #'(lambda ()
+         (org-agenda nil "d"))))
+
+  (defun hiro/tab-bar-run-irc ()
+    (interactive)
+    (mmk2410/tab-bar-switch-or-create
+     "Telega"
+     #'telega))
+
+  (defun hiro/tab-bar-run-elfeed ()
+    (interactive)
+    (mmk2410/tab-bar-switch-or-create "RSS" #'elfeed))
+
+  (defun hiro/tab-bar-run-write ()
+    (interactive)
+    (mmk2410/tab-bar-switch-or-create "Write" #'scratch-buffer))
+  )
 
 ;;; Settings for tracking recent files
 
@@ -908,8 +995,8 @@ Call a second time to restore the original window configuration."
 (use-package writeroom-mode
   :hook ((org-mode . prose-mode)
          (LaTeX-mode . prose-mode))
-  ;; :custom
-  ;; (writeroom-fullscreen-effect 'fullboth)
+  :custom
+  (writeroom-fullscreen-effect 'fullboth)
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
@@ -1045,11 +1132,14 @@ Call a second time to restore the original window configuration."
 ;;; LaTeX
 ;; read README.GIT && ./configure to generate .el files
 
+(require 'latex)
 (use-package latex
   :hook ((LaTeX-mode . prettify-symbols-mode))
   :bind (:map LaTeX-mode-map
               ("C-S-e" . latex-math-from-calc))
   :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
   ;; Format math as a Latex string with Calc
   (defun latex-math-from-calc ()
     "Evaluate `calc' on the contents of line at point."
@@ -1085,11 +1175,11 @@ Call a second time to restore the original window configuration."
 
 ;; temporary fix for this
 ;; check here https://github.com/tom-tan/auctex-latexmk/issues/44
-(provide 'tex-buf)
-(use-package auctex-latexmk
-  :config
-  (auctex-latexmk-setup)
-  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+;; (provide 'tex-buf)
+;; (use-package auctex-latexmk
+;;   :config
+;;   (auctex-latexmk-setup)
+;;   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 ;;; Terminal config
 
