@@ -32,7 +32,7 @@
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode 0))
   (scroll-bar-mode -1)
-  (menu-bar-mode 1)
+  (menu-bar-mode t)
   (setq x-underline-at-descent-line t)
   (toggle-debug-on-error))
 
@@ -79,12 +79,14 @@
     "Current font size.")
 
   ;; default fonts: Lation Modern Mono
-  (defvar meomacs-fonts '((default . "Courier New")
+  ;; 中英文测试
+  ;; aaBBCcDDee
+  (defvar meomacs-fonts '((default . "Latin Modern Mono")
                           (cjk . "LXGW WenKai")
                           (symbol . "Symbola")
                           (fixed . "Source Code Pro")
                           (fixed-serif . "Robot Mono")
-                          (variable . "Courier New"))
+                          (variable . "Latin Modern Mono"))
     "Fonts to use.")
 
   (defun meomacs--get-font-family (key)
@@ -149,15 +151,7 @@
   (add-hook 'after-init-hook
             (lambda ()
               (when window-system
-                (meomacs-load-font))))
-  )
-
-;; Change global font size easily
-
-(use-package default-text-scale
-  :bind (("C-M-=" . default-text-scale-increase)
-         ("C-M--" . default-text-scale-decrease)
-         ("C-M-0" . default-text-scale-reset)))
+                (meomacs-load-font)))))
 
 ;;; Dired mode
 
@@ -222,12 +216,11 @@
   (setq-default mode-line-format
                 '("%e"
                   mode-line-front-space
-                  (:eval (when (fboundp 'rime-lighter) (rime-lighter)))
                   " "
                   (:eval (mode-line-evil))
                   "  "
-                  ;; mode-line-mule-info
-                  ;; mode-line-client
+                  mode-line-mule-info
+                  mode-line-client
                   mode-line-modified
                   ;; mode-line-remote
                   mode-line-frame-identification
@@ -469,24 +462,11 @@
 ;; (use-package kind-icon
 ;;   :after corfu
 ;;   :custom
-;;   (kind-icon-default-face 'corfu-default)
+;;   (kind-icon-default-face 'corfu-default) to compute blended backgrounds correctly
 ;;   :config
 ;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-;; (use-package tempel
-;;   :custom (tempel-trigger-prefix "<")
-;;   :bind (("M-+" . tempel-complete)
-;;          ("M-*" . tempel-insert)
-;;          :map tempel-map
-;;          ("M-]" . tempel-next)
-;;          ("M-[" . tempel-previous))
-;;   :hook ((prog-mode text-mode) . tempel-setup-capf)
-;;   :init
-;;   (defun tempel-setup-capf ()
-;;     "Setup completion at point."
-;;     (setq-local completion-at-point-functions
-;;                 (cons #'tempel-expand
-;;                       completion-at-point-functions))))
+;;; snippets
 
 (use-package yasnippet
   :config
@@ -562,6 +542,10 @@ Call a second time to restore the original window configuration."
   (switch-window-shortcut-style 'alphabet)
   (switch-window-timeout nil))
 
+(use-package popwin
+  :config
+  (popwin-mode 1))
+
 ;;; Tab bar
 
 (use-package tab-bar
@@ -626,26 +610,29 @@ Call a second time to restore the original window configuration."
       (mmk2410/tab-bar-new-tab name func)))
 
   (defun hiro/tab-bar-run-agenda ()
+    "Create or switch to Agenda tab-bar."
     (interactive)
     (mmk2410/tab-bar-switch-or-create
      "Agenda"
      #'(lambda ()
          (org-agenda nil "d"))))
 
-  (defun hiro/tab-bar-run-irc ()
+  (defun hiro/tab-bar-run-telega ()
+    "Create or switch to Telega tab-bar."
     (interactive)
     (mmk2410/tab-bar-switch-or-create
      "Telega"
      #'telega))
 
   (defun hiro/tab-bar-run-elfeed ()
+    "Create or switch to Elfeed tab-bar."
     (interactive)
     (mmk2410/tab-bar-switch-or-create "RSS" #'elfeed))
 
   (defun hiro/tab-bar-run-write ()
+    "Create or switch to Write tab-bar."
     (interactive)
-    (mmk2410/tab-bar-switch-or-create "Write" #'scratch-buffer))
-  )
+    (mmk2410/tab-bar-switch-or-create "Write" #'scratch-buffer)))
 
 ;;; Settings for tracking recent files
 
@@ -822,7 +809,7 @@ Call a second time to restore the original window configuration."
      '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
      '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
   ;; org latex code render size
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
   ;; make svg latex preview image
   (setq org-preview-latex-default-process 'dvisvgm)
   ;; Re-align tags when window shape changes
@@ -874,8 +861,8 @@ Call a second time to restore the original window configuration."
    ("C-c c" . org-capture))
   :config
   ;; Directories settings
-  (when (file-directory-p "~/Documents/gtd/")
-    (setq org-agenda-files (list "~/Documents/gtd/")))
+  (when (file-directory-p "~/Dropbox/gtd/")
+    (setq org-agenda-files (list "~/Dropbox/gtd/")))
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
@@ -1058,7 +1045,16 @@ Call a second time to restore the original window configuration."
 
   (global-set-key (kbd "C-\\") 'toggle-input-method))
 
+;;; Google Translate
+
+(use-package google-translate
+  :config
+  (require 'google-translate-smooth-ui)
+  (setq google-translate-translation-directions-alist '(("en" . "zh") ("zh" . "en")))
+  (global-set-key (kbd "C-c t") 'google-translate-smooth-translate))
+
 ;;; Blog writing
+
 (use-package org-static-blog
   :load-path "lib/org-static-blog"
   :config
@@ -1127,7 +1123,14 @@ Call a second time to restore the original window configuration."
 (use-package org-roam-dailies
   :load-path "lib/org-roam/extensions/")
 
-(use-package org-roam-ui)
+(use-package org-roam-ui
+  :config
+  (setq
+   ;; org-roam-ui-sync-theme t
+   org-roam-ui-follow t
+   org-roam-ui-update-on-save t
+   ;; org-roam-ui-open-on-start t
+   ))
 
 ;;; LaTeX
 ;; read README.GIT && ./configure to generate .el files
@@ -1195,7 +1198,7 @@ Call a second time to restore the original window configuration."
         (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n"
                 ";; stay hungry, stay foolish\n"
                 ";; write more, but shorter\n"
-                ";; do one thing and do it best"
+                ";; do one thing and do it best\n"
                 ";; no day but toady\n\n"))
   :preface
   (defun sanityinc/maybe-set-bundled-elisp-readonly ()
@@ -1557,7 +1560,8 @@ and download pdf to user-specified directory."
   (which-key-mode t)
   (which-key-setup-side-window-bottom))
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :if (display-graphic-p))
 
 (use-package super-save
   :diminish
@@ -1669,3 +1673,4 @@ and download pdf to user-specified directory."
       (load file))))
 
 ;;; init.el ends here
+(put 'upcase-region 'disabled nil)

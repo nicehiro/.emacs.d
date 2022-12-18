@@ -58,9 +58,6 @@
 [submodule "dash"]
 	path = lib/dash
 	url = git@github.com:magnars/dash.el.git
-[submodule "default-text-scale"]
-	path = lib/default-text-scale
-	url = git@github.com:purcell/default-text-scale.git
 [submodule "deferred"]
 	path = lib/deferred
 	url = git@github.com:kiwanami/emacs-deferred.git
@@ -73,6 +70,9 @@
 [submodule "diredfl"]
 	path = lib/diredfl
 	url = git@github.com:purcell/diredfl.git
+[submodule "discover"]
+	path = lib/discover
+	url = git@github.com:mickeynp/discover.el.git
 [submodule "doom-modeline"]
 	path = lib/doom-modeline
 	url = git@github.com:seagle0128/doom-modeline.git
@@ -101,6 +101,9 @@
 [submodule "embark"]
 	path = lib/embark
 	url = git@github.com:oantolin/embark.git
+[submodule "emms"]
+	path = lib/emms
+	url = git@github.com:emacsmirror/emms.git
 [submodule "envrc"]
 	path = lib/envrc
 	url = git@github.com:purcell/envrc.git
@@ -113,6 +116,9 @@
 [submodule "evil"]
 	path = lib/evil
 	url = git@github.com:emacs-evil/evil.git
+[submodule "evil-surround"]
+	path = lib/evil-surround
+	url = git@github.com:emacs-evil/evil-surround.git
 [submodule "exec-path-from-shell"]
 	path = lib/exec-path-from-shell
 	url = git@github.com:purcell/exec-path-from-shell.git
@@ -140,12 +146,18 @@
 [submodule "go-translate"]
 	path = lib/go-translate
 	url = git@github.com:lorniu/go-translate.git
+[submodule "google-translate"]
+	path = lib/google-translate
+	url = git@github.com:atykhonov/google-translate.git
 [submodule "goto-chg"]
 	path = lib/goto-chg
 	url = git@github.com:emacs-evil/goto-chg.git
 [submodule "grammarly"]
 	path = lib/grammarly
 	url = git@github.com:emacs-grammarly/grammarly.git
+[submodule "guess-language"]
+	path = lib/guess-language
+	url = git@github.com:tmalsburg/guess-language.el.git
 [submodule "highlight-escape-sequences"]
 	path = lib/highlight-escape-sequences
 	url = git@github.com:dgutov/highlight-escape-sequences.git
@@ -155,15 +167,15 @@
 [submodule "hledger-mode"]
 	path = lib/hledger-mode
 	url = git@github.com:narendraj9/hledger-mode.git
+[submodule "ht"]
+	path = lib/ht
+	url = git@github.com:Wilfred/ht.el.git
 [submodule "htmlize"]
 	path = lib/htmlize
 	url = git@github.com:hniksic/emacs-htmlize.git
 [submodule "inheritenv"]
 	path = lib/inheritenv
 	url = git@github.com:purcell/inheritenv.git
-[submodule "kind-icon"]
-	path = lib/kind-icon
-	url = https://github.com/jdtsmith/kind-icon
 [submodule "ledger-mode"]
 	path = lib/ledger-mode
 	url = git@github.com:ledger/ledger-mode.git
@@ -185,18 +197,30 @@
 [submodule "lib/org-static-blog"]
 	path = lib/org-static-blog
 	url = git@github.com:bastibe/org-static-blog.git
+[submodule "lib/txl.el"]
+	path = lib/txl.el
+	url = git@github.com:tmalsburg/txl.el.git
 [submodule "link-hint"]
 	path = lib/link-hint
 	url = git@github.com:noctuid/link-hint.el.git
+[submodule "lyrics-fetcher"]
+	path = lib/lyrics-fetcher
+	url = git@github.com:SqrtMinusOne/lyrics-fetcher.el.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git
+[submodule "makey"]
+	path = lib/makey
+	url = git@github.com:mickeynp/makey.git
 [submodule "marginalia"]
 	path = lib/marginalia
 	url = git@github.com:minad/marginalia.git
 [submodule "markdown-mode"]
 	path = lib/markdown-mode
 	url = git@github.com:jrblevin/markdown-mode.git
+[submodule "mindre-theme"]
+	path = lib/mindre-theme
+	url = git@github.com:erikbackman/mindre-theme.git
 [submodule "minions"]
 	path = lib/minions
 	url = git@github.com:tarsius/minions.git
@@ -245,6 +269,9 @@
 [submodule "pass"]
 	path = lib/pass
 	url = git@github.com:NicolasPetton/pass.git
+[submodule "persist"]
+	path = lib/persist
+	url = git@github.com:emacsmirror/persist.git
 [submodule "popup"]
 	path = lib/popup
 	url = git@github.com:auto-complete/popup-el.git
@@ -293,9 +320,6 @@
 [submodule "switch-window"]
 	path = lib/switch-window
 	url = git@github.com:dimitri/switch-window.git
-[submodule "telega"]
-	path = lib/telega
-	url = git@github.com:zevlg/telega.el.git
 [submodule "tempel"]
 	path = lib/tempel
 	url = git@github.com:minad/tempel.git
@@ -308,6 +332,9 @@
 [submodule "treepy"]
 	path = lib/treepy
 	url = git@github.com:volrath/treepy.el.git
+[submodule "ts"]
+	path = lib/ts
+	url = git@github.com:alphapapa/ts.el.git
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git
