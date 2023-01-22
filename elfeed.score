@@ -15,7 +15,7 @@
   (:text "graph" :title-value 10 :content-value 5 :type s)
   (:text "multi-task" :title-value 10 :content-value 5 :type s)
   (:text "latent space" :title-value 10 :content-value 5 :type s)
-  (:text "goal-condition" :title-value 10 :content-value 5 :type s)
+  (:text "goal condition" :title-value 10 :content-value 5 :type s)
   (:text "subtask" :title-value 20 :content-value 10 :type s)
   (:text "zero shot" :title-value 10 :content-value 5 :type s)
   (:text "generalization" :title-value 10 :content-value 5 :type s)

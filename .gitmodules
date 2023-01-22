@@ -49,6 +49,9 @@
 [submodule "consult-eglot"]
 	path = lib/consult-eglot
 	url = git@github.com:mohkale/consult-eglot.git
+[submodule "consult-org-roam"]
+	path = lib/consult-org-roam
+	url = git@github.com:jgru/consult-org-roam.git
 [submodule "corfu"]
 	path = lib/corfu
 	url = git@github.com:minad/corfu.git
@@ -79,9 +82,6 @@
 [submodule "doom-themes"]
 	path = lib/doom-themes
 	url = git@github.com:doomemacs/themes.git
-[submodule "eglot"]
-	path = lib/eglot
-	url = git@github.com:joaotavora/eglot.git
 [submodule "elfeed"]
 	path = lib/elfeed
 	url = git@github.com:skeeto/elfeed.git
@@ -125,15 +125,6 @@
 [submodule "f"]
 	path = lib/f
 	url = git@github.com:rejeep/f.el.git
-[submodule "flymake"]
-	path = lib/flymake
-	url = git@github.com:emacsmirror/flymake.git
-[submodule "flymake-grammarly"]
-	path = lib/flymake-grammarly
-	url = git@github.com:emacs-grammarly/flymake-grammarly.git
-[submodule "flyspell-correct"]
-	path = lib/flyspell-correct
-	url = git@github.com:d12frosted/flyspell-correct.git
 [submodule "ghub"]
 	path = lib/ghub
 	url = git@github.com:magit/ghub.git
@@ -176,9 +167,9 @@
 [submodule "inheritenv"]
 	path = lib/inheritenv
 	url = git@github.com:purcell/inheritenv.git
-[submodule "ledger-mode"]
-	path = lib/ledger-mode
-	url = git@github.com:ledger/ledger-mode.git
+[submodule "kind-icon"]
+	path = lib/kind-icon
+	url = https://github.com/jdtsmith/kind-icon
 [submodule "lib/biblio.el"]
 	path = lib/biblio.el
 	url = git@github.com:nicehiro/biblio.el.git
@@ -233,6 +224,9 @@
 [submodule "move-dup"]
 	path = lib/move-dup
 	url = git@github.com:wyuenho/move-dup.git
+[submodule "multi-vterm"]
+	path = lib/multi-vterm
+	url = git@github.com:suonlight/multi-vterm.git
 [submodule "names"]
 	path = lib/names
 	url = git@github.com:Malabarba/names.git
@@ -314,6 +308,9 @@
 [submodule "simple-httpd"]
 	path = lib/simple-httpd
 	url = git@github.com:skeeto/emacs-web-server.git
+[submodule "ssh-config-mode"]
+	path = lib/ssh-config-mode
+	url = git@github.com:jhgorrell/ssh-config-mode-el.git
 [submodule "super-save"]
 	path = lib/super-save
 	url = git@github.com:bbatsov/super-save.git
@@ -335,9 +332,6 @@
 [submodule "ts"]
 	path = lib/ts
 	url = git@github.com:alphapapa/ts.el.git
-[submodule "use-package"]
-	path = lib/use-package
-	url = git@github.com:jwiegley/use-package.git
 [submodule "valign"]
 	path = lib/valign
 	url = git@github.com:casouri/valign.git
