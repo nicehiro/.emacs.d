@@ -1,4 +1,4 @@
-;;; init.el --- user-init-file              -*- lexical-binding: t -*-
+﻿;;; init.el --- user-init-file              -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -48,7 +48,7 @@
   (setq use-package-compute-statistics t)
   (require 'use-package))
 
-(use-package epkg)
+;; (use-package epkg)
 
 (use-package no-littering)
 
@@ -77,10 +77,12 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(require 'init-theme)
 (require 'init-font)
+(require 'init-evil)
 (require 'init-dired)
 (require 'init-modeline)
-(require 'init-flymake)
+;; (require 'init-flymake)
 (require 'init-minibuffer)
 (require 'init-complete)
 (require 'init-window)
@@ -97,7 +99,7 @@
 (require 'init-python)
 (require 'init-lsp)
 (require 'init-elfeed)
-(require 'init-rime)
+;; (require 'init-rime)
 (require 'init-doc)
 (require 'init-utils)
 

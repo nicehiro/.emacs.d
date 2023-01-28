@@ -37,7 +37,7 @@
 
 (use-package posframe)
 
-(use-package pass)
+;; (use-package pass)
 
 (provide 'init-utils)
 ;;; init-utils.el ends here

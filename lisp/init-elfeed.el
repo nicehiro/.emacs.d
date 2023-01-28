@@ -45,17 +45,6 @@
   (setq elfeed-search-title-max-width 80)
   (setq elfeed-search-filter "@1-week-ago +unread"))
 
-(use-package elfeed-score
-  :config
-  (elfeed-score-load-score-file "~/.emacs.d/elfeed.score")
-  (setq elfeed-score-serde-score-file "~/.emacs.d/elfeed.serde.score")
-  (elfeed-score-enable)
-  (define-key elfeed-search-mode-map "=" elfeed-score-map))
-
-(use-package elfeed-goodies
-  :config
-  (elfeed-goodies/setup)
-  (setq elfeed-goodies/entry-pane-position 'bottom))
 
 (provide 'init-elfeed)
 ;;; init-elfeed.el ends here

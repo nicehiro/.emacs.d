@@ -54,10 +54,7 @@
 	url = git@github.com:jgru/consult-org-roam.git
 [submodule "corfu"]
 	path = lib/corfu
-	url = git@github.com:minad/corfu.git
-[submodule "corfu-doc"]
-	path = lib/corfu-doc
-	url = git@github.com:galeo/corfu-doc.git
+	url = https://github.com/minad/corfu
 [submodule "dash"]
 	path = lib/dash
 	url = git@github.com:magnars/dash.el.git
@@ -185,15 +182,15 @@
 [submodule "lib/global-interactive-emacs"]
 	path = lib/global-interactive-emacs
 	url = git@github.com:ginqi7/global-interactive-emacs.git
-[submodule "lib/org-static-blog"]
-	path = lib/org-static-blog
-	url = git@github.com:bastibe/org-static-blog.git
 [submodule "lib/txl.el"]
 	path = lib/txl.el
 	url = git@github.com:tmalsburg/txl.el.git
 [submodule "link-hint"]
 	path = lib/link-hint
 	url = git@github.com:noctuid/link-hint.el.git
+[submodule "llama"]
+	path = lib/llama
+	url = https://git.sr.ht/~tarsius/llama
 [submodule "lyrics-fetcher"]
 	path = lib/lyrics-fetcher
 	url = git@github.com:SqrtMinusOne/lyrics-fetcher.el.git
@@ -227,6 +224,9 @@
 [submodule "multi-vterm"]
 	path = lib/multi-vterm
 	url = git@github.com:suonlight/multi-vterm.git
+[submodule "my-yasnippets"]
+	path = lib/my-yasnippets
+	url = git@github.com:nicehiro/yasnippets.git
 [submodule "names"]
 	path = lib/names
 	url = git@github.com:Malabarba/names.git
@@ -257,6 +257,9 @@
 [submodule "org-roam-ui"]
 	path = lib/org-roam-ui
 	url = git@github.com:org-roam/org-roam-ui.git
+[submodule "org-static-blog"]
+	path = lib/org-static-blog
+	url = git@github.com:bastibe/org-static-blog.git
 [submodule "parsebib"]
 	path = lib/parsebib
 	url = git@github.com:joostkremers/parsebib.git
@@ -296,9 +299,6 @@
 [submodule "request"]
 	path = lib/request
 	url = git@github.com:tkf/emacs-request.git
-[submodule "rime"]
-	path = lib/rime
-	url = git@github.com:DogLooksGood/emacs-rime.git
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git

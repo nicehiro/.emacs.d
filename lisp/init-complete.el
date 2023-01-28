@@ -11,14 +11,11 @@
   :init
   (global-corfu-mode))
 
-(use-package corfu-doc
-  :hook ((corfu-mode . corfu-doc-mode))
-  :bind
-  (:map corfu-map
-        ("M-p" . corfu-doc-scroll-up)
-        ("M-n" . corfu-doc-scroll-down))
+(use-package corfu-popupinfo
+  :load-path "lib/corfu/extensions/"
   :config
-  (setq corfu-doc-display-within-parent-frame nil))
+  (corfu-popupinfo-mode)
+  (setq corfu-popupinfo-delay (cons nil 1.0)))
 
 (use-package cape
   :after corfu

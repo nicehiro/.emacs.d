@@ -34,7 +34,7 @@
   (org-src-fontify-natively t)
   (org-src-preserve-indentation t)
   (org-src-tab-acts-natively t)
-  (org-indent-mode t)
+  ;; (org-indent-mode t)
   (org-image-actual-width nil) ;; set this first for #+attr_org :width works
   :config
   ;; org face
@@ -255,6 +255,11 @@
       (visual-line-mode -1)
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0)))))
+
+(use-package org-modern
+  :config
+  (global-org-modern-mode)
+  (set-face-attribute 'org-modern-symbol nil :family "Iosevka"))
 
 (provide 'init-org)
 ;;; init-org.el ends here
