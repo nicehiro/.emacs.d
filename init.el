@@ -31,7 +31,7 @@
               (set-window-scroll-bars
                (minibuffer-window frame) 0 nil 0 nil t)))
   (when (fboundp 'tool-bar-mode)
-    (tool-bar-mode 0))
+    (tool-bar-mode 1))
   (scroll-bar-mode -1)
   (menu-bar-mode t)
   (setq x-underline-at-descent-line t)
@@ -101,6 +101,7 @@
 (require 'init-elfeed)
 ;; (require 'init-rime)
 (require 'init-doc)
+(require 'init-hledger)
 (require 'init-utils)
 
 ;;; Configure default locale

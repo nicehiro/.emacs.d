@@ -82,12 +82,6 @@
 [submodule "elfeed"]
 	path = lib/elfeed
 	url = git@github.com:skeeto/elfeed.git
-[submodule "elfeed-goodies"]
-	path = lib/elfeed-goodies
-	url = git@github.com:jeetelongname/elfeed-goodies.git
-[submodule "elfeed-score"]
-	path = lib/elfeed-score
-	url = git@github.com:sp1ff/elfeed-score.git
 [submodule "emacs-zotero"]
 	path = emacs-zotero
 	url = git@gitlab.com:fvdbeek/emacs-zotero.git
@@ -218,6 +212,9 @@
 [submodule "modus-themes"]
 	path = lib/modus-themes
 	url = git@github.com:emacsmirror/modus-themes.git
+[submodule "mood-line"]
+	path = lib/mood-line
+	url = https://gitlab.com/jessieh/mood-line
 [submodule "move-dup"]
 	path = lib/move-dup
 	url = git@github.com:wyuenho/move-dup.git
@@ -311,6 +308,9 @@
 [submodule "ssh-config-mode"]
 	path = lib/ssh-config-mode
 	url = git@github.com:jhgorrell/ssh-config-mode-el.git
+[submodule "standard-themes"]
+	path = lib/standard-themes
+	url = https://github.com/emacsmirror/standard-themes
 [submodule "super-save"]
 	path = lib/super-save
 	url = git@github.com:bbatsov/super-save.git

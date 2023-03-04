@@ -77,7 +77,13 @@
   (defun hiro/tab-bar-run-write ()
     "Create or switch to Write tab-bar."
     (interactive)
-    (mmk2410/tab-bar-switch-or-create "Write" #'scratch-buffer)))
+    (mmk2410/tab-bar-switch-or-create "Write" #'scratch-buffer))
+
+  (defun hiro/tab-bar-run-code ()
+    "Create or switch to code tab-bar."
+    (interactive)
+    (mmk2410/tab-bar-switch-or-create "Code" #'scratch-buffer)))
+
 
 (provide 'init-tab)
 ;;; init-tab.el ends here

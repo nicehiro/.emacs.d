@@ -99,8 +99,8 @@
    ("C-c c" . org-capture))
   :config
   ;; Directories settings
-  (when (file-directory-p "~/Dropbox/gtd/")
-    (setq org-agenda-files (list "~/Dropbox/gtd/")))
+  (when (file-directory-p "~/Documents/gtd/")
+    (setq org-agenda-files (list "~/Documents/gtd/")))
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
@@ -144,22 +144,22 @@
   (defvar org-capture-templates nil
     "Org capture templates.")
   (setq org-capture-templates '(("i" "Idea"
-                                 entry (file+headline "~/Dropbox/gtd/ideas.org" "Someday/Maybe")
+                                 entry (file+headline "~/Documents/gtd/ideas.org" "Someday/Maybe")
                                  "* IDEA %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t)
                                 ("t" "Todo"
-                                 entry (file+headline "~/Dropbox/gtd/inbox.org" "TODOs")
+                                 entry (file+headline "~/Documents/gtd/inbox.org" "TODOs")
                                  "* TODO %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t)
                                 ("r" "Read"
-                                 entry (file+headline "~/Dropbox/gtd/read.org" "Reading List")
+                                 entry (file+headline "~/Documents/gtd/read.org" "Reading List")
                                  "* READ %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t)
                                 ("b" "Blog"
-                                 entry (file+headline "~/Dropbox/gtd/blog.org" "Blogs")
+                                 entry (file+headline "~/Documents/gtd/blog.org" "Blogs")
                                  "* BLOG %?\nAdded: %U\n"
                                  :prepend t
                                  :kill-buffer t))))
@@ -216,8 +216,6 @@
 (use-package writeroom-mode
   :hook ((org-mode . prose-mode)
          (LaTeX-mode . prose-mode))
-  :custom
-  (writeroom-fullscreen-effect 'fullboth)
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
@@ -240,7 +238,6 @@
           (setq-local show-trailing-whitespace nil)
           (setq-local line-spacing 0.2)
           (setq-local electric-pair-mode nil)
-          (ignore-errors (flyspell-mode 1))
           (visual-line-mode 1))
       (kill-local-variable 'truncate-lines)
       (kill-local-variable 'word-wrap)
@@ -251,10 +248,11 @@
       (kill-local-variable 'line-spacing)
       (kill-local-variable 'electric-pair-mode)
       (buffer-face-mode -1)
-      (flyspell-mode -1)
       (visual-line-mode -1)
       (when (fboundp 'writeroom-mode)
-        (writeroom-mode 0)))))
+        (writeroom-mode 0))))
+  :config
+  (setq ))
 
 (use-package org-modern
   :config
