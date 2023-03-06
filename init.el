@@ -33,7 +33,7 @@
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode 1))
   (scroll-bar-mode -1)
-  (menu-bar-mode t)
+  (menu-bar-mode -1)
   (setq x-underline-at-descent-line t)
   (toggle-debug-on-error))
 
@@ -77,7 +77,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(require 'init-theme)
+;; (require 'init-theme)
 (require 'init-font)
 (require 'init-evil)
 (require 'init-dired)
@@ -94,7 +94,6 @@
 (require 'init-blog)
 (require 'init-tex)
 (require 'init-yas)
-(require 'init-vterm)
 (require 'init-elisp)
 (require 'init-python)
 (require 'init-lsp)
