@@ -11,3 +11,4 @@ etc/
 private.el
 librime/
 *.elc
+mind-wave/

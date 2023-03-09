@@ -19,6 +19,9 @@
 [submodule "beacon"]
 	path = lib/beacon
 	url = git@github.com:Malabarba/beacon.git
+[submodule "biblio"]
+	path = lib/biblio
+	url = https://github.com/cpitclaudel/biblio.el
 [submodule "borg"]
 	path = lib/borg
 	url = git@github.com:emacscollective/borg.git
@@ -79,12 +82,12 @@
 [submodule "doom-themes"]
 	path = lib/doom-themes
 	url = git@github.com:doomemacs/themes.git
+[submodule "ef-themes"]
+	path = lib/ef-themes
+	url = git@github.com:emacsmirror/ef-themes.git
 [submodule "elfeed"]
 	path = lib/elfeed
 	url = git@github.com:skeeto/elfeed.git
-[submodule "emacs-zotero"]
-	path = emacs-zotero
-	url = git@gitlab.com:fvdbeek/emacs-zotero.git
 [submodule "emacsql"]
 	path = lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
@@ -124,7 +127,7 @@
 	url = git@github.com:sshaw/git-link.git
 [submodule "git-timemachine"]
 	path = lib/git-timemachine
-	url = git@gitlab.com:pidu/git-timemachine.git
+	url = git@github.com:emacsmirror/git-timemachine.git
 [submodule "go-translate"]
 	path = lib/go-translate
 	url = git@github.com:lorniu/go-translate.git
@@ -161,24 +164,6 @@
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = https://github.com/jdtsmith/kind-icon
-[submodule "lib/biblio.el"]
-	path = lib/biblio.el
-	url = git@github.com:nicehiro/biblio.el.git
-[submodule "lib/carbon-theme"]
-	path = lib/carbon-theme
-	url = git@github.com:DogLooksGood/carbon-theme.git
-[submodule "lib/ef-themes"]
-	path = lib/ef-themes
-	url = git@github.com:protesilaos/ef-themes.git
-[submodule "lib/emacs-zotero"]
-	path = lib/emacs-zotero
-	url = git@gitlab.com:fvdbeek/emacs-zotero.git
-[submodule "lib/global-interactive-emacs"]
-	path = lib/global-interactive-emacs
-	url = git@github.com:ginqi7/global-interactive-emacs.git
-[submodule "lib/txl.el"]
-	path = lib/txl.el
-	url = git@github.com:tmalsburg/txl.el.git
 [submodule "link-hint"]
 	path = lib/link-hint
 	url = git@github.com:noctuid/link-hint.el.git
@@ -200,6 +185,9 @@
 [submodule "markdown-mode"]
 	path = lib/markdown-mode
 	url = git@github.com:jrblevin/markdown-mode.git
+[submodule "mind-wave"]
+	path = lib/mind-wave
+	url = git@github.com:manateelazycat/mind-wave.git
 [submodule "mindre-theme"]
 	path = lib/mindre-theme
 	url = git@github.com:erikbackman/mindre-theme.git
@@ -208,7 +196,7 @@
 	url = git@github.com:tarsius/minions.git
 [submodule "mixed-pitch"]
 	path = lib/mixed-pitch
-	url = git@gitlab.com:jabranham/mixed-pitch.git
+	url = https://gitlab.com/jabranham/mixed-pitch
 [submodule "modus-themes"]
 	path = lib/modus-themes
 	url = git@github.com:emacsmirror/modus-themes.git
@@ -263,6 +251,9 @@
 [submodule "pass"]
 	path = lib/pass
 	url = git@github.com:NicolasPetton/pass.git
+[submodule "password-store"]
+	path = lib/password-store
+	url = git@github.com:emacsmirror/password-store.git
 [submodule "persist"]
 	path = lib/persist
 	url = git@github.com:emacsmirror/persist.git
@@ -301,7 +292,7 @@
 	url = git@github.com:magnars/s.el.git
 [submodule "shrink-path"]
 	path = lib/shrink-path
-	url = git@gitlab.com:bennya/shrink-path.el.git
+	url = https://gitlab.com/bennya/shrink-path.el
 [submodule "simple-httpd"]
 	path = lib/simple-httpd
 	url = git@github.com:skeeto/emacs-web-server.git
@@ -367,4 +358,4 @@
 	url = git@github.com:xuchunyang/youdao-dictionary.el.git
 [submodule "zotxt"]
 	path = lib/zotxt
-	url = git@gitlab.com:egh/zotxt-emacs.git
+	url = https://gitlab.com/egh/zotxt-emacs

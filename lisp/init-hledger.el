@@ -3,7 +3,7 @@
 (use-package hledger-mode
   :mode ("\\.journal\\'" "\\.hledger\\'")
   :init
-  (setq hledger-jfile "~/OneDrive - The Hong Kong Polytechnic University/accounts.journal")
+  (setq hledger-jfile "~/Documents/hledger/accounts.journal")
   :config
   (add-hook 'hledger-view-mode-hook #'hl-line-mode)
   (setq hledger-currency-string "$"))

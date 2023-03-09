@@ -77,7 +77,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-;; (require 'init-theme)
+(require 'init-theme)
 (require 'init-font)
 (require 'init-evil)
 (require 'init-dired)
