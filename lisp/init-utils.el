@@ -33,6 +33,7 @@
   (setq super-save-idle-duration 10)
   (setq super-save-auto-save-when-idle t)
   (setq save-silently t)
+  (setq auto-save-default nil)
   (super-save-mode 1))
 
 (use-package posframe)

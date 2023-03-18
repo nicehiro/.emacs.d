@@ -185,9 +185,6 @@
 [submodule "markdown-mode"]
 	path = lib/markdown-mode
 	url = git@github.com:jrblevin/markdown-mode.git
-[submodule "mind-wave"]
-	path = lib/mind-wave
-	url = git@github.com:manateelazycat/mind-wave.git
 [submodule "mindre-theme"]
 	path = lib/mindre-theme
 	url = git@github.com:erikbackman/mindre-theme.git
@@ -359,3 +356,9 @@
 [submodule "zotxt"]
 	path = lib/zotxt
 	url = https://gitlab.com/egh/zotxt-emacs
+[submodule "auto-save"]
+	path = lib/auto-save
+	url = git@github.com:manateelazycat/auto-save.git
+[submodule "gptel"]
+	path = lib/gptel
+	url = git@github.com:karthink/gptel.git
