@@ -167,10 +167,17 @@
 ;; https://christiantietze.de/posts/2019/12/emacs-notifications/
 (use-package appt ;; appointment for org agenda
   :config
+  (require 'notifications)
   (defun hiro/notify (title msg)
     "Send notification with `msg' and `title'."
-    (ns-do-applescript (format "display notification \"%s\" with title \"%s\" sound name \"Submarine\""
-                               msg title)))
+    (if (eq system-type 'darwin)
+        (ns-do-applescript (format
+                            "display notification \"%s\" with title \"%s\" sound name \"Submarine\""
+                            msg title))
+      (if (eq system-type 'gnu/linux)
+          (notifications-notify
+           :title title
+           :body msg))))
 
   (setq appt-time-msg-list nil    ;; clear existing appt list
         appt-display-interval '5  ;; warn every 5 minutes from t - appt-message-warning-time
