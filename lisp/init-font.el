@@ -3,12 +3,12 @@
 (defvar meomacs-font-size 16
   "Current font size.")
 
-(defvar meomacs-fonts '((default . "Iosevka")
+(defvar meomacs-fonts '((default . "Berkeley Mono")
                         (cjk . "LXGW WenKai Mono")
                         (symbol . "Noto Sans Symbols")
-                        (fixed . "Iosevka Fixed")
-                        (fixed-serif . "Iosevka Fixed")
-                        (variable . "Iosevka Alie")
+                        (fixed . "Berkeley Mono")
+                        (fixed-serif . "Berkeley Mono")
+                        (variable . "Berkeley Mono Variable")
                         (wide . "Iosevka")
                         (tall . "Iosevka"))
   "Fonts to use.")

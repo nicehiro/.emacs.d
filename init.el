@@ -33,7 +33,10 @@
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode 1))
   (scroll-bar-mode -1)
-  (menu-bar-mode -1)
+  (if (eq system-type 'darwin)
+      (menu-bar-mode 1)
+    (if (eq system-type 'gnu/linux)
+        (menu-bar-mode -1)))
   (setq x-underline-at-descent-line t)
   (toggle-debug-on-error))
 
@@ -93,7 +96,7 @@
 (require 'init-roam)
 (require 'init-blog)
 (require 'init-tex)
-(require 'init-yas)
+;; (require 'init-yas)
 (require 'init-elisp)
 (require 'init-python)
 (require 'init-lsp)
@@ -102,6 +105,7 @@
 (require 'init-doc)
 (require 'init-hledger)
 (require 'init-utils)
+(require 'init-gpt)
 
 ;;; Configure default locale
 (progn ; `charset'

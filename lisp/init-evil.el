@@ -14,6 +14,7 @@
   (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)
   (add-to-list 'evil-emacs-state-modes 'telega-root-mode)
   (add-to-list 'evil-emacs-state-modes 'telega-chat-mode)
+  (add-to-list 'evil-emacs-state-modes 'gptel-mode)
   (with-eval-after-load 'evil-maps
     (define-key evil-normal-state-map (kbd "C-n") nil)
     (define-key evil-normal-state-map (kbd "C-p") nil))
