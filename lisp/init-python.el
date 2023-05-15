@@ -7,7 +7,7 @@
 (use-package pyvenv
   :hook (python-mode . pyvenv-mode)
   :config
-  (setenv "WORKON_HOME" "/usr/local/Caskroom/miniconda/base/envs/")
+  (setenv "WORKON_HOME" ".")
   (add-hook 'pyvenv-post-activate-hooks
             (lambda ()
               (setq python-shell-interpreter

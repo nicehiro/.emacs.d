@@ -232,8 +232,7 @@
     :init-value nil :lighter " Prose" :keymap nil
     (if prose-mode
         (progn
-          (when (fboundp 'writeroom-mode)
-            (writeroom-mode 1))
+          (writeroom-mode 1)
           (setq truncate-lines nil)
           (setq word-wrap t)
           (setq word-wrap-by-category t)
@@ -257,9 +256,7 @@
       (buffer-face-mode -1)
       (visual-line-mode -1)
       (when (fboundp 'writeroom-mode)
-        (writeroom-mode 0))))
-  :config
-  (setq ))
+        (writeroom-mode 0)))))
 
 (use-package org-modern
   :config

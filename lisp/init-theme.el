@@ -58,9 +58,12 @@
           (t . (variable-pitch 1.1))))
 
   ;; Disable all other themes to avoid awkward blending:
-  (mapc #'disable-theme custom-enabled-themes)
+  (mapc #'disable-theme custom-enabled-themes))
 
-  (load-theme 'standard-light :no-confirm))
+(use-package doom-themes)
+
+;; add custom themes
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

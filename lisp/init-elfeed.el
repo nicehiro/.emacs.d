@@ -14,7 +14,8 @@
           ("https://lilianweng.github.io/lil-log/feed.xml" research)
           ("https://manateelazycat.github.io/feed.xml" emacs)
           ("https://sachachua.com/blog/feed" emacs)
-          ("https://karthinks.com/software/index.xml" emacs)))
+          ("https://karthinks.com/software/index.xml" emacs)
+          ("https://danieltakeshi.github.io/feed.xml" research)))
   (setq-default elfeed-search-filter "@1-years-old +unread "))
 
 (provide 'init-elfeed)

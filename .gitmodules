@@ -13,6 +13,9 @@
 [submodule "auctex-latexmk"]
 	path = lib/auctex-latexmk
 	url = git@github.com:tom-tan/auctex-latexmk.git
+[submodule "auto-save"]
+	path = lib/auto-save
+	url = git@github.com:manateelazycat/auto-save.git
 [submodule "avy"]
 	path = lib/avy
 	url = git@github.com:abo-abo/avy.git
@@ -76,12 +79,12 @@
 [submodule "discover"]
 	path = lib/discover
 	url = git@github.com:mickeynp/discover.el.git
-[submodule "doom-modeline"]
-	path = lib/doom-modeline
-	url = git@github.com:seagle0128/doom-modeline.git
 [submodule "doom-themes"]
 	path = lib/doom-themes
 	url = git@github.com:doomemacs/themes.git
+[submodule "dracula-theme"]
+	path = lib/dracula-theme
+	url = https://github.com/dracula/emacs
 [submodule "ef-themes"]
 	path = lib/ef-themes
 	url = git@github.com:emacsmirror/ef-themes.git
@@ -137,6 +140,9 @@
 [submodule "goto-chg"]
 	path = lib/goto-chg
 	url = git@github.com:emacs-evil/goto-chg.git
+[submodule "gptel"]
+	path = lib/gptel
+	url = git@github.com:karthink/gptel.git
 [submodule "grammarly"]
 	path = lib/grammarly
 	url = git@github.com:emacs-grammarly/grammarly.git
@@ -197,9 +203,6 @@
 [submodule "modus-themes"]
 	path = lib/modus-themes
 	url = git@github.com:emacsmirror/modus-themes.git
-[submodule "mood-line"]
-	path = lib/mood-line
-	url = https://gitlab.com/jessieh/mood-line
 [submodule "move-dup"]
 	path = lib/move-dup
 	url = git@github.com:wyuenho/move-dup.git
@@ -293,6 +296,9 @@
 [submodule "simple-httpd"]
 	path = lib/simple-httpd
 	url = git@github.com:skeeto/emacs-web-server.git
+[submodule "solarized-theme"]
+	path = lib/solarized-theme
+	url = https://github.com/bbatsov/solarized-emacs
 [submodule "ssh-config-mode"]
 	path = lib/ssh-config-mode
 	url = git@github.com:jhgorrell/ssh-config-mode-el.git
@@ -356,9 +362,6 @@
 [submodule "zotxt"]
 	path = lib/zotxt
 	url = https://gitlab.com/egh/zotxt-emacs
-[submodule "auto-save"]
-	path = lib/auto-save
-	url = git@github.com:manateelazycat/auto-save.git
-[submodule "gptel"]
-	path = lib/gptel
-	url = git@github.com:karthink/gptel.git
+[submodule "org-roam-logseq.el"]
+	path = lib/org-roam-logseq
+	url = git@github.com:idanov/org-roam-logseq.el.git

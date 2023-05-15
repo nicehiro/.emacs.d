@@ -1,16 +1,16 @@
 ;; -*- lexical-binding: t; Font Configuration -*-
 
-(defvar meomacs-font-size 16
+(defvar meomacs-font-size 20
   "Current font size.")
 
-(defvar meomacs-fonts '((default . "Berkeley Mono")
+(defvar meomacs-fonts '((default . "Menlo")
                         (cjk . "LXGW WenKai Mono")
                         (symbol . "Noto Sans Symbols")
-                        (fixed . "Berkeley Mono")
-                        (fixed-serif . "Berkeley Mono")
-                        (variable . "Berkeley Mono Variable")
-                        (wide . "Iosevka")
-                        (tall . "Iosevka"))
+                        (fixed . "Menlo")
+                        (fixed-serif . "Menlo")
+                        (variable . "Helvetica")
+                        (wide . "Menlo")
+                        (tall . "Menlo"))
   "Fonts to use.")
 (defun meomacs--get-font-family (key)
   (let ((font (alist-get key meomacs-fonts)))
@@ -53,7 +53,7 @@
 
 (meomacs-load-default-font)
 (meomacs-load-face-font)
-;; (meomacs-load-charset-font)
+(meomacs-load-charset-font)
 
 ;; Run after startup
 (add-hook 'after-init-hook
@@ -61,8 +61,8 @@
             (when window-system
               (meomacs-load-charset-font))))
 
-(add-to-list 'default-frame-alist '(font .  "Iosevka-16" ))
-(set-face-attribute 'default t :font  "Iosevka-16" )
+;; (add-to-list 'default-frame-alist '(font .  "Iosevka-16" ))
+;; (set-face-attribute 'default t :font  "Iosevka-16" )
 
 (provide 'init-font)
 ;;; init-font.el ends here
