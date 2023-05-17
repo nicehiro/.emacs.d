@@ -236,9 +236,6 @@
 [submodule "org-roam"]
 	path = lib/org-roam
 	url = git@github.com:org-roam/org-roam.git
-[submodule "org-roam-server"]
-	path = lib/org-roam-server
-	url = git@github.com:emacsattic/org-roam-server.git
 [submodule "org-roam-ui"]
 	path = lib/org-roam-ui
 	url = git@github.com:org-roam/org-roam-ui.git
@@ -287,6 +284,9 @@
 [submodule "request"]
 	path = lib/request
 	url = git@github.com:tkf/emacs-request.git
+[submodule "rime"]
+	path = lib/rime
+	url = https://github.com/DogLooksGood/emacs-rime
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git
@@ -362,6 +362,3 @@
 [submodule "zotxt"]
 	path = lib/zotxt
 	url = https://gitlab.com/egh/zotxt-emacs
-[submodule "org-roam-logseq.el"]
-	path = lib/org-roam-logseq
-	url = git@github.com:idanov/org-roam-logseq.el.git

@@ -9,8 +9,11 @@
   (rime-title "")
   :init
   (when *is-a-mac*
-    (setq rime-librime-root "~/.emacs.d/librime/dist")
-    (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/"))
+    (setq rime-librime-root "~/.config/emacs/librime/dist")
+    ;; (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/")
+    ;; Mac rime schame store path now is ~/Library/Rime/
+    (setq rime-share-data-dir "~/Library/Rime/")
+    )
   :config
   (defvar rime-default-cursor-color (frame-parameter nil 'cursor-color)
     "The default cursor color.")
