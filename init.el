@@ -31,7 +31,7 @@
               (set-window-scroll-bars
                (minibuffer-window frame) 0 nil 0 nil t)))
   (when (fboundp 'tool-bar-mode)
-    (tool-bar-mode 1))
+    (tool-bar-mode -1))
   (scroll-bar-mode -1)
   (if (eq system-type 'darwin)
       (menu-bar-mode 1)
@@ -95,8 +95,8 @@
 (require 'init-org)
 (require 'init-roam)
 (require 'init-blog)
-(require 'init-tex)
-(require 'init-yas)
+;; (require 'init-tex)
+;; (require 'init-yas)
 (require 'init-elisp)
 (require 'init-python)
 (require 'init-lsp)
@@ -105,7 +105,7 @@
 (require 'init-doc)
 (require 'init-hledger)
 (require 'init-utils)
-(require 'init-gpt)
+;; (require 'init-gpt)
 
 ;;; Configure default locale
 (progn ; `charset'

@@ -1,5 +1,14 @@
 ;; -*- lexical-binding: t; -*-
 
+;; https://www.reddit.com/r/emacs/comments/1u5l17/always_black_cursor_in_emacsclient/
+;; There's both a cursor-color frame parameter and a cursor face.
+;; One of these settings may be overriding the other.
+;; Most themes will set the cursor face appropriately for
+;; dark/light frame background colours, so you might consider
+;; explicitly setting the cursor-color to nil so that you can
+;; rely on the theme's settings
+(add-to-list 'default-frame-alist '(cursor-color . nil))
+
 (use-package ef-themes
   :load-path "lib/ef-themes"
   :config
