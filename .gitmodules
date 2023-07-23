@@ -88,6 +88,9 @@
 [submodule "dracula-theme"]
 	path = lib/dracula-theme
 	url = https://github.com/dracula/emacs
+[submodule "easy-hugo"]
+	path = lib/easy-hugo
+	url = https://github.com/masasam/emacs-easy-hugo
 [submodule "ef-themes"]
 	path = lib/ef-themes
 	url = git@github.com:emacsmirror/ef-themes.git

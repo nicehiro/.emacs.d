@@ -4,6 +4,7 @@
 
 (defconst *spell-check-support-enabled* t)
 (defconst *is-a-mac* (eq system-type 'darwin))
+(defconst *is-a-linux* (eq system-type 'gnu/linux))
 
 ;; Adjust garbage collection thresholds during startup, and thereafter
 
@@ -80,7 +81,6 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(require 'init-theme)
 (require 'init-font)
 (require 'init-evil)
 (require 'init-dired)
@@ -105,7 +105,9 @@
 (require 'init-doc)
 (require 'init-hledger)
 (require 'init-utils)
-;; (require 'init-gpt)
+(require 'init-gpt)
+
+(require 'init-theme)
 
 ;;; Configure default locale
 (progn ; `charset'
