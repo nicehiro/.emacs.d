@@ -5,6 +5,10 @@
 (defconst *spell-check-support-enabled* t)
 (defconst *is-a-mac* (eq system-type 'darwin))
 (defconst *is-a-linux* (eq system-type 'gnu/linux))
+(defconst *is-a-win* (eq system-type 'window-nt))
+
+(if *is-a-win*
+    (setenv "Home" "c:/Users/fywan/"))
 
 ;; Adjust garbage collection thresholds during startup, and thereafter
 
@@ -36,8 +40,7 @@
   (scroll-bar-mode -1)
   (if (eq system-type 'darwin)
       (menu-bar-mode 1)
-    (if (eq system-type 'gnu/linux)
-        (menu-bar-mode -1)))
+    (menu-bar-mode -1))
   (setq x-underline-at-descent-line t)
   (toggle-debug-on-error))
 
@@ -105,7 +108,7 @@
 (require 'init-doc)
 (require 'init-hledger)
 (require 'init-utils)
-(require 'init-gpt)
+;; (require 'init-gpt)
 
 (require 'init-theme)
 

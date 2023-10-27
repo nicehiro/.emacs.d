@@ -47,7 +47,7 @@
      '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
      '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
   ;; org latex code render size
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.0))
   ;; make svg latex preview image
   (setq org-preview-latex-default-process 'dvisvgm)
   ;; Re-align tags when window shape changes

@@ -45,5 +45,10 @@
 (add-hook 'window-setup-hook #'centaur-setup-fonts)
 (add-hook 'server-after-make-frame-hook #'centaur-setup-fonts)
 
+
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+		    charset (font-spec :family "KaiTi" :size 28)))
+
 (provide 'init-font)
 ;;; init-font.el ends here

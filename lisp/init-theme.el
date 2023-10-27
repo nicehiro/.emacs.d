@@ -74,5 +74,7 @@
 ;; add custom themes
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 
+(load-theme 'nord :t)
+
 (provide 'init-theme)
 ;;; init-theme.el ends here
