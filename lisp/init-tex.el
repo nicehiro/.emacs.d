@@ -2,7 +2,7 @@
 
 ;;; LaTeX
 ;; read README.GIT && ./configure to generate .el files
-(require 'latex)
+;; (require 'latex)
 (use-package latex
   :hook ((LaTeX-mode . prettify-symbols-mode))
   :bind (:map LaTeX-mode-map
@@ -101,14 +101,6 @@
               (bound-and-true-p org-cdlatex-mode))
           (cdlatex-tab)
         (yas-next-field-or-maybe-expand)))))
-
-;; temporary fix for this
-;; check here https://github.com/tom-tan/auctex-latexmk/issues/44
-(provide 'tex-buf)
-(use-package auctex-latexmk
-  :config
-  (auctex-latexmk-setup)
-  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (provide 'init-tex)
 ;;; init-tex.el ends here
