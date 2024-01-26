@@ -24,5 +24,10 @@
 (use-package highlight-quoted
   :hook (emacs-lisp-mode . highlight-quoted-mode))
 
+(use-package psearch
+  :load-path "lib/psearch/")
+
+(use-package rainbow-mode)
+
 (provide 'init-elisp)
 ;;; init-elisp.el ends here

@@ -45,7 +45,7 @@
 	url = git@github.com:purcell/color-theme-sanityinc-tomorrow.git
 [submodule "compat"]
 	path = lib/compat
-	url = https://git.sr.ht/~pkal/compat
+	url = https://github.com/emacs-compat/compat
 [submodule "consult"]
 	path = lib/consult
 	url = git@github.com:minad/consult.git
@@ -176,6 +176,12 @@
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = https://github.com/jdtsmith/kind-icon
+[submodule "lib/org-margin"]
+	path = lib/org-margin
+	url = https://github.com/rougier/org-margin.git
+[submodule "lib/psearch"]
+	path = lib/psearch
+	url = https://github.com/twlz0ne/psearch.el.git
 [submodule "link-hint"]
 	path = lib/link-hint
 	url = git@github.com:noctuid/link-hint.el.git
@@ -221,6 +227,9 @@
 [submodule "names"]
 	path = lib/names
 	url = git@github.com:Malabarba/names.git
+[submodule "nerd-icons"]
+	path = lib/nerd-icons
+	url = https://github.com/rainstormstudio/nerd-icons.el
 [submodule "no-littering"]
 	path = lib/no-littering
 	url = git@github.com:emacscollective/no-littering.git
@@ -287,6 +296,9 @@
 [submodule "rainbow-identifiers"]
 	path = lib/rainbow-identifiers
 	url = git@github.com:Fanael/rainbow-identifiers.git
+[submodule "rainbow-mode"]
+	path = lib/rainbow-mode
+	url = git@github.com:emacsmirror/rainbow-mode.git
 [submodule "recursion-indicator"]
 	path = lib/recursion-indicator
 	url = git@github.com:minad/recursion-indicator.git
@@ -320,6 +332,9 @@
 [submodule "switch-window"]
 	path = lib/switch-window
 	url = git@github.com:dimitri/switch-window.git
+[submodule "telega"]
+	path = lib/telega
+	url = https://github.com/zevlg/telega.el
 [submodule "tempel"]
 	path = lib/tempel
 	url = git@github.com:minad/tempel.git

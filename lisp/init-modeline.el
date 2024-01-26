@@ -12,13 +12,7 @@
   (setq mode-line-percent-position '(-3 "%p"))
   (setq mode-line-position-column-line-format '(" %l,%c"))
   (setq mode-line-compact nil)
-
-  ;; (let ((active-bg (face-attribute 'mode-line :background))
-  ;;       (inactive-bg (face-attribute 'mode-line-inactive :background)))
-  ;;   (custom-set-faces
-  ;;    `(mode-line ((t :inherit variable-pitch :box (:line-width 6 :color ,active-bg) :background ,active-bg)))
-  ;;    `(mode-line-inactive ((t :inherit variable-pitch :box (:line-width 6 :color ,inactive-bg) :background ,inactive-bg)))))
-
+  ;; evil
   (defun mode-line-evil ()
     "Evil state info for modeline."
     (cond

@@ -16,7 +16,8 @@
          ("C-c C-c" . org-edit-src-exit))
   :bind-keymap ("C-c o" . sanityinc/org-global-prefix-map)
   :hook ((org-agenda-mode . hl-line-mode)
-         (org-mode . variable-pitch-mode))
+         (org-mode . variable-pitch-mode)
+         (org-mode . visual-line-mode))
   :custom
   (org-modules nil) ; Faster loading
   (org-log-done 'time)
@@ -32,7 +33,7 @@
   (org-confirm-babel-evaluate nil)
   (org-link-elisp-confirm-function nil)
   (org-src-fontify-natively t)
-  (org-src-preserve-indentation t)
+  ;; (org-src-preserve-indentation t)
   (org-src-tab-acts-natively t)
   ;; (org-indent-mode t)
   (org-image-actual-width nil) ;; set this first for #+attr_org :width works
@@ -221,8 +222,8 @@
                                 :visible "▼")))
 
 (use-package writeroom-mode
-  :hook ((org-mode . prose-mode)
-         (LaTeX-mode . prose-mode))
+  ;; :hook ((org-mode . prose-mode)
+  ;;        (LaTeX-mode . prose-mode))
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.
@@ -259,10 +260,11 @@
       (when (fboundp 'writeroom-mode)
         (writeroom-mode 0)))))
 
-(use-package org-modern
+(use-package org-margin
+  :load-path "~/.config/emacs/lib/org-margin/"
+  :hook ((org-mode . org-margin-mode))
   :config
-  (global-org-modern-mode)
-  (set-face-attribute 'org-modern-symbol nil :family "Iosevka"))
+  (org-indent-mode -1))
 
 (provide 'init-org)
 ;;; init-org.el ends here

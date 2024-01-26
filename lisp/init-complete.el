@@ -25,7 +25,7 @@
          ("C-c p f" . cape-file)
          ("C-c p s" . cape-symbol)
          ("C-c p a" . cape-abbrev)
-         ("C-c p i" . cape-ispell)
+         ;; ("C-c p i" . cape-ispell)
          ("C-c p l" . cape-line)
          ("C-c p \\" . cape-tex)
          ("C-c p w" . cape-dict))

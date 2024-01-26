@@ -33,48 +33,26 @@
   (mapc #'disable-theme custom-enabled-themes)
 
   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
-  ;; (ef-themes-select 'ef-cyprus)
+
+  ;; modeline
+  (defun hiro/ef-theme-mode-line ()
+    (ef-themes-with-colors
+      (custom-set-faces
+       `(mode-line ((,c
+                     :background ,bg-mode-line
+                     :box (:line-width 10 :color ,bg-mode-line))))
+       `(mode-line-inactive ((,c
+                              :background ,bg-completion
+                              :box (:line-width 10 :color ,bg-completion)))))))
+  (add-hook 'ef-themes-post-load-hook #'hiro/ef-theme-mode-line)
+
+  (ef-themes-select 'ef-rosa)
   )
-
-(use-package standard-themes
-  :config
-  (setq standard-themes-bold-constructs t
-        standard-themes-italic-constructs t
-        standard-themes-mixed-fonts t
-        standard-themes-variable-pitch-ui t
-        standard-themes-mode-line-accented nil
-
-        ;; Accepts a symbol value:
-        standard-themes-fringes 'subtle
-
-        ;; The following accept lists of properties
-        standard-themes-links '(neutral-underline)
-        standard-themes-region '(no-extend neutral intense)
-        standard-themes-prompts '(bold italic)
-
-        ;; more complex alist to set weight, height, and optional
-        ;; `variable-pitch' per heading level (t is for any level not
-        ;; specified):
-        standard-themes-headings
-        '((0 . (variable-pitch light 1.9))
-          (1 . (variable-pitch light 1.8))
-          (2 . (variable-pitch light 1.7))
-          (3 . (variable-pitch semilight 1.6))
-          (4 . (variable-pitch semilight 1.5))
-          (5 . (variable-pitch 1.4))
-          (6 . (variable-pitch 1.3))
-          (7 . (variable-pitch 1.2))
-          (t . (variable-pitch 1.1))))
-
-  ;; Disable all other themes to avoid awkward blending:
-  (mapc #'disable-theme custom-enabled-themes))
 
 (use-package doom-themes)
 
 ;; add custom themes
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-
-(load-theme 'nord :t)
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

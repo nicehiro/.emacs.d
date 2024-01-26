@@ -36,6 +36,7 @@
             (lambda (frame)
               (set-window-scroll-bars
                (minibuffer-window frame) 0 nil 0 nil t)))
+  (set-frame-parameter nil 'internal-border-width 20)
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
   (scroll-bar-mode -1)
@@ -43,7 +44,8 @@
       (menu-bar-mode 1)
     (menu-bar-mode -1))
   (setq x-underline-at-descent-line t)
-  (toggle-debug-on-error))
+  (toggle-debug-on-error)
+  (set-fringe-mode -1))
 
 (eval-and-compile ; `borg'
   (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
@@ -88,7 +90,6 @@
 (require 'init-font)
 (require 'init-evil)
 (require 'init-dired)
-(require 'init-modeline)
 ;; (require 'init-flymake)
 (require 'init-minibuffer)
 (require 'init-complete)
@@ -96,7 +97,6 @@
 (require 'init-tab)
 (require 'init-vc)
 (require 'init-edit)
-(require 'init-org)
 (require 'init-roam)
 (require 'init-blog)
 (require 'init-tex)
@@ -109,10 +109,12 @@
 (require 'init-doc)
 (require 'init-hledger)
 (require 'init-utils)
-;; (require 'init-gpt)
+(require 'init-gpt)
 (require 'init-waka)
-
 (require 'init-theme)
+(require 'init-modeline)
+(require 'init-org)
+(require 'init-telega)
 
 ;;; Configure default locale
 (progn ; `charset'

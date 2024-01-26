@@ -25,8 +25,8 @@
 (use-package elec-pair
   :config (electric-pair-mode))
 
-(use-package electric
-  :config (electric-indent-mode))
+;; (use-package electric
+;;   :config (electric-indent-mode))
 
 (use-package autorevert
   :diminish
