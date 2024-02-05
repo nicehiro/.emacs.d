@@ -35,7 +35,7 @@
   (org-src-fontify-natively t)
   ;; (org-src-preserve-indentation t)
   (org-src-tab-acts-natively t)
-  ;; (org-indent-mode t)
+  (org-indent-mode nil)
   (org-image-actual-width nil) ;; set this first for #+attr_org :width works
   :config
   ;; org face
@@ -107,6 +107,7 @@
   (setq org-agenda-start-on-weekday nil)
   (setq org-deadline-warning-days 16)
   (setq org-use-speed-commands t)
+  (setq org-agenda-include-diary t)
   (setq org-agenda-start-day "+0d")
   (setq org-todo-keywords
         '(
@@ -262,9 +263,7 @@
 
 (use-package org-margin
   :load-path "~/.config/emacs/lib/org-margin/"
-  :hook ((org-mode . org-margin-mode))
-  :config
-  (org-indent-mode -1))
+  :hook ((org-mode . org-margin-mode)))
 
 (provide 'init-org)
 ;;; init-org.el ends here
