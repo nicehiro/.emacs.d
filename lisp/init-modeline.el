@@ -16,10 +16,10 @@
   (defun mode-line-evil ()
     "Evil state info for modeline."
     (cond
-     ((eq evil-state 'normal) "Ⓝ")
-     ((eq evil-state 'insert) "Ⓘ")
-     ((eq evil-state 'visual) "Ⓥ")
-     ((eq evil-state 'emacs) "Ⓔ")
+     ((eq evil-state 'normal) "󰰒")
+     ((eq evil-state 'insert) "󰰃")
+     ((eq evil-state 'visual) "󰰪")
+     ((eq evil-state 'emacs) "󰯷")
      (t "＃")))
 
   (setq-default mode-line-format

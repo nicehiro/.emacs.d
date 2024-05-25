@@ -94,6 +94,9 @@
 [submodule "elfeed"]
 	path = lib/elfeed
 	url = git@github.com:skeeto/elfeed.git
+[submodule "elfeed-score"]
+	path = lib/elfeed-score
+	url = https://github.com/sp1ff/elfeed-score
 [submodule "emacsql"]
 	path = lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
@@ -320,6 +323,9 @@
 [submodule "solarized-theme"]
 	path = lib/solarized-theme
 	url = https://github.com/bbatsov/solarized-emacs
+[submodule "spacious-padding"]
+	path = lib/spacious-padding
+	url = https://git.sr.ht/~protesilaos/spacious-padding
 [submodule "ssh-config-mode"]
 	path = lib/ssh-config-mode
 	url = git@github.com:jhgorrell/ssh-config-mode-el.git

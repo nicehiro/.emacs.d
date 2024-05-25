@@ -7,7 +7,7 @@
 ;; dark/light frame background colours, so you might consider
 ;; explicitly setting the cursor-color to nil so that you can
 ;; rely on the theme's settings
-(add-to-list 'default-frame-alist '(cursor-color . nil))
+;; (add-to-list 'default-frame-alist '(cursor-color . nil))
 
 (use-package ef-themes
   :load-path "lib/ef-themes"
@@ -34,43 +34,8 @@
 
   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
 
-  ;; modeline
-  (defun hiro/ef-theme-mode-line ()
-    (ef-themes-with-colors
-      (custom-set-faces
-       `(mode-line ((,c
-                     :background ,bg-mode-line
-                     :box (:line-width 10 :color ,bg-mode-line))))
-       `(mode-line-inactive ((,c
-                              :background ,bg-completion
-                              :box (:line-width 10 :color ,bg-completion)))))))
-
-  (add-hook 'ef-themes-post-load-hook #'hiro/ef-theme-mode-line)
-
-  (defun hiro/ef-theme-telega ()
-    (ef-themes-with-colors
-      (custom-set-faces
-       `(telega-msg-heading ((,c
-                              :background nil)))
-       `(telega-msg-inline-reply ((,c
-                                   :foreground ,fg-alt)))
-       `(telega-msg-self-title ((,c
-                                 :foreground ,fg-changed
-                                 :italic t
-                                 :weight 'bold)))
-       `(telega-msg-user-title ((,c
-                                 :italic t)))
-       )))
-
-  (hiro/ef-theme-telega)
-
-  ;; customized face
-  (set-face-attribute 'telega-msg-heading nil
-                      :background nil
-                      :weight 'bold)
-
-
-  (ef-themes-select 'ef-rosa))
+  ;; (ef-themes-select 'ef-rosa)
+  )
 
 (use-package doom-themes)
 

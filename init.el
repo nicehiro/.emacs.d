@@ -110,11 +110,11 @@
 (require 'init-hledger)
 (require 'init-utils)
 (require 'init-gpt)
-(require 'init-waka)
-(require 'init-theme)
+;; (require 'init-waka)
 (require 'init-modeline)
 (require 'init-org)
-(require 'init-telega)
+(require 'init-theme)
+;; (require 'init-telega)
 
 ;;; Configure default locale
 (progn ; `charset'
@@ -144,4 +144,3 @@
       (load file))))
 
 ;;; init.el ends here
-(put 'upcase-region 'disabled nil)

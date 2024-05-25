@@ -8,6 +8,7 @@
   (default-input-method "rime")
   (rime-title "")
   :init
+  (setq rime-share-data-dir "/usr/share/rime-data")
   (when *is-a-mac*
     (setq rime-librime-root "~/.config/emacs/librime/dist")
     ;; (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/")

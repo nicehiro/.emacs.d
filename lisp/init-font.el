@@ -7,11 +7,17 @@
   "Setup fonts."
   (when (display-graphic-p)
     ;; Set default font
-    (cl-loop for font in '("Lilex" "Comic Mono" "Cascadia Code" "Hack")
+    (cl-loop for font in '("Iosevka Nerd Font" "Lilex" "Comic Mono" "Cascadia Code" "Hack")
              when (font-installed-p font)
              return (set-face-attribute 'default nil
                                         :family font
-                                        :height 120))
+                                        :height 140))
+
+    (cl-loop for font in '("Iosevka Nerd Font")
+             when (font-installed-p font)
+             return (set-face-attribute 'variable-pitch nil
+                                        :family font
+                                        :height 140))
 
     ;; Specify font for all unicode characters
     (cl-loop for font in '("Segoe UI Symbol" "Symbola" "Symbol")

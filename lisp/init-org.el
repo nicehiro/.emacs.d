@@ -245,7 +245,7 @@
           (buffer-face-mode 1)
           (setq-local blink-cursor-interval 0.6)
           (setq-local show-trailing-whitespace nil)
-          (setq-local line-spacing 0.2)
+          (setq-local line-spacing 0.6)
           (setq-local electric-pair-mode nil)
           (visual-line-mode 1))
       (kill-local-variable 'truncate-lines)

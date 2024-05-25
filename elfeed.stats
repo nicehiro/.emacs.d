@@ -1,42 +1,14 @@
 ;;; Elfeed score rule stats file DO NOT EDIT       -*- lisp -*-
-(:version 1 :stats #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data
-                                 (#s(elfeed-score-title-or-content-rule "offline" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 178 1674264065.706655)
-                                    #s(elfeed-score-title-or-content-rule "reinforcement learning" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 706 1674264065.744777)
-                                    #s(elfeed-score-title-or-content-rule "graph" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 943 1674264065.741515)
-                                    #s(elfeed-score-title-or-content-rule "bayesian" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 205 1674264065.667958)
-                                    #s(elfeed-score-title-or-content-rule "distribute" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 234 1674264065.726395)
-                                    #s(elfeed-score-title-or-content-rule "generalization" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 342 1674264065.750248)
-                                    #s(elfeed-score-title-or-content-rule "latent space" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 96 1674264065.698756)
-                                    #s(elfeed-score-title-or-content-rule "multi-task" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 82 1674264065.495137)
-                                    #s(elfeed-score-title-or-content-rule "gaussian" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 201 1674264065.747811)
-                                    #s(elfeed-score-title-or-content-rule "multi-agent" 20 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 133 1674264065.692205)
-                                    #s(elfeed-score-title-or-content-rule "zero shot" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 5 1667183034.428983)
-                                    #s(elfeed-score-authors-rule "Sergey Levine" 300 S nil nil nil)
-                                    #s(elfeed-score-rule-stats 15 1672133558.641254)
-                                    #s(elfeed-score-title-or-content-rule "feature selection" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 26 1674264065.666295)
-                                    #s(elfeed-score-title-or-content-rule "meta learning" 10 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 5 1672731537.985003)
-                                    #s(elfeed-score-title-or-content-rule "uncertainty" 20 10 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 154 1674264065.74904)
-                                    #s(elfeed-score-title-or-content-rule "exploration" 30 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 128 1674264065.733045)
-                                    #s(elfeed-score-title-or-content-rule "sequence" 20 10 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 198 1674264065.743542)
-                                    #s(elfeed-score-title-or-content-rule "exploitation" 30 5 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 21 1674264065.733054)
-                                    #s(elfeed-score-title-or-content-rule "subtask" 20 10 s nil nil nil)
-                                    #s(elfeed-score-rule-stats 4 1671092360.168179)
-                                    #s(elfeed-score-authors-rule "Pieter Abbeel" 300 S nil nil nil)
-                                    #s(elfeed-score-rule-stats 2 1669342155.995314))))
+(:version 1 :stats
+          #s(hash-table test equal data
+                        (#s(elfeed-score-title-or-content-rule
+                            "subgoal" 10 10 s nil nil nil)
+                           #s(elfeed-score-rule-stats 1
+                                                      1711357184.37229)
+                           #s(elfeed-score-title-or-content-rule "LLM"
+                                                                 10 10
+                                                                 s nil
+                                                                 nil
+                                                                 nil)
+                           #s(elfeed-score-rule-stats 2
+                                                      1711357184.3723161))))

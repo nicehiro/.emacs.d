@@ -72,5 +72,25 @@ Call a second time to restore the original window configuration."
   :config
   (popwin-mode 1))
 
+(use-package spacious-padding
+  :config
+  ;; These is the default value, but I keep it here for visiibility.
+  (setq spacious-padding-widths
+        '( :internal-border-width 10
+           :header-line-width 4
+           :mode-line-width 6
+           :tab-width 4
+           :right-divider-width 30
+           :scroll-bar-width 8
+           :fringe-width 8))
+
+  ;; Read the doc string of `spacious-padding-subtle-mode-line' as it
+  ;; is very flexible and provides several examples.
+  (setq spacious-padding-subtle-mode-line
+        `( :mode-line-active vertical-border
+           :mode-line-inactive 'default))
+
+  (spacious-padding-mode 1))
+
 (provide 'init-window)
 ;;; init-window.el ends here

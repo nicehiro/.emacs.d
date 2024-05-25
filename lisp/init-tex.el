@@ -4,6 +4,7 @@
 ;; read README.GIT && ./configure to generate .el files
 ;; (require 'latex)
 (use-package latex
+  :ensure auctex
   :hook ((LaTeX-mode . prettify-symbols-mode))
   :bind (:map LaTeX-mode-map
               ("C-S-e" . latex-math-from-calc))
@@ -39,6 +40,7 @@
                         (funcall (preview-scale-from-face)))))))
 
 (use-package cdlatex
+  :ensure t
   :hook (LaTeX-mode . turn-on-cdlatex)
   :bind (:map cdlatex-mode-map
               ("<tab>" . cdlatex-tab)))
@@ -60,7 +62,6 @@
   (defun my/yas-try-expanding-auto-snippets ()
     (when (and (boundp 'yas-minor-mode) yas-minor-mode)
       (let ((yas-buffer-local-condition ''(require-snippet-condition . auto)))
-
         (yas-expand)))))
 
 ;; CDLatex integration with YaSnippet: Allow cdlatex tab to work inside Yas
@@ -101,6 +102,35 @@
               (bound-and-true-p org-cdlatex-mode))
           (cdlatex-tab)
         (yas-next-field-or-maybe-expand)))))
+
+(use-package reftex
+  :after latex
+  :defer 2
+  :commands turn-on-reftex
+  :hook ((latex-mode LaTeX-mode) . turn-on-reftex)
+  :config
+  (setq reftex-default-bibliography '("~/Documents/Projects/vaesi_paper/main.bib"))
+  (setq reftex-insert-label-flags '("sf" "sfte"))
+  (setq reftex-plug-into-AUCTeX t)
+  (setq reftex-ref-style-default-list '("Default" "AMSMath" "Cleveref"))
+  (setq reftex-use-multiple-selection-buffers t))
+
+(use-package consult-reftex
+  ;; :load-path "plugins/consult-reftex/"
+  :after (reftex consult embark)
+  :bind (:map reftex-mode-map
+              ("C-c )"   . consult-reftex-insert-reference)
+              ("C-c M-." . consult-reftex-goto-label)
+              :map org-mode-map
+              ("C-c (" . consult-reftex-goto-label)
+              ("C-c )"   . consult-reftex-insert-reference))
+  :config
+  (setq consult-reftex-preview-function
+        #'consult-reftex-make-window-preview
+        consult-reftex-preferred-style-order
+        '("\\eqref" "\\ref"))
+  (consult-customize consult-reftex-insert-reference
+                     :preview-key (list :debounce 0.3 'any)))
 
 (provide 'init-tex)
 ;;; init-tex.el ends here
