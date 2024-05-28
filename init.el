@@ -47,6 +47,9 @@
   (toggle-debug-on-error)
   (set-fringe-mode -1))
 
+;; load auctex
+(progn (setq package-load-list '((auctex t))) (package-initialize))
+
 (eval-and-compile ; `borg'
   (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
   (require 'borg)
@@ -99,7 +102,6 @@
 (require 'init-edit)
 (require 'init-roam)
 (require 'init-blog)
-(require 'init-tex)
 (require 'init-yas)
 (require 'init-elisp)
 (require 'init-python)
@@ -111,9 +113,10 @@
 (require 'init-utils)
 (require 'init-gpt)
 ;; (require 'init-waka)
-(require 'init-modeline)
 (require 'init-org)
+(require 'init-modeline)
 (require 'init-theme)
+(require 'init-tex)
 ;; (require 'init-telega)
 
 ;;; Configure default locale
