@@ -94,6 +94,9 @@
 [submodule "elfeed"]
 	path = lib/elfeed
 	url = git@github.com:skeeto/elfeed.git
+[submodule "elfeed-protocol"]
+	path = lib/elfeed-protocol
+	url = https://github.com/fasheng/elfeed-protocol
 [submodule "elfeed-score"]
 	path = lib/elfeed-score
 	url = https://github.com/sp1ff/elfeed-score
