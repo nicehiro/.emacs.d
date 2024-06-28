@@ -5,7 +5,7 @@
 ;; (require 'latex)
 (use-package latex
   :ensure auctex
-  :hook ((LaTeX-mode . prettify-symbols-mode))
+  ;; :hook ((LaTeX-mode . prettify-symbols-mode))
   :bind (:map LaTeX-mode-map
               ("C-S-e" . latex-math-from-calc))
   :config

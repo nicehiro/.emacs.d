@@ -37,6 +37,9 @@
 [submodule "citeproc"]
 	path = lib/citeproc
 	url = git@github.com:andras-simonyi/citeproc-el.git
+[submodule "clipetty"]
+	path = lib/clipetty
+	url = https://github.com/spudlyo/clipetty
 [submodule "closql"]
 	path = lib/closql
 	url = git@github.com:emacscollective/closql.git
@@ -266,6 +269,9 @@
 [submodule "org-static-blog"]
 	path = lib/org-static-blog
 	url = git@github.com:bastibe/org-static-blog.git
+[submodule "ox-hugo"]
+	path = lib/ox-hugo
+	url = https://github.com/kaushalmodi/ox-hugo
 [submodule "parsebib"]
 	path = lib/parsebib
 	url = git@github.com:joostkremers/parsebib.git
@@ -275,6 +281,9 @@
 [submodule "password-store"]
 	path = lib/password-store
 	url = git@github.com:emacsmirror/password-store.git
+[submodule "pddl-mode"]
+	path = lib/pddl-mode
+	url = git@github.com:emacsmirror/pddl-mode.git
 [submodule "persist"]
 	path = lib/persist
 	url = git@github.com:emacsmirror/persist.git
@@ -347,6 +356,9 @@
 [submodule "tempel"]
 	path = lib/tempel
 	url = git@github.com:minad/tempel.git
+[submodule "tomelr"]
+	path = lib/tomelr
+	url = https://github.com/kaushalmodi/tomelr
 [submodule "tree-sitter"]
 	path = lib/tree-sitter
 	url = git@github.com:emacs-tree-sitter/elisp-tree-sitter.git

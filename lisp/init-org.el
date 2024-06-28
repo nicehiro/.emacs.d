@@ -225,6 +225,8 @@
 (use-package writeroom-mode
   ;; :hook ((org-mode . prose-mode)
   ;;        (LaTeX-mode . prose-mode))
+  :config
+  (setq writeroom-width 120)
   :preface
   (define-minor-mode prose-mode
     "Set up a buffer for prose editing.

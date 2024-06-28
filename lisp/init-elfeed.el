@@ -2,7 +2,7 @@
 
 (use-package elfeed
   :config
-  (setq-default elfeed-search-filter "@1-years-old ")
+  (setq-default elfeed-search-filter "@1-years-old +unread")
   (defun elfeed-mark-all-as-read ()
     (interactive)
     (mark-whole-buffer)
@@ -22,9 +22,9 @@
                                 (insert-file-contents "~/Documents/keys/fever/pwd.txt")
                                 (buffer-string))))
 
-  (setq elfeed-protocol-feeds '(("fever+https://fy@freshrss.nicehiro.xyz"
+  (setq elfeed-protocol-feeds `(("fever+https://fy@freshrss.nicehiro.xyz"
                                  :api-url "https://freshrss.nicehiro.xyz/api/fever.php"
-                                 :password #'hiro/get-fever-pwd)))
+                                 :password ,(hiro/get-fever-pwd))))
   (setq elfeed-protocol-enabled-protocols '(fever))
   (elfeed-protocol-enable))
 

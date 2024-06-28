@@ -38,6 +38,10 @@
 
 (use-package posframe)
 
+(use-package clipetty
+  :hook (after-init . global-clipetty-mode)
+  :bind ("M-w" . clipetty-kill-ring-save))
+
 ;; (use-package pass)
 
 (provide 'init-utils)

@@ -7,7 +7,7 @@
 ;; dark/light frame background colours, so you might consider
 ;; explicitly setting the cursor-color to nil so that you can
 ;; rely on the theme's settings
-(add-to-list 'default-frame-alist '(cursor-color . nil))
+;; (add-to-list 'default-frame-alist '(cursor-color . nil))
 
 (use-package ef-themes
   :load-path "lib/ef-themes"
@@ -34,7 +34,7 @@
 
   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
 
-  ;; (ef-themes-select 'ef-rosa)
+  (ef-themes-select 'ef-light)
   )
 
 (use-package doom-themes)
