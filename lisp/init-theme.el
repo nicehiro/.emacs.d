@@ -34,13 +34,15 @@
 
   ;; OR use this to load the theme which also calls `ef-themes-post-load-hook':
 
-  (ef-themes-select 'ef-light)
+  ;; (ef-themes-select 'ef-light)
   )
 
 (use-package doom-themes)
 
 ;; add custom themes
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+
+(load-theme 'gruber-darker t)
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

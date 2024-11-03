@@ -1,5 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
+;; before using emacs-rime
+;; we need to install librime & rime-double-pinyin in the system
+;; then use `rime-open-configuration' to open config and set default schema
 (use-package rime
   :bind (("C-`" . rime-send-keybinding)
          ("C-\\" . toggle-input-method))

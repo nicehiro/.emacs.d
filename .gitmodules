@@ -161,6 +161,9 @@
 [submodule "grammarly"]
 	path = lib/grammarly
 	url = git@github.com:emacs-grammarly/grammarly.git
+[submodule "gruber-darker-theme"]
+	path = lib/gruber-darker-theme
+	url = https://github.com/rexim/gruber-darker-theme
 [submodule "guess-language"]
 	path = lib/guess-language
 	url = git@github.com:tmalsburg/guess-language.el.git
@@ -194,9 +197,6 @@
 [submodule "link-hint"]
 	path = lib/link-hint
 	url = git@github.com:noctuid/link-hint.el.git
-[submodule "llama"]
-	path = lib/llama
-	url = https://git.sr.ht/~tarsius/llama
 [submodule "lyrics-fetcher"]
 	path = lib/lyrics-fetcher
 	url = git@github.com:SqrtMinusOne/lyrics-fetcher.el.git
@@ -380,9 +380,6 @@
 [submodule "visual-fill-column"]
 	path = lib/visual-fill-column
 	url = https://codeberg.org/joostkremers/visual-fill-column.git
-[submodule "wakatime-mode"]
-	path = lib/wakatime-mode
-	url = https://github.com/wakatime/wakatime-mode
 [submodule "websocket"]
 	path = lib/websocket
 	url = git@github.com:ahyatt/emacs-websocket.git
@@ -413,3 +410,6 @@
 [submodule "zotxt"]
 	path = lib/zotxt
 	url = https://gitlab.com/egh/zotxt-emacs
+[submodule "lib/llama"]
+	path = lib/llama
+	url = https://github.com/tarsius/llama.git

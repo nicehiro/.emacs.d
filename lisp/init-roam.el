@@ -83,6 +83,7 @@
   :custom
   ;; (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory (file-truename "~/Documents/roam/org-roam/"))
+  (org-roam-db-location "~/Documents/roam/org-roam/roam.db")
   (org-roam-db-gc-threshold most-positive-fixnum)
   :config
   (unless (file-exists-p org-roam-directory)

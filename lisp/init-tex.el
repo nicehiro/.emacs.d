@@ -8,6 +8,7 @@
   ;; :hook ((LaTeX-mode . prettify-symbols-mode))
   :bind (:map LaTeX-mode-map
               ("C-S-e" . latex-math-from-calc))
+  :hook ((LaTeX-mode . visual-line-mode))
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
