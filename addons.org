@@ -30,7 +30,7 @@ Enable diff-hl in based on major modes.
   (add-hook 'conf-mode-hook 'diff-hl-mode)
 #+end_src
 
-* Input method with emacs-rime
+* COMMENT Input method with emacs-rime
 
 ~librime~ is required for this feature.
 
@@ -108,7 +108,7 @@ Auto switch to inline ascii state when after a space after a non-ascii character
                  (:exclude ".dir-locals.el" "*-tests.el"))))
 #+end_src
 
-** Key bindings
+** COMMENT Key bindings
 #+begin_src emacs-lisp
   (keymap-set meomacs-addon-map "e" 'eshell)
 #+end_src
@@ -119,7 +119,7 @@ Auto switch to inline ascii state when after a space after a non-ascii character
   (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
 #+end_src
 
-* ChatGPT
+* COMMENT ChatGPT
 #+begin_src emacs-lisp
   (straight-use-package '(gptel :host github :repo "karthink/gptel"))
 
