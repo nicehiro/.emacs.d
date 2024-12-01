@@ -1,0 +1,283 @@
+#+title: Look & Feel
+
+Configuration for look and feels, make UI looks better.
+
+#+begin_src emacs-lisp :exports none
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Disabling some components
+
+No tool bar & menu bar.
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+  (menu-bar-mode 1)
+#+end_src
+
+No scroll bars in minibuffer.
+
+#+begin_src emacs-lisp
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (set-window-scroll-bars
+               (minibuffer-window frame) 0 nil 0 nil t)))
+#+end_src
+
+* Window divider
+** GUI
+#+begin_src emacs-lisp
+  (window-divider-mode 0)
+#+end_src
+
+** TUI
+#+begin_src emacs-lisp
+  (set-display-table-slot standard-display-table
+                          'vertical-border
+                          (make-glyph-code ?│))
+#+end_src
+
+* Highlight Numbers
+#+begin_src emacs-lisp
+  (straight-use-package 'highlight-numbers)
+
+  (require 'highlight-numbers)
+
+  (add-hook 'prog-mode-hook 'highlight-numbers-mode)
+#+end_src
+
+* Some UI related variables
+
+#+begin_src emacs-lisp
+  (setq x-underline-at-descent-line t)
+#+end_src
+
+* Fonts
+
+** Font Families
+
+Default variables
+
+#+begin_src emacs-lisp
+  (defvar meomacs-font-pixelsize 16
+    "Font size in pixels.")
+
+  (defvar meomacs-fonts '((mono . "Monospace")
+                          (sans . "Monospace")
+                          (serif . "Monospace")
+                          (cjk . "Unifont")
+                          (symbol . "Unifont"))
+    "Fonts to use.")
+#+end_src
+
+Load font table
+
+** Load font table
+#+begin_src emacs-lisp :var fonts=private.org:fonts
+  (setq meomacs-fonts
+        (mapcar (lambda (row)
+                  (cons
+                   (intern (car row))
+                   (cadr row)))
+                fonts))
+#+end_src
+
+Define functions for loading fonts.
+Font families are specified in [[file:private.org::Fonts][private]] config.
+
+#+begin_src emacs-lisp
+  (defun meomacs--get-font-family (key)
+    (let ((font (alist-get key meomacs-fonts)))
+      (if (string-empty-p font)
+          (alist-get 'mono meomacs-fonts)
+        font)))
+
+  (defun meomacs--format-font-name (family)
+    (format "%s:pixelsize=%s" family meomacs-font-pixelsize))
+
+  (defun meomacs-load-default-font ()
+    "Load default font configuration."
+    (let ((default-font (meomacs--format-font-name (meomacs--get-font-family 'mono))))
+      (add-to-list 'default-frame-alist (cons 'font default-font))))
+
+  (defun meomacs-load-face-font ()
+    "Load face font configuration."
+    (let ((sans (meomacs--get-font-family 'sans))
+          (mono (meomacs--get-font-family 'mono))
+          (serif (meomacs--get-font-family 'serif)))
+      (set-face-attribute 'variable-pitch nil :family serif)
+      (set-face-attribute 'variable-pitch-text nil :family sans)
+      (set-face-attribute 'fixed-pitch nil :family mono)
+      (set-face-attribute 'fixed-pitch-serif nil :family mono)))
+
+  (defun meomacs-load-charset-font (&optional font)
+    "Load charset font configuration."
+    (let ((default-font (or font (meomacs--format-font-name (meomacs--get-font-family 'mono))))
+          (cjk-font (meomacs--get-font-family 'cjk))
+          (symbol-font (meomacs--get-font-family 'symbol)))
+      (set-frame-font default-font)
+      (dolist (charset '(kana han hangul cjk-misc bopomofo))
+        (set-fontset-font t charset cjk-font))
+      (set-fontset-font t 'symbol symbol-font)))
+
+  (meomacs-load-default-font)
+  (meomacs-load-face-font)
+
+  ;; Run after startup
+  (add-hook 'after-init-hook
+            (lambda ()
+              (when window-system
+                (meomacs-load-charset-font))))
+#+end_src
+
+*** COMMENT Variants used when spliting window
+#+begin_src emacs-lisp
+  (defvar meomacs-font-current-variant nil)
+
+  (defun meomacs-dynamic-set-font (&rest ignore)
+    (interactive)
+    (when window-system
+      (when (or (frame-root-window-p (get-buffer-window))
+              (frame-root-window-p (window-parent)))
+      (let* ((prev-font-style meomacs-font-current-variant)
+             (wl (seq-filter (lambda (w) (not (string-prefix-p " " (buffer-name (window-buffer w))))) (window-list)))
+             (def (meomacs--get-font-family 'default))
+             (new-variant (cond
+                              ((= 1 (length wl))
+                               (meomacs--get-font-family 'default))
+
+                              ((window-combined-p)
+                               (meomacs--get-font-family 'tall))
+
+                              (t
+                               (meomacs--get-font-family 'wide)))))
+        (unless (equal prev-font-style new-variant)
+          (setq meomacs-font-current-variant new-variant)
+          (set-frame-font new-variant)
+          (meomacs-load-charset-font new-variant))))))
+
+  (setq frame-inhibit-implied-resize t)
+  (add-hook 'window-state-change-hook 'meomacs-dynamic-set-font)
+#+end_src
+
+* Themes
+
+Load themes.
+
+#+begin_src emacs-lisp
+  (straight-use-package 'ef-themes)
+
+  (setq ef-themes-headings ; read the manual's entry or the doc string
+        '((0 . (variable-pitch light 1.6))
+          (1 . (variable-pitch light 1.55))
+          (2 . (variable-pitch regular 1.5))
+          (3 . (variable-pitch regular 1.45))
+          (4 . (variable-pitch regular 1.4))
+          (5 . (variable-pitch 1.35)) ; absence of weight means `bold'
+          (6 . (variable-pitch 1.3))
+          (7 . (variable-pitch 1.2))
+          (t . (variable-pitch 1.1))))
+
+  (setq ef-themes-mixed-fonts t
+        ef-themes-variable-pitch-ui t)
+
+  (setq ef-themes-region '(intense no-extend neutral))
+
+  ;; Disable all other themes to avoid awkward blending:
+  (mapc #'disable-theme custom-enabled-themes)
+
+  (ef-themes-select 'ef-light)
+#+end_src
+
+Auto change light/dark themes on Mac.
+
+#+begin_src emacs-lisp
+  (defun my/apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (ef-themes-select 'ef-light))
+      ('dark (ef-themes-select 'ef-owl))))
+
+  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
+#+end_src
+
+* Paren face
+#+begin_src emacs-lisp
+  (straight-use-package 'paren-face)
+  (require 'paren-face)
+  (setq paren-face-regexp "[][(){}]")
+  (add-hook 'prog-mode-hook 'paren-face-mode)
+#+end_src
+
+* Modeline
+
+** Add a double width space to ensure the height
+
+#+begin_src emacs-lisp
+  (defvar meomacs-increase-mode-line-height-only-once nil)
+
+  (unless meomacs-increase-mode-line-height-only-once
+    (setq-default mode-line-format
+                  (append (list (propertize "﻿" 'face '(:height 1.2))) mode-line-format ))
+    (setq meomacs-increase-mode-line-height-only-once t))
+#+end_src
+
+** Diminish
+
+Hide unnecessary lighters.
+
+#+begin_src emacs-lisp
+  (straight-use-package 'diminish)
+
+  (require 'diminish)
+  (diminish 'gcmh-mode)
+  (add-hook 'eldoc-mode-hook (lambda () (diminish 'eldoc-mode)))
+  (add-hook 'hs-minor-mode-hook (lambda () (diminish 'hs-minor-mode)))
+  (add-hook 'auto-revert-mode-hook (lambda () (diminish 'auto-revert-mode)))
+  (add-hook 'eldoc-mode-hook (lambda () (diminish 'buffer-face-mode)))
+#+end_src
+
+** Items
+
+#+begin_src emacs-lisp
+  (progn ; `modeline'
+    (setq mode-line-percent-position '(-3 "%p"))
+    (setq mode-line-position-column-line-format '(" %l,%c"))
+    (setq mode-line-compact nil)
+    ;; evil
+    (defun mode-line-evil ()
+      "Evil state info for modeline."
+      (cond
+       ((eq evil-state 'normal) "N")
+       ((eq evil-state 'insert) "I")
+       ((eq evil-state 'visual) "V")
+       ((eq evil-state 'emacs) "E")
+       (t "＃")))
+
+    (setq-default mode-line-format
+                  '("%e"
+                    mode-line-front-space
+                    " "
+                    (:eval (mode-line-evil))
+                    "  "
+                    mode-line-mule-info
+                    mode-line-client
+                    mode-line-modified
+                    ;; mode-line-remote
+                    mode-line-frame-identification
+                    mode-line-buffer-identification
+                    "  "
+                    mode-line-position
+                    mode-line-modes
+                    "  "
+                    (vc-mode vc-mode)
+                    "  "
+                    mode-line-misc-info
+                    mode-line-end-spaces)))
+
+  (straight-use-package 'recursion-indicator)
+  (setq recursion-indicator-general "&")
+  (setq recursion-indicator-minibuffer "@")
+  (recursion-indicator-mode 1)
+#+end_src
