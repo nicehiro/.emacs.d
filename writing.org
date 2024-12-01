@@ -1,0 +1,270 @@
+#+title: Writing
+
+Configuration for writing with Emacs, specifically for Markdown and Org mode.
+
+#+begin_src emacs-lisp :exports none
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Org
+
+** Basics
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'hl-line-mode)
+
+  (straight-use-package '(org-margin
+                          :repo "rougier/org-margin"
+                          :host github
+                          :type git))
+  (add-hook 'org-mode-hook 'org-margin-mode)
+#+end_src
+
+** Org LaTeX
+
+#+begin_src emacs-lisp
+  ;; org latex code render size
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.0))
+  ;; make svg latex preview image
+  (setq org-preview-latex-default-process 'dvisvgm)
+#+end_src
+
+** Org Agenda
+
+#+begin_src emacs-lisp
+  (use-package org-agenda
+    :bind
+    (("C-c a" . org-agenda)
+     ("C-c c" . org-capture))
+    :config
+    ;; Directories settings
+    (when (file-directory-p "~/Documents/gtd/")
+      (setq org-agenda-files (list "~/Documents/gtd/")))
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-scheduled-if-done t)
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-deadline-warning-days 16)
+    (setq org-use-speed-commands t)
+    (setq org-agenda-include-diary t)
+    (setq org-agenda-start-day "+0d")
+    (setq org-todo-keywords
+          '(
+            (sequence "TODO(t)" "STARTED(s)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
+            (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(f)")
+            (sequence "|" "READ(r)")
+            (sequence "|" "BLOG(b)")
+            (sequence "|" "IDEA(i)")
+            ))
+
+    ;; my agenda view contains follow items:
+    ;;; Ideas
+    ;;; Day views
+    ;;; Reading list
+    ;;; Blogs
+    (defvar org-agenda-custom-commands nil
+      "Custom commands for org agenda.")
+    (setq org-agenda-custom-commands
+          '(("d" "Daily agenda and Ideas"
+             ((todo "IDEA"
+                    ((org-agenda-overriding-header "Stupid but maybe interesting IDEAs:")))
+              (agenda ""
+                      ((org-agenda-overriding-header "Today's agenda")
+                       (org-agenda-span 'day)
+                       (org-agenda-toggle-deadlines)))
+              (agenda ""
+                      ((org-agenda-overriding-header "Future's agenda(One week)")
+                       (org-agenda-start-day "+1d")
+                       (org-agenda-span 7)
+                       (org-agenda-toggle-deadlines)))
+              (todo "READ"
+                    ((org-agenda-overriding-header "Reading List:")))
+              (todo "BLOG"
+                    ((org-agenda-overriding-header "Blogs:")))))))
+    ;; org capture
+    (defvar org-capture-templates nil
+      "Org capture templates.")
+    (setq org-capture-templates '(("i" "Idea"
+                                   entry (file+headline "~/Documents/gtd/ideas.org" "Someday/Maybe")
+                                   "* IDEA %?\nAdded: %U\n"
+                                   :prepend t
+                                   :kill-buffer t)
+                                  ("t" "Todo"
+                                   entry (file+headline "~/Documents/gtd/inbox.org" "TODOs")
+                                   "* TODO %?\nAdded: %U\n"
+                                   :prepend t
+                                   :kill-buffer t)
+                                  ("r" "Read"
+                                   entry (file+headline "~/Documents/gtd/read.org" "Reading List")
+                                   "* READ %?\nAdded: %U\n"
+                                   :prepend t
+                                   :kill-buffer t)
+                                  ("b" "Blog"
+                                   entry (file+headline "~/Documents/gtd/blog.org" "Blogs")
+                                   "* BLOG %?\nAdded: %U\n"
+                                   :prepend t
+                                   :kill-buffer t))))
+#+end_src
+
+** Org Roam
+
+#+begin_src emacs-lisp
+  (straight-use-package 'org-roam)
+
+  (use-package org-roam
+    :diminish
+    :bind (("C-c n a" . org-id-get-create)
+           ("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ("C-c n j" . org-roam-dailies-capture-today)
+           ("C-c n r" . org-roam-ref-find)
+           ("C-c n R" . org-roam-ref-add)
+           ("C-c n s" . org-roam-db-sync))
+    :custom
+    ;; (org-roam-database-connector 'sqlite-builtin)
+    (org-roam-directory (expand-file-name "~/Documents/roam/"))
+    (org-roam-dailies-directory (expand-file-name "~/Documents/roam/journal"))
+    (org-roam-db-location "~/Documents/roam/roam.db")
+    (org-roam-db-gc-threshold most-positive-fixnum)
+    (with-eval-after-load "org-roam"
+      (org-roam-setup)
+      (org-roam-db-autosync-mode)))
+
+  (straight-use-package 'consult-org-roam)
+
+  (use-package consult-org-roam
+    :after org-roam consult
+    :init
+    (require 'consult-org-roam)
+    ;; Activate the minor mode
+    (consult-org-roam-mode 1)
+    :custom
+    ;; Use `ripgrep' for searching with `consult-org-roam-search'
+    (consult-org-roam-grep-func #'consult-ripgrep)
+    ;; Configure a custom narrow key for `consult-buffer'
+    (consult-org-roam-buffer-narrow-key ?r)
+    ;; Display org-roam buffers right after non-org-roam buffers
+    ;; in consult-buffer (and not down at the bottom)
+    (consult-org-roam-buffer-after-buffers t)
+    :config
+    ;; Eventually suppress previewing for certain functions
+    (consult-customize
+     consult-org-roam-forward-links
+     :preview-key (kbd "M-."))
+    :bind
+    ;; Define some convenient keybindings as an addition
+    ("C-c n e" . consult-org-roam-file-find)
+    ("C-c n b" . consult-org-roam-backlinks)
+    ("C-c n l" . consult-org-roam-forward-links)
+    ("C-c n r" . consult-org-roam-search))
+#+end_src
+
+*** Key bindings
+#+tblname: org-roam-keymap-table
+| Key | Command                         |
+|-----+---------------------------------|
+| l   | org-roam-buffer-toggle          |
+| f   | org-roam-node-find              |
+| g   | org-roam-graph                  |
+| i   | org-roam-node-insert            |
+| c   | org-roam-capture                |
+| s   | org-roam-db-sync                |
+| t   | org-roam-dailies-goto-today     |
+| y   | org-roam-dailies-goto-yesterday |
+| T   | org-roam-dailies-goto-tomorrow  |
+| d   | org-roam-dailies-goto-date      |
+
+#+header: :var org-roam-keymap-table=org-roam-keymap-table
+#+begin_src emacs-lisp
+  (meomacs-keymap-table org-roam-keymap org-roam-keymap-table)
+  (keymap-set global-map "C-c r" 'org-roam-keymap)
+#+end_src
+
+*** Bigger GC threshold during sync.
+
+#+begin_src emacs-lisp
+  (setq org-roam-db-gc-threshold most-positive-fixnum)
+#+end_src
+
+** Good old template shortcut
+
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (require 'org-tempo))
+#+end_src
+
+** Using variable pitch font
+
+Enable ~variable-pitch-mode~.
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+#+end_src
+
+** Turn off some eye-candy stuff
+
+#+begin_src emacs-lisp
+  (setq org-fontify-quote-and-verse-blocks nil
+        org-fontify-whole-heading-line nil
+        org-hide-leading-stars nil
+        org-hide-leading-stars-before-indent-mode nil
+        org-startup-indented nil)
+#+end_src
+
+** Babel
+
+#+begin_src emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+
+  (with-eval-after-load "org"
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((R . t)
+       (dot . t)
+       (shell . t)
+       (clojure . t))))
+
+  (defun meomacs-after-babel-execute ()
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+
+  (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
+#+end_src
+
+* Markdown
+
+#+begin_src emacs-lisp
+  (straight-use-package 'markdown-mode)
+  (straight-use-package 'edit-indirect)
+#+end_src
+
+** Keybindings
+
+#+begin_src emacs-lisp
+  (with-eval-after-load "markdown-mode"
+    (define-key markdown-mode-map (kbd "C-c v") 'markdown-toggle-markup-hiding))
+#+end_src
+
+* Blog
+
+#+begin_src emacs-lisp
+  (straight-use-package 'easy-hugo)
+
+  (use-package easy-hugo
+    :init
+    (setq easy-hugo-basedir "~/Documents/nicehiro.github.io/")
+    (setq easy-hugo-postdir "content/posts")
+    (setq easy-hugo-url "https://nicehiro.github.io")
+    (setq easy-hugo-previewtime "300")
+    :bind
+    (("C-c C-e" . easy-hugo)
+     ("C-c C-k" . easy-hugo-menu))
+    :config
+    (easy-hugo-enable-menu)
+    (setq easy-hugo-default-ext ".org")
+    (setq easy-hugo-image-directory "imgs")
+    (setq easy-hugo-org-header t))
+#+end_src

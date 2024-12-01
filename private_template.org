@@ -1,0 +1,60 @@
+#+title: Private
+
+Private configuration.
+
+#+begin_src emacs-lisp :exports none
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Fonts
+
+** Modern
+
+#+begin_src emacs-lisp
+  (setq meomacs-font-pixelsize 14)
+#+end_src
+
+#+tblname: fonts
+| key    | font             | description                         |
+|--------+------------------+-------------------------------------|
+| mono   | DejaVu Sans Mono | monospace font for ascii characters |
+| sans   | DejaVu Sans      | sans font for ascii characters      |
+| serif  | DejaVu Serif     | serif font for ascii characters     |
+| cjk    | Apple LiSung | default font for cjk characters     |
+| symbol | Apple Symbol          | default font for unicode symbols    |
+
+** COMMENT Pixel
+
+#+begin_src emacs-lisp
+  (setq meomacs-font-pixelsize 16)
+#+end_src
+
+#+tblname: fonts
+| key    | font          | description                         |
+|--------+---------------+-------------------------------------|
+| mono   | Unifont       | monospace font for ascii characters |
+| sans   | Unifont       | sans font for ascii characters      |
+| serif  | Unifont       | serif font for ascii characters     |
+| cjk    | Unifont       | default font for cjk characters     |
+| symbol | Unifont Upper | default font for unicode symbols    |
+
+* Themes
+
+#+begin_src emacs-lisp
+  (straight-use-package '(carbon-theme :host github :repo "DogLooksGood/carbon-theme"))
+  (straight-use-package '(paperlike-theme :host github :repo "DogLooksGood/paperlike-theme"))
+
+  (require 'carbon-theme)
+  (require 'paperlike-theme)
+#+end_src
+
+#+name: themes
+- [X] paperlike
+- [X] default
+
+* Pass table
+
+#+tblname: var-table
+| Variable      | Entry in passs | Description                |
+|---------------+----------------+----------------------------|
+| gptel-api-key | chatgpt_key    | The key for openai ChatGPT |

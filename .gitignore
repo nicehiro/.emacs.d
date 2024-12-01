@@ -12,3 +12,6 @@ private.el
 librime/
 *.elc
 mind-wave/
+straight/
+tangle/
+custom.el

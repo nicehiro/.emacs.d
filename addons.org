@@ -1,0 +1,174 @@
+#+title: Addons
+
+Configuration for addons, additional features provided by individual packages.
+
+#+begin_src emacs-lisp :exports none
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Git integration with magit & diff-hl & smerge
+
+To manage the git repository, use builtin package ~vc~.
+
+#+begin_src emacs-lisp
+  (straight-use-package 'magit)
+  (straight-use-package 'diff-hl)
+  (straight-use-package 'smerge-mode)
+
+  (autoload 'magit-status "magit" nil t)
+  (autoload 'diff-hl-mode "diff-hl" nil t)
+  (autoload 'diff-hl-dired-mode "diff-hl-dired" nil t)
+  (autoload 'smerge-mode "smerge-mode" nil t)
+#+end_src
+
+** COMMENT Diff-hl
+Enable diff-hl in based on major modes.
+
+#+begin_src emacs-lisp
+  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
+  (add-hook 'prog-mode-hook 'diff-hl-mode)
+  (add-hook 'conf-mode-hook 'diff-hl-mode)
+#+end_src
+
+* COMMENT Input method with emacs-rime
+
+~librime~ is required for this feature.
+
+~emacs-rime~ is the frontend of rime built with emacs input method API.
+
+#+begin_src emacs-lisp
+  (straight-use-package 'rime)
+
+  (require 'rime)
+
+  (setq default-input-method "rime"
+        rime-emacs-module-header-root (file-name-directory (getenv "EMACS_MODULE_HEADER"))
+        rime-show-candidate 'sidewindow
+        rime-librime-root (meomacs-read-var "rime-librime-root")
+        rime-share-data-dir (expand-file-name "~/.config/rime"))
+
+  (with-eval-after-load "rime"
+    (define-key rime-mode-map (kbd "C-`") 'rime-send-keybinding)
+
+    (dolist (k '("TAB" "C-p" "C-n" "M-v" "C-v" "C-y" "<escape>"))
+      (define-key rime-active-mode-map (kbd k) 'rime-send-keybinding))
+
+    (define-key rime-active-mode-map (kbd "C-a") 'rime-inline-ascii))
+#+end_src
+
+Auto switch to inline ascii state when after a space after a non-ascii character.
+
+#+begin_src emacs-lisp
+  (setq rime-inline-predicates '(rime-predicate-space-after-cc-p))
+#+end_src
+
+* Directory environment support with direnv
+
+#+begin_src emacs-lisp
+  (straight-use-package 'direnv)
+
+  (setq direnv-always-show-summary nil)
+
+  (autoload 'direnv-mode "direnv" nil t)
+
+  (defun meomacs-direnv-wrapper-function (orig-fun &rest args)
+    (if (bound-and-true-p direnv-mode)
+        (apply orig-fun args)
+      (direnv-mode 1)
+      (let ((ret (apply orig-fun args)))
+        (direnv-mode -1)
+        ret)))
+
+  (defun meomacs-direnv-wrap (command)
+    "Wrap a command so direnv starts before the command and stops after the command."
+    (advice-add command :around 'meomacs-direnv-wrapper-function))
+
+  (defvar meomacs-direnv-wrap-commands
+    '(justl justl-exec-recipe-in-dir))
+
+  (dolist (cmd meomacs-direnv-wrap-commands)
+    (meomacs-direnv-wrap cmd))
+#+end_src
+
+* Pinentry
+#+begin_src emacs-lisp
+  (setq epa-pinentry-mode 'loopback)
+#+end_src
+
+* EAT
+#+begin_src emacs-lisp
+  (straight-use-package
+   '(eat :type git
+         :host codeberg
+         :repo "akib/emacs-eat"
+         :files ("*.el" ("term" "term/*.el") "*.texi"
+                 "*.ti" ("terminfo/e" "terminfo/e/*")
+                 ("terminfo/65" "terminfo/65/*")
+                 ("integration" "integration/*")
+                 (:exclude ".dir-locals.el" "*-tests.el"))))
+#+end_src
+
+** COMMENT Key bindings
+#+begin_src emacs-lisp
+  (keymap-set meomacs-addon-map "e" 'eshell)
+#+end_src
+
+** Eshell support
+#+begin_src emacs-lisp
+  (add-hook 'eshell-load-hook #'eat-eshell-mode)
+  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
+#+end_src
+
+* COMMENT ChatGPT
+#+begin_src emacs-lisp
+  (straight-use-package '(gptel :host github :repo "karthink/gptel"))
+
+  (autoload 'gptel "gptel" nil t)
+
+  (setq gptel-use-curl t
+        gptel-model 'gpt-4o
+        gptel-default-mode 'org-mode
+        gptel-api-key (lambda () (meomacs-read-var "gptel-api-key")))
+
+  (with-eval-after-load "gptel"
+    (require 'gptel-curl))
+#+end_src
+
+** Keybindings
+#+begin_src emacs-lisp
+  (defvar gptel-map
+    (let ((m (make-keymap)))
+      (suppress-keymap m t)
+      (keymap-set m "n" 'gptel)
+      (keymap-set m "i" 'gptel-menu)
+      (keymap-set m "a" 'gptel-add)
+      m))
+
+  (defalias 'gptel-map gptel-map)
+
+  (keymap-set global-map "C-c i" 'gptel-map)
+
+
+  (with-eval-after-load "gptel"
+    (setq gptel-directives
+          '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
+            (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt, note. Provide code without markdown syntax and triple backticks. Provide code without including any of the reference code provided, unless it's a rewriting. ")
+            (writing . "You are a large language model and a writing assistant. Respond concisely.")
+            (chat . "You are a large language model and a conversation partner. Respond concisely."))))
+#+end_src
+
+* Go translate
+
+#+begin_src emacs-lisp
+  (straight-use-package 'go-translate)
+
+  (require 'go-translate)
+
+  (setq gt-preset-translators
+          `((Default . ,(gt-translator
+                         :taker (gt-taker :langs '(en zh) :text 'word :prompt nil)
+                         :engines  (gt-youdao-dict-engine :if 'word)
+                         :render (gt-posframe-pop-render :if 'word :frame-params (list :height 40 :border-width 5))))))
+
+  (keymap-set global-map "<f6>" 'gt-do-translate)
+#+end_src
