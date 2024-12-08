@@ -6,6 +6,69 @@ Configuration for doing research with Emacs.
   ;;; -*- lexical-binding: t -*-
 #+end_src
 
+* Citation Management
+
+I use Zotero for downloading, quick noting and sharing (sometimes) papers. For long notes, I use Org-Roam to write and Citar for manage them in Emacs. The Zotero and Citar are connected by using Better-BibTeX.
+
+** Zotero auto export bibs
+
+Use Zotero to manage all papers in different platform as a graphic interface, and better-bibtex to automatic output all bibs.
+
+** Citar to manage bibs in Emacs
+
+Create or open notes in Org-Roam for all bibs.
+
+#+begin_src emacs-lisp
+  ;; Ensure :zotero: links are redirected to org-mode
+  (use-package org
+    :custom
+    (org-link-set-parameters "zotero" :follow
+                             (lambda (zpath)
+                               (browse-url
+                                (format "zotero:%s" zpath)))))
+
+  (use-package oc
+    :custom
+    (setq org-cite-global-bibliography '("~/Documents/roam/library.bib")))
+
+  ;; Use `citar' with `org-cite'
+  (straight-use-package 'citar)
+  (use-package citar
+    :after oc
+    :custom
+    (org-cite-insert-processor 'citar)
+    (org-cite-follow-processor 'citar)
+    (org-cite-activate-processor 'citar)
+    (citar-bibliography '("~/Documents/roam/library.bib"))
+    (citar-org-roam-note-title-template "${author} - ${title}\npdf: ${file}")
+    (add-to-list 'citar-file-open-functions '("pdf" . citar-file-open-external))
+    :bind
+    (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
+
+  (straight-use-package 'citar-org-roam)
+  (use-package citar-org-roam
+    :after (citar org-roam)
+    :config (citar-org-roam-mode))
+
+  (use-package org-roam
+    :config
+    (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           :target
+           (file+head
+            "%<%Y%m%d%H%M%S>-${slug}.org"
+            "#+title: ${note-title}\n")
+           :unnarrowed t)
+          ("n" "literature note" plain
+           "%?"
+           :target
+           (file+head
+            "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+            "#+title: ${citar-citekey} (${citar-date}). ${note-title}.\n#+created: %U\n#+last_modified: %U\n\n")
+           :unnarrowed t))))
+#+end_src
+
 * LaTeX
 
 #+begin_src emacs-lisp

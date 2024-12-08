@@ -15,3 +15,6 @@ mind-wave/
 straight/
 tangle/
 custom.el
+.cache/
+bookmarks
+.org-id-locations

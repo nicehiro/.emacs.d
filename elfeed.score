@@ -18,6 +18,7 @@
   (:text "imitation learning" :title-value 20 :content-value 10 :type s)
   (:text "reinforcement learning" :title-value 20 :content-value 10 :type s)
   (:text "vision pro" :title-value 50 :content-value 30 :type s)
+  (:text "gr1t1" :title-value 100 :content-value 100 :type s)
   )
  ("tag")
  ("authors"
