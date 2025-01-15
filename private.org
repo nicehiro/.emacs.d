@@ -30,7 +30,7 @@ Private configuration.
 | key    | font                      | description                         |
 |--------+---------------------------+-------------------------------------|
 | mono   | JetBrainsMonoNL Nerd Font | monospace font for ascii characters |
-| sans   | Geneva                    | sans font for ascii characters      |
+| sans   | LXGW WenKai               | sans font for ascii characters      |
 | serif  | JetBrainsMono Nerd Font   | serif font for ascii characters     |
 | cjk    | LXGW WenKai               | default font for cjk characters     |
 | symbol | Apple Symbol              | default font for unicode symbols    |

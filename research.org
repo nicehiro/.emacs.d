@@ -40,7 +40,7 @@ Create or open notes in Org-Roam for all bibs.
     (org-cite-follow-processor 'citar)
     (org-cite-activate-processor 'citar)
     (citar-bibliography '("~/Documents/roam/library.bib"))
-    (citar-org-roam-note-title-template "${author} - ${title}\npdf: ${file}")
+    (citar-org-roam-note-title-template "${title}")
     (add-to-list 'citar-file-open-functions '("pdf" . citar-file-open-external))
     :bind
     (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
