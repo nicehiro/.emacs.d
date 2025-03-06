@@ -5,57 +5,57 @@
                                                                20 10 s
                                                                nil nil
                                                                nil)
-                           #s(elfeed-score-rule-stats 2388
-                                                      1736563022.518186)
+                           #s(elfeed-score-rule-stats 2630
+                                                      1737385985.883267)
                            #s(elfeed-score-title-or-content-rule
                               "Large Language Model" 20 10 s nil nil
                               nil)
-                           #s(elfeed-score-rule-stats 2214
-                                                      1736563022.518189)
+                           #s(elfeed-score-rule-stats 2446
+                                                      1737385985.881799)
                            #s(elfeed-score-title-or-content-rule
                               "subtask" 100 70 s nil nil nil)
-                           #s(elfeed-score-rule-stats 46
-                                                      1736563020.737752)
+                           #s(elfeed-score-rule-stats 47
+                                                      1737118130.266693)
                            #s(elfeed-score-title-or-content-rule "VLA"
                                                                  50 30
                                                                  s nil
                                                                  nil
                                                                  nil)
-                           #s(elfeed-score-rule-stats 45
-                                                      1736563020.738327)
+                           #s(elfeed-score-rule-stats 50
+                                                      1737118130.275318)
                            #s(elfeed-score-title-or-content-rule
                               "reinforcement learning" 20 10 s nil nil
                               nil)
-                           #s(elfeed-score-rule-stats 1132
-                                                      1736563022.521467)
+                           #s(elfeed-score-rule-stats 1289
+                                                      1737385985.884179)
                            #s(elfeed-score-title-or-content-rule "VLM"
                                                                  20 10
                                                                  s nil
                                                                  nil
                                                                  nil)
-                           #s(elfeed-score-rule-stats 227
-                                                      1736563022.517973)
+                           #s(elfeed-score-rule-stats 253
+                                                      1737385985.411692)
                            #s(elfeed-score-title-or-content-rule
                               "Vision Language Model" 20 10 s nil nil
                               nil)
-                           #s(elfeed-score-rule-stats 79
-                                                      1736563018.542686)
+                           #s(elfeed-score-rule-stats 83
+                                                      1737118129.46358)
                            #s(elfeed-score-title-or-content-rule
                               "humanoid" 100 70 s nil nil nil)
-                           #s(elfeed-score-rule-stats 80
-                                                      1736563019.856956)
+                           #s(elfeed-score-rule-stats 83
+                                                      1737118129.274942)
                            #s(elfeed-score-title-or-content-rule
                               "imitation learning" 20 10 s nil nil nil)
-                           #s(elfeed-score-rule-stats 119
-                                                      1736563019.422504)
+                           #s(elfeed-score-rule-stats 124
+                                                      1737385982.909488)
                            #s(elfeed-score-authors-rule
                               "Pieter Abbeel" 300 S nil nil nil)
-                           #s(elfeed-score-rule-stats 3
-                                                      1736563017.679609)
+                           #s(elfeed-score-rule-stats 6
+                                                      1737118128.106821)
                            #s(elfeed-score-title-or-content-rule
                               "Open Vocabulary" 50 30 s nil nil nil)
-                           #s(elfeed-score-rule-stats 8
-                                                      1736344155.961442)
+                           #s(elfeed-score-rule-stats 9
+                                                      1737118127.5284)
                            #s(elfeed-score-title-or-content-rule
                               "vision pro" 50 30 s nil nil nil)
                            #s(elfeed-score-rule-stats 6
@@ -66,16 +66,16 @@
                                                       1736344149.934585)
                            #s(elfeed-score-title-or-content-rule
                               "long horizon" 50 30 s nil nil nil)
-                           #s(elfeed-score-rule-stats 9
-                                                      1736344153.10141)
+                           #s(elfeed-score-rule-stats 11
+                                                      1737385983.889935)
                            #s(elfeed-score-authors-rule
                               "Xiaolong Wang" 100 S nil nil nil)
-                           #s(elfeed-score-rule-stats 9
-                                                      1736563020.301491)
+                           #s(elfeed-score-rule-stats 10
+                                                      1737118129.864625)
                            #s(elfeed-score-authors-rule
                               "Sergey Levine" 300 S nil nil nil)
-                           #s(elfeed-score-rule-stats 5
-                                                      1736563017.679607)
+                           #s(elfeed-score-rule-stats 13
+                                                      1737118130.469365)
                            #s(elfeed-score-authors-rule "Shuran Song"
                                                         100 S nil nil
                                                         nil)

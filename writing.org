@@ -19,15 +19,34 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
                           :host github
                           :type git))
   (add-hook 'org-mode-hook 'org-margin-mode)
+
+  ;; Set line spacing for specific modes
+  (defun my-setup-line-spacing ()
+    "Set line spacing."
+    (setq line-spacing 0.2))
+
+  (add-hook 'org-mode-hook 'my-setup-line-spacing)
+  (add-hook 'text-mode-hook 'my-setup-line-spacing)
+
+  ;; org downlaod
+  (straight-use-package 'org-download)
+  (use-package org-download
+    :config
+    (setq org-download-image-dir "~/Pictures/Org-Download"))
 #+end_src
 
 ** Org LaTeX
 
 #+begin_src emacs-lisp
+  (require 'ox)
   ;; org latex code render size
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.0))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
   ;; make svg latex preview image
   (setq org-preview-latex-default-process 'dvisvgm)
+
+  ;; auto refresh latex preview
+  (straight-use-package 'org-fragtog)
+  (add-hook 'org-mode-hook 'org-fragtog-mode)
 #+end_src
 
 ** Org Agenda
