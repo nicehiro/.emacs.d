@@ -237,8 +237,8 @@ Create or open notes in Org-Roam for all bibs.
                                   (insert-file-contents "~/Documents/keys/fever/pwd.txt")
                                   (buffer-string))))
 
-    (setq elfeed-protocol-feeds `(("fever+https://fy@freshrss.nicehiro.xyz"
-                                   :api-url "https://freshrss.nicehiro.xyz/api/fever.php"
+    (setq elfeed-protocol-feeds `(("fever+https://fy@freshrss.nicehiro.org"
+                                   :api-url "https://freshrss.nicehiro.org/api/fever.php"
                                    :password ,(hiro/get-fever-pwd))))
     (setq elfeed-protocol-enabled-protocols '(fever))
     (elfeed-protocol-enable))
