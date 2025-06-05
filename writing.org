@@ -274,7 +274,7 @@ Enable ~variable-pitch-mode~.
 
   (use-package easy-hugo
     :init
-    (setq easy-hugo-basedir "~/Documents/nicehiro.github.io/")
+    (setq easy-hugo-basedir "~/Documents/Projects/nicehiro.github.io/")
     (setq easy-hugo-postdir "content/posts")
     (setq easy-hugo-url "https://nicehiro.github.io")
     (setq easy-hugo-previewtime "300")
@@ -286,4 +286,36 @@ Enable ~variable-pitch-mode~.
     (setq easy-hugo-default-ext ".org")
     (setq easy-hugo-image-directory "imgs")
     (setq easy-hugo-org-header t))
+#+end_src
+
+** Writeroom
+
+#+begin_src emacs-lisp
+  (straight-use-package 'writeroom-mode)
+
+  (use-package writeroom-mode                 ;requires MELPA
+    ;; Activate automatically in text-heavy buffers
+    :hook ((text-mode   . writeroom-mode)
+           (markdown-mode . writeroom-mode)
+           (org-mode . writeroom-mode)
+           (LaTeX-mode . writeroom-mode))
+    :custom
+    ;; --- Look & feel ---
+    (writeroom-width            80)
+    (writeroom-maximize-window   t)
+    ;; --- Optional extras ---
+    (writeroom-restore-window-config t)
+    (writeroom-fringes-outside-margins nil)
+    (writeroom-extra-line-spacing 4)
+    (writeroom-mode-line nil))
+
+  ;; Nice companion tweaks
+  (add-hook 'writeroom-mode-enable-hook
+            (lambda ()
+              (visual-line-mode 1)             ;soft wrap
+              (setq cursor-type 'bar)))        ;change cursor shape
+  (add-hook 'writeroom-mode-disable-hook
+            (lambda ()
+              (visual-line-mode -1)
+              (setq cursor-type t)))
 #+end_src
