@@ -208,6 +208,73 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
   (setq org-roam-db-gc-threshold most-positive-fixnum)
 #+end_src
 
+*** Ox-Hugo export to Quartz
+
+For more details refer to [[https://www.asterhu.com/post/20240220-publish-org-roam-with-quartz-oxhugo/][Publish org-roam notes to personal wiki using ox-hugo and Quartz]].
+
+#+begin_src emacs-lisp
+  (straight-use-package 'ox-hugo)
+
+  (use-package ox-hugo
+    :after ox
+    :config
+    (setq org-hugo-export-attachment t))
+
+  (defun hiro/org-publish-to-quartz ()
+    "Export current org‑roam buffer to Quartz‑compatible markdown."
+    (interactive)
+    (let ((org-hugo-auto-export-on-save t))
+      (org-hugo-export-to-md)))
+  (add-hook 'org-mode-hook
+            (lambda () (add-hook 'after-save-hook #'hiro/org-publish-to-quartz 0 t)))
+#+end_src
+
+After taking notes with org-roam, I use ox-hugo to export org notes to hugo-flavoured markdown files, so that Quartz can render a functional website.
+
+There are two more thing need to config,
+1. Set =org-hugo-default-section-directory= to =/= if you don't want to use =posts=.
+2. Config =FrontMatter= to =quartz.config.ts= to detect =title= and other metadata.
+
+#+begin_src emacs-lisp
+  (defun my/hugo-export-org-directory (org-dir &optional recursive)
+    "Export every *.org file in ORG-DIR to Markdown with ox‑hugo.
+
+  With a prefix argument (C-u) the search is RECURSIVE, so it walks
+  into sub‑directories as well.
+
+  Each file is exported with `org-hugo-export-to-md' (whole‑file
+  workflow).  You still control the output location and front‑matter
+  via #+hugo_* keywords or your usual ox‑hugo variables."
+    (interactive (list (read-directory-name "Org notes directory: ")
+                       current-prefix-arg))
+    (let* ((files (if recursive
+                      (directory-files-recursively org-dir "\\.org\\'")
+                    (directory-files org-dir t "\\.org\\'")))
+           (org-hugo-export-front-matter-format "yaml")
+           ;; don’t pop up a temporary *Org Export* buffer for every file
+           (org-export-show-temporary-export-buffer nil))
+      (message "ox‑hugo: exporting %d file%s …"
+               (length files) (if (= (length files) 1) "" "s"))
+      (dolist (f files)
+        (with-current-buffer (find-file-noselect f)
+          (message "  → %s" (file-name-nondirectory f))
+          ;; nil nil nil nil = (async subtreep visible-only body-only)
+          (org-hugo-export-to-md)          ; whole‑file export
+          (save-buffer)                    ; keep any :EXPORT_ props you added
+          (kill-buffer)))
+      (message "ox‑hugo: done – %d file%s exported."
+               (length files) (if (= (length files) 1) "" "s"))))
+
+  ;; Optional convenience alias:
+  ;; M-x hugo-export-this-directory  (recursive with C-u)
+  (defalias 'hugo-export-this-directory #'my/hugo-export-org-directory)
+#+End_src
+
+Workflow:
+1. Write a note
+2. =hiro/org-publish-to-quartz= outputs the current roam note to Quartz
+3. Use =git= to commit and push Quartz repo, and wait for deployment finish.
+
 ** Good old template shortcut
 
 #+begin_src emacs-lisp
