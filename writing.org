@@ -43,10 +43,6 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
   ;; make svg latex preview image
   (setq org-preview-latex-default-process 'dvisvgm)
-
-  ;; auto refresh latex preview
-  (straight-use-package 'org-fragtog)
-  (add-hook 'org-mode-hook 'org-fragtog-mode)
 #+end_src
 
 ** Org Agenda
@@ -368,8 +364,8 @@ Enable ~variable-pitch-mode~.
            (LaTeX-mode . writeroom-mode))
     :custom
     ;; --- Look & feel ---
-    (writeroom-width            80)
-    (writeroom-maximize-window   t)
+    (writeroom-width 80)
+    (writeroom-maximize-window nil)
     ;; --- Optional extras ---
     (writeroom-restore-window-config t)
     (writeroom-fringes-outside-margins nil)

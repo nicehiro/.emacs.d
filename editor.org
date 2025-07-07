@@ -158,6 +158,9 @@ Straight.el is used for package management.
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
   (setq jit-lock-defer-time 0)
+
+  (global-auto-revert-mode 1)
+  (setq auto-revert-use-notify nil)
 #+end_src
 
 * Evil
@@ -176,6 +179,7 @@ Straight.el is used for package management.
   (evil-set-initial-state 'telega-root-mode 'emacs)
   (evil-set-initial-state 'telega-chat-mode 'emacs)
   (evil-set-initial-state 'gptel-mode 'emacs)
+  (evil-set-initial-state 'vterm-mode 'emacs)
   (setq evil-default-state 'normal)
   (with-eval-after-load 'evil-maps
     (define-key evil-normal-state-map (kbd "C-n") nil)
@@ -851,4 +855,45 @@ Configuration of ~gptel~ for daily LLM usage in Emacs.
     (setq gptel-model 'gemini-2.5-pro
         gptel-backend (gptel-make-gh-copilot "Copilot"))
     )
+#+end_src
+
+* Default Application
+
+Set default application to open PDFs.
+
+#+begin_src emacs-lisp
+  (defcustom pdf-external-viewer-app "Preview"
+    "Default application to open PDF files on macOS.
+  Common options: Preview, Adobe Acrobat Reader DC, Skim, PDF Expert"
+    :type 'string
+    :group 'pdf-external)
+
+  (defun pdf-open-external (&optional file)
+    "Open PDF file with external application on macOS.
+  If FILE is not provided, prompt for file selection.
+  Uses the application specified in `pdf-external-viewer-app'."
+    (interactive)
+    (let ((pdf-file (or file
+                        (read-file-name "Select PDF file: " nil nil t nil
+                                        (lambda (name)
+                                          (string-match-p "\\.pdf\\'" name))))))
+      (if (and pdf-file (file-exists-p pdf-file))
+          (progn
+            (start-process "pdf-external-viewer" nil
+                           "open" "-a" pdf-external-viewer-app
+                           (expand-file-name pdf-file))
+            (message "Opening %s with %s" (file-name-nondirectory pdf-file) pdf-external-viewer-app))
+        (error "File does not exist: %s" pdf-file))))
+
+  (defun pdf-find-file-advice (orig-fun &rest args)
+    "Advice to open PDF files externally when using find-file."
+    (let ((filename (car args)))
+      (if (and filename (string-match-p "\\.pdf\\'" filename))
+          (progn
+            (pdf-open-external filename)
+            ;; Return a dummy buffer to satisfy find-file
+            (get-buffer-create "*PDF opened externally*"))
+        (apply orig-fun args))))
+
+  (advice-add 'find-file :around #'pdf-find-file-advice)
 #+end_src

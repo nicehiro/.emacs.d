@@ -6,6 +6,7 @@ Configuration for look and feels, make UI looks better.
   ;;; -*- lexical-binding: t -*-
 #+end_src
 
+
 * Disabling some components
 
 No tool bar & menu bar.
@@ -25,6 +26,7 @@ No scroll bars in minibuffer.
 #+end_src
 
 * Window divider
+
 ** GUI
 #+begin_src emacs-lisp
   (window-divider-mode 0)
@@ -221,6 +223,18 @@ Auto change light/dark themes on Mac.
     (setq-default mode-line-format
                   (append (list (propertize "﻿" 'face '(:height 1.2))) mode-line-format ))
     (setq meomacs-increase-mode-line-height-only-once t))
+
+  ;; Set modeline border color to match background
+  (defun my/set-modeline-box ()
+    "Set modeline box colors to match background."
+    (let ((bg-color (face-attribute 'mode-line :background))
+          (inactive-bg-color (face-attribute 'mode-line-inactive :background)))
+      (set-face-attribute 'mode-line nil
+                          :box `(:line-width 5 :color ,bg-color))
+      (set-face-attribute 'mode-line-inactive nil
+                          :box `(:line-width 5 :color ,inactive-bg-color))))
+  
+  (add-hook 'ef-themes-post-load-hook #'my/set-modeline-box)
 #+end_src
 
 ** Diminish
@@ -266,11 +280,12 @@ Hide unnecessary lighters.
                     mode-line-modified
                     ;; mode-line-remote
                     mode-line-frame-identification
-                    mode-line-buffer-identification
+                    (:eval (format "%-10.10s" (buffer-name)))
                     "  "
                     mode-line-position
-                    mode-line-modes
+                    (:eval (format "[%s]" (symbol-name major-mode)))
                     "  "
+                    (:eval (propertize " " 'display '(space :align-to (- right 20))))
                     (vc-mode vc-mode)
                     "  "
                     mode-line-misc-info
