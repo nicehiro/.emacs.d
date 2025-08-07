@@ -119,18 +119,11 @@ Auto switch to inline ascii state when after a space after a non-ascii character
   (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
 #+end_src
 
-* Go translate
+* Icons
 
 #+begin_src emacs-lisp
-  (straight-use-package 'go-translate)
+  (straight-use-package 'all-the-icons)
 
-  (require 'go-translate)
-
-  (setq gt-preset-translators
-          `((Default . ,(gt-translator
-                         :taker (gt-taker :langs '(en zh) :text 'word :prompt nil)
-                         :engines  (gt-youdao-dict-engine :if 'word)
-                         :render (gt-posframe-pop-render :if 'word :frame-params (list :height 40 :border-width 5))))))
-
-  (keymap-set global-map "<f6>" 'gt-do-translate)
+  (use-package all-the-icons
+    :if (display-graphic-p))
 #+end_src

@@ -47,8 +47,12 @@ Straight.el is used for package management.
 
 #+begin_src emacs-lisp
   (straight-use-package 'exec-path-from-shell)
-  (when *is-a-mac*
-    (exec-path-from-shell-initialize))
+
+  (use-package exec-path-from-shell
+    :ensure t
+    :init
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
 #+end_src
 
 * Better defaults

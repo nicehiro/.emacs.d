@@ -37,12 +37,44 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 
 ** Org LaTeX
 
+For =latex= and =dvisvgm= paths on MacOS, I need to specify the full of the program. Otherwise, even the =(executable-find "latex")= shows correctly, the preview subprocess still won't find the =latex=.
+
 #+begin_src emacs-lisp
   (require 'ox)
-  ;; org latex code render size
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
-  ;; make svg latex preview image
+
+  (setq org-latex-compiler "pdflatex")
+
+  ;; Configure preview options
+  (setq org-format-latex-options
+        '(:foreground default
+          :background default
+          :scale 1.5
+          :html-foreground "Black"
+          :html-background "Transparent"
+          :html-scale 1.0
+          :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+
+  (setq org-preview-latex-process-alist
+        '((dvisvgm :programs
+                   ("/usr/local/texlive/2025/bin/universal-darwin/latex"
+                    "/usr/local/texlive/2025/bin/universal-darwin/dvisvgm")
+                   :description "dvi > svg"
+                   :message "you need to install the programs: latex and dvisvgm."
+                   :image-input-type "dvi"
+                   :image-output-type "svg"
+                   :image-size-adjust (1.7 . 1.5)
+                   :latex-compiler
+                   ("/usr/local/texlive/2025/bin/universal-darwin/latex -interaction nonstopmode -output-directory %o %f")
+                   :image-converter
+                   ("/usr/local/texlive/2025/bin/universal-darwin/dvisvgm %f -n -b min -c %S -o %O"))))
+
   (setq org-preview-latex-default-process 'dvisvgm)
+
+  (setq org-latex-preview-ltxpng-directory "ltxpng/")
+  (setq org-latex-packages-alist
+        '(("" "amsmath" t)
+          ("" "amssymb" t)
+          ("" "mathtools" t)))
 #+end_src
 
 ** Org Agenda
@@ -219,8 +251,10 @@ For more details refer to [[https://www.asterhu.com/post/20240220-publish-org-ro
   (defun hiro/org-publish-to-quartz ()
     "Export current org‑roam buffer to Quartz‑compatible markdown."
     (interactive)
-    (let ((org-hugo-auto-export-on-save t))
-      (org-hugo-export-to-md)))
+    (when (and (bound-and-true-p org-roam-mode)
+               (org-roam-file-p))
+      (let ((org-hugo-auto-export-on-save t))
+        (org-hugo-export-to-md))))
   (add-hook 'org-mode-hook
             (lambda () (add-hook 'after-save-hook #'hiro/org-publish-to-quartz 0 t)))
 #+end_src
