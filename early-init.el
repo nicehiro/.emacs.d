@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+;; disable decoration
+(add-to-list 'default-frame-alist '(undecorated-round . t))
+
 ;; Disable GC during initialization(for the case, early-init.el is not used)
 (setq gc-cons-threshold most-positive-fixnum)
 

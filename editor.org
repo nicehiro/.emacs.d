@@ -52,7 +52,10 @@ Straight.el is used for package management.
     :ensure t
     :init
     (when (memq window-system '(mac ns x))
-      (exec-path-from-shell-initialize)))
+      (exec-path-from-shell-initialize))
+    :config
+    (exec-path-from-shell-copy-env "ANTHROPIC_BASE_URL")
+    (exec-path-from-shell-copy-env "ANTHROPIC_AUTH_TOKEN"))
 #+end_src
 
 * Better defaults
@@ -297,9 +300,6 @@ Use frames for workspaces.
 Use tabs for workspaces.
 
 #+begin_src emacs-lisp
-  ;; We could hide the window decoration
-  (setq default-frame-alist '((undecorated . t)))
-
   (add-hook 'after-init-hook
             (lambda ()
               (tab-rename "*Emacs*")))

@@ -258,3 +258,83 @@ Use eglot as LSP client.
 
   (use-package typescript-mode)
 #+end_src
+
+
+* Swift
+
+#+begin_src emacs-lisp
+  (straight-use-package 'swift-mode)
+
+  (use-package swift-mode)
+#+end_src
+
+* Claude code
+
+#+begin_src emacs-lisp
+    (straight-use-package '(claude-code
+                            :host github
+                            :repo "stevemolitor/claude-code.el"
+                            :branch "main"
+                            :files ("*.el" (:exclude "images/*"))))
+
+    (straight-use-package 'vterm)
+
+    (straight-use-package
+     '(monet :type git :host github :repo "stevemolitor/monet"))
+
+    (use-package monet
+      :config
+      ;; Change log buffer name
+      (setq monet-log-buffer-name "*Monet Log*")
+
+      ;; Customize diff keybindings
+      (setq monet-ediff-quit-key "C-g")            ; Default: "q"
+      (setq monet-simple-diff-quit-key "C-g")      ; Default: "q"
+
+      ;; Change ediff window split direction
+      (setq monet-ediff-split-window-direction 'horizontal)
+
+      (setq monet-diff-tool #'monet-ediff-tool)
+      (setq monet-diff-cleanup-tool #'monet-ediff-cleanup-tool)
+      )
+
+    (use-package claude-code
+      :bind-keymap
+      ("C-c t" . claude-code-command-map)
+      ;; Optionally define a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm modes after invoking claude-code-cycle-mode / C-c M.
+      :bind
+      (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode))
+      :config
+      ;; optional IDE integration with Monet
+      (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
+      (monet-mode 1)
+
+      ;; Set line spacing to reduce gaps between vertical bars
+      (setq line-spacing 0.1)
+      (claude-code-mode)
+
+      (defun hiro/claude-notify (title message)
+      "Display a macOS notification with sound."
+        (call-process "osascript" nil nil nil
+                    "-e" (format
+                          "display notification \"%s\" with title \"%s\" sound name \"Glass\""
+                          message title)))
+      (setq claude-code-notification-function 'hiro/claude-notify)
+
+      (add-to-list 'display-buffer-alist
+                 '("\\*claude.*\\*"
+                   (display-buffer-in-side-window)
+                   (side . right)
+                   (window-width . 60)))
+
+      (setq claude-code-terminal-backend 'vterm)
+      ;; Increase vterm scrollback to 100000 lines (the maximum allowed)
+      ;; Note: This increases memory usage
+      (add-hook 'claude-code-start-hook
+              (lambda ()
+                ;; Only increase scrollback for vterm backend
+                (when (eq claude-code-terminal-backend 'vterm)
+                  (setq-local vterm-max-scrollback 100000))))
+      ;; Allow vterm windows to be as narrow as 40 columns
+      (setopt vterm-min-window-width 40))
+#+end_src

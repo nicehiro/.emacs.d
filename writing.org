@@ -73,8 +73,7 @@ For =latex= and =dvisvgm= paths on MacOS, I need to specify the full of the prog
   (setq org-latex-preview-ltxpng-directory "ltxpng/")
   (setq org-latex-packages-alist
         '(("" "amsmath" t)
-          ("" "amssymb" t)
-          ("" "mathtools" t)))
+          ("" "libertinus" t)))
 #+end_src
 
 ** Org Agenda
@@ -404,7 +403,8 @@ Enable ~variable-pitch-mode~.
     (writeroom-restore-window-config t)
     (writeroom-fringes-outside-margins nil)
     (writeroom-extra-line-spacing 4)
-    (writeroom-mode-line nil))
+    (writeroom-mode-line t)
+    (writeroom-fullscreen-effect nil))
 
   ;; Nice companion tweaks
   (add-hook 'writeroom-mode-enable-hook

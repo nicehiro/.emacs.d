@@ -71,9 +71,25 @@ Create or open notes in Org-Roam for all bibs.
 
 * LaTeX
 
+Use AUCTeX to preview.
+
+#+begin_src emacs-lisp
+  (straight-use-package 'auctex)
+
+  (use-package auctex
+    :ensure t
+    :config
+    ;; Use SVG for preview
+    (setq preview-image-type 'svg)
+    ;; Optional: adjust scale since SVG scales differently
+    (setq preview-scale-function 1.2)
+    ;; Enable preview mode
+    ;; (add-hook 'LaTeX-mode-hook 'preview-latex-mode)
+    )
+#+end_src
+
 #+begin_src emacs-lisp
 
-  (straight-use-package 'auctex)
   (straight-use-package 'cdlatex)
   (straight-use-package 'reftex)
 
@@ -207,6 +223,7 @@ Create or open notes in Org-Roam for all bibs.
     (consult-customize consult-reftex-insert-reference
                        :preview-key (list :debounce 0.3 'any)))
 #+end_src
+
 
 * Elfeed
 
