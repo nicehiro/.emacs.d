@@ -37,43 +37,76 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 
 ** Org LaTeX
 
-For =latex= and =dvisvgm= paths on MacOS, I need to specify the full of the program. Otherwise, even the =(executable-find "latex")= shows correctly, the preview subprocess still won't find the =latex=.
+For =latex= and =dvisvgm= paths on MacOS, I need to specify the full path of the program. Otherwise, even the =(executable-find "latex")= shows correctly, the preview subprocess still won't find the =latex=.
+
+Using tecosaur's org-mode fork with the new =org-latex-preview= system.
 
 #+begin_src emacs-lisp
   (require 'ox)
 
   (setq org-latex-compiler "pdflatex")
 
-  ;; Configure preview options
-  (setq org-format-latex-options
-        '(:foreground default
-          :background default
-          :scale 1.5
-          :html-foreground "Black"
-          :html-background "Transparent"
-          :html-scale 1.0
+  ;; New org-latex-preview appearance options (replaces org-format-latex-options)
+  (setq org-latex-preview-appearance-options
+        '(:foreground auto
+          :background "Transparent"
+          :scale 1.0
+          :zoom 1.2
+          :page-width 0.6
           :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
 
-  (setq org-preview-latex-process-alist
-        '((dvisvgm :programs
-                   ("/usr/local/texlive/2025/bin/universal-darwin/latex"
-                    "/usr/local/texlive/2025/bin/universal-darwin/dvisvgm")
-                   :description "dvi > svg"
-                   :message "you need to install the programs: latex and dvisvgm."
-                   :image-input-type "dvi"
-                   :image-output-type "svg"
-                   :image-size-adjust (1.7 . 1.5)
-                   :latex-compiler
-                   ("/usr/local/texlive/2025/bin/universal-darwin/latex -interaction nonstopmode -output-directory %o %f")
-                   :image-converter
-                   ("/usr/local/texlive/2025/bin/universal-darwin/dvisvgm %f -n -b min -c %S -o %O"))))
+  ;; Use dvisvgm as the default process
+  (setq org-latex-preview-process-default 'dvisvgm)
 
-  (setq org-preview-latex-default-process 'dvisvgm)
+  ;; Explicitly set LaTeX executable paths for org-latex-preview
+  (let ((texlive-bin "/usr/local/texlive/2025/bin/universal-darwin"))
+    ;; Set compiler command map with full paths - this controls what %l and %L expand to
+    (setq org-latex-preview-compiler-command-map
+          `(("pdflatex" . ,(concat texlive-bin "/latex"))
+            ("xelatex" . ,(concat texlive-bin "/xelatex -no-pdf"))
+            ("lualatex" . ,(concat texlive-bin "/dvilualatex"))))
+    (setq org-latex-preview-process-alist
+          `((dvisvgm
+             :programs ("latex" "dvisvgm")
+             :description "dvi > svg"
+             :message "You need to install latex and dvisvgm."
+             :image-input-type "dvi"
+             :image-output-type "svg"
+             :latex-compiler (,(concat texlive-bin "/latex -interaction nonstopmode -output-directory %o %f"))
+             :latex-precompiler (,(concat texlive-bin "/latex -output-directory %o -ini -jobname=%b \"&%L\" mylatexformat.ltx %f"))
+             :image-converter (,(concat texlive-bin "/dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f"))))))
 
-  (setq org-latex-preview-ltxpng-directory "ltxpng/")
+  ;; Enable persistent cache across Emacs sessions
+  (setq org-latex-preview-cache 'persist)
+
+  ;; Cache expiry in days
+  (setq org-latex-preview-persist-expiry 7)
+
+  ;; Enable equation numbering
+  (setq org-latex-preview-numbered t)
+
+  ;; Show processing indicator in fringe
+  (setq org-latex-preview-process-active-indicator 'fringe)
+
+  ;; Enable preamble precompilation for faster previews
+  (setq org-latex-preview-process-precompile t)
+
+  ;; Live preview while editing
+  (setq org-latex-preview-mode-display-live '(block edit-special))
+
+  ;; Debounce delay for live updates (seconds)
+  (setq org-latex-preview-mode-update-delay 0.5)
+
+  ;; Track fragment insertions for auto-preview
+  (setq org-latex-preview-mode-track-inserts t)
+
+  ;; LaTeX packages
   (setq org-latex-packages-alist
         '(("" "amsmath" t)
           ("" "libertinus" t)))
+
+  ;; Enable org-latex-preview-mode in org buffers
+  (add-hook 'org-mode-hook #'org-latex-preview-mode)
 #+end_src
 
 ** Org Agenda
@@ -101,6 +134,7 @@ For =latex= and =dvisvgm= paths on MacOS, I need to specify the full of the prog
             (sequence "|" "READ(r)")
             (sequence "|" "BLOG(b)")
             (sequence "|" "IDEA(i)")
+            (sequence "|" "RESEARCH(R)")
             ))
 
     ;; my agenda view contains follow items:
@@ -112,17 +146,19 @@ For =latex= and =dvisvgm= paths on MacOS, I need to specify the full of the prog
       "Custom commands for org agenda.")
     (setq org-agenda-custom-commands
           '(("d" "Daily agenda and Ideas"
-             ((todo "IDEA"
+             ((todo "RESEARCH"
+                    ((org-agenda-overriding-header "Scientific Projects:")))
+              (todo "IDEA"
                     ((org-agenda-overriding-header "Stupid but maybe interesting IDEAs:")))
               (agenda ""
                       ((org-agenda-overriding-header "Today's agenda")
                        (org-agenda-span 'day)
                        (org-agenda-toggle-deadlines)))
-              (agenda ""
-                      ((org-agenda-overriding-header "Future's agenda(One week)")
-                       (org-agenda-start-day "+1d")
-                       (org-agenda-span 7)
-                       (org-agenda-toggle-deadlines)))
+              ;; (agenda ""
+              ;;         ((org-agenda-overriding-header "Future's agenda(One week)")
+              ;;          (org-agenda-start-day "+1d")
+              ;;          (org-agenda-span 7)
+              ;;          (org-agenda-toggle-deadlines)))
               (todo "READ"
                     ((org-agenda-overriding-header "Reading List:")))
               (todo "BLOG"
@@ -148,6 +184,11 @@ For =latex= and =dvisvgm= paths on MacOS, I need to specify the full of the prog
                                   ("b" "Blog"
                                    entry (file+headline "~/Documents/gtd/blog.org" "Blogs")
                                    "* BLOG %?\nAdded: %U\n"
+                                   :prepend t
+                                   :kill-buffer t)
+                                  ("s" "Scientific Project"
+                                   entry (file+headline "~/Documents/gtd/projects.org" "Scientific")
+                                   "* RESEARCH %?\nAdded: %U\n"
                                    :prepend t
                                    :kill-buffer t))))
 #+end_src

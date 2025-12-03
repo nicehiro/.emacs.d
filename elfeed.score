@@ -33,7 +33,9 @@
   (:text "Shuran Song" :value 100 :type S)
   (:text "Xiaolong Wang" :value 100 :type S)
   (:text "Andy Zeng" :value 100 :type S))
- ("feed")
+ ("feed"
+  (:text "IEEE Transactions on Robotics" :value 300 :type S :attr t)
+  (:text "Science Robotics" :value 300 :type S :attr t))
  ("link")
  ("udf")
  (mark -600)

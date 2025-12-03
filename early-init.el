@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+
+(setq package-enable-at-startup nil)
+
 ;; disable decoration
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 

@@ -29,8 +29,8 @@ Private configuration.
 #+tblname: fonts
 | key    | font             | description                         |
 |--------+------------------+-------------------------------------|
-| mono   | Maple Mono NF    | monospace font for ascii characters |
-| sans   | Maple Mono NF    | sans font for ascii characters      |
+| mono   | Iosevka FY       | monospace font for ascii characters |
+| sans   | Iosevka FY       | sans font for ascii characters      |
 | serif  | Maple Mono NF    | serif font for ascii characters     |
 | cjk    | Maple Mono NF CN | default font for cjk characters     |
 | symbol | Maple Mono NF    | default font for unicode symbols    |
