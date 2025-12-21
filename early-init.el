@@ -57,6 +57,10 @@ If FORCE-TANGLE is non-nil, always tangle before load."
 ;; Straight configs
 (setq straight-vc-git-default-clone-depth 1)
 
+;; Integrate use-package with straight
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
 ;; Use GCMH as GC config.
 (straight-use-package 'gcmh)
 (require 'gcmh)

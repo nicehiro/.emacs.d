@@ -19,3 +19,4 @@ custom.el
 bookmarks
 .org-id-locations
 eshell/
+*.tex

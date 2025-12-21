@@ -13,20 +13,7 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'hl-line-mode)
-
-  (straight-use-package '(org-margin
-                          :repo "rougier/org-margin"
-                          :host github
-                          :type git))
-  (add-hook 'org-mode-hook 'org-margin-mode)
-
-  ;; Set line spacing for specific modes
-  (defun my-setup-line-spacing ()
-    "Set line spacing."
-    (setq line-spacing 0.2))
-
-  (add-hook 'org-mode-hook 'my-setup-line-spacing)
-  (add-hook 'text-mode-hook 'my-setup-line-spacing)
+  (add-hook 'org-mode-hook (lambda () (setq-local line-spacing 0.2)))
 
   ;; org downlaod
   (straight-use-package 'org-download)
@@ -103,16 +90,20 @@ Using tecosaur's org-mode fork with the new =org-latex-preview= system.
   ;; LaTeX packages
   (setq org-latex-packages-alist
         '(("" "amsmath" t)
-          ("" "libertinus" t)))
+          ("" "libertinus" t)
+          ("ruled,vlined" "algorithm2e" t)))
 
   ;; Enable org-latex-preview-mode in org buffers
   (add-hook 'org-mode-hook #'org-latex-preview-mode)
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex)
 #+end_src
 
 ** Org Agenda
 
 #+begin_src emacs-lisp
   (use-package org-agenda
+    :straight nil
+    :ensure nil
     :bind
     (("C-c a" . org-agenda)
      ("C-c c" . org-capture))
@@ -425,7 +416,7 @@ Enable ~variable-pitch-mode~.
     (setq easy-hugo-org-header t))
 #+end_src
 
-** Writeroom
+** COMMENT Writeroom
 
 #+begin_src emacs-lisp
   (straight-use-package 'writeroom-mode)
@@ -442,7 +433,7 @@ Enable ~variable-pitch-mode~.
     (writeroom-maximize-window nil)
     ;; --- Optional extras ---
     (writeroom-restore-window-config t)
-    (writeroom-fringes-outside-margins nil)
+    (writeroom-fringes-outside-margins 3)
     (writeroom-extra-line-spacing 4)
     (writeroom-mode-line t)
     (writeroom-fullscreen-effect nil))
@@ -456,4 +447,29 @@ Enable ~variable-pitch-mode~.
             (lambda ()
               (visual-line-mode -1)
               (setq cursor-type t)))
+#+end_src
+
+** Org-Modern
+
+#+begin_src emacs-lisp
+  (straight-use-package 'org-modern)
+
+  (use-package org-modern
+    :config
+    (setq
+     ;; Edit settings
+     org-auto-align-tags nil
+     org-tags-column 0
+     org-catch-invisible-edits 'show-and-error
+     org-special-ctrl-a/e t
+     org-insert-heading-respect-content t
+
+     ;; Org styling, hide markup etc.
+     org-hide-emphasis-markers t
+     org-pretty-entities t
+     org-agenda-tags-column 0
+     org-ellipsis "…")
+    (add-hook 'org-mode-hook #'org-modern-mode)
+    (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+  )
 #+end_src

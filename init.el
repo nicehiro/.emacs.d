@@ -75,7 +75,7 @@
 (global-set-key (kbd "<f12>") 'meomacs-refresh)
 
 ;; Load main configuration
-(meomacs-load-config "laf")
+;; Note: "laf" is already loaded in early-init.el
 (meomacs-load-config "editor")
 (meomacs-load-config "writing")
 (meomacs-load-config "programming")

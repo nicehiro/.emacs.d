@@ -21,6 +21,8 @@ Create or open notes in Org-Roam for all bibs.
 #+begin_src emacs-lisp
   ;; Ensure :zotero: links are redirected to org-mode
   (use-package org
+    :straight nil
+    :ensure nil
     :custom
     (org-link-set-parameters "zotero" :follow
                              (lambda (zpath)
@@ -28,6 +30,8 @@ Create or open notes in Org-Roam for all bibs.
                                 (format "zotero:%s" zpath)))))
 
   (use-package oc
+    :straight nil
+    :ensure nil
     :custom
     (setq org-cite-global-bibliography '("~/Documents/roam/library.bib")))
 
@@ -51,6 +55,8 @@ Create or open notes in Org-Roam for all bibs.
     :config (citar-org-roam-mode))
 
   (use-package org-roam
+    :straight nil
+    :ensure nil
     :config
     (setq org-roam-capture-templates
         '(("d" "default" plain
@@ -76,13 +82,16 @@ Use AUCTeX to preview.
 #+begin_src emacs-lisp
   (straight-use-package 'auctex)
 
-  (use-package auctex
-    :ensure t
+  (use-package tex-site
+    :straight nil
+    :ensure auctex
     :config
     ;; Use SVG for preview
     (setq preview-image-type 'svg)
     ;; Optional: adjust scale since SVG scales differently
     (setq preview-scale-function 1.2)
+    ;; Cache preamble for faster preview
+    (setq preview-auto-cache-preamble t)
     ;; Enable preview mode
     ;; (add-hook 'LaTeX-mode-hook 'preview-latex-mode)
     )
@@ -94,14 +103,19 @@ Use AUCTeX to preview.
   (straight-use-package 'reftex)
 
   (use-package latex
+    :straight nil
     :ensure auctex
     ;; :hook ((LaTeX-mode . prettify-symbols-mode))
     :bind (:map LaTeX-mode-map
                 ("C-S-e" . latex-math-from-calc))
-    :hook ((LaTeX-mode . visual-line-mode))
+    :hook ((LaTeX-mode . visual-line-mode)
+           (LaTeX-mode . LaTeX-math-mode)
+           (LaTeX-mode . (lambda () (setq-local line-spacing 0.2))))
     :config
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
+    ;; Auto-match \left \right braces
+    (setq LaTeX-electric-left-right-brace t)
     ;; Format math as a Latex string with Calc
     (defun latex-math-from-calc ()
       "Evaluate `calc' on the contents of line at point."
@@ -122,13 +136,32 @@ Use AUCTeX to preview.
                                       calc-angle-mode rad))))))))
 
   (use-package preview
+    :straight nil
+    :ensure nil
     :after latex
-    :hook ((LaTeX-mode . preview-larger-previews))
+    :hook ((LaTeX-mode . preview-larger-previews)
+           (LaTeX-mode . my/setup-latex-auto-preview))
     :config
     (defun preview-larger-previews ()
       (setq preview-scale-function
             (lambda () (* 1.0
-                          (funcall (preview-scale-from-face)))))))
+                          (funcall (preview-scale-from-face))))))
+
+    ;; Auto-preview on idle
+    (defvar my/preview-idle-timer nil)
+
+    (defun my/preview-environment-on-idle ()
+      "Preview current math environment after idle."
+      (when (and (derived-mode-p 'LaTeX-mode)
+                 (texmathp))
+        (ignore-errors (preview-environment 1))))
+
+    (defun my/setup-latex-auto-preview ()
+      "Setup auto-preview timer for LaTeX."
+      (when my/preview-idle-timer
+        (cancel-timer my/preview-idle-timer))
+      (setq my/preview-idle-timer
+            (run-with-idle-timer 1.5 t #'my/preview-environment-on-idle))))
 
   (use-package cdlatex
     :ensure t
@@ -137,10 +170,14 @@ Use AUCTeX to preview.
                 ("<tab>" . cdlatex-tab)))
 
   (use-package yasnippet
+    :straight nil
+    :ensure nil
     :hook ((LaTeX-mode . yas-minor-mode)
            (post-self-insert . my/yas-try-expanding-auto-snippets))
     :config
     (use-package warnings
+      :straight nil
+      :ensure nil
       :config
       (cl-pushnew '(yasnippet backquote-change)
                   warning-suppress-types
@@ -158,10 +195,14 @@ Use AUCTeX to preview.
   ;; CDLatex integration with YaSnippet: Allow cdlatex tab to work inside Yas
   ;; fields
   (use-package cdlatex
+    :straight nil
+    :ensure nil
     :hook ((cdlatex-tab . yas-expand)
            (cdlatex-tab . cdlatex-in-yas-field))
     :config
     (use-package yasnippet
+      :straight nil
+      :ensure nil
       :bind (:map yas-keymap
                   ("<tab>" . yas-next-field-or-cdlatex)
                   ("TAB" . yas-next-field-or-cdlatex))
@@ -195,6 +236,8 @@ Use AUCTeX to preview.
           (yas-next-field-or-maybe-expand)))))
 
   (use-package reftex
+    :straight nil
+    :ensure nil
     :after latex
     :defer 2
     :commands turn-on-reftex
@@ -207,6 +250,8 @@ Use AUCTeX to preview.
     (setq reftex-use-multiple-selection-buffers t))
 
   (use-package consult-reftex
+    :straight nil
+    :ensure nil
     ;; :load-path "plugins/consult-reftex/"
     :after (reftex consult embark)
     :bind (:map reftex-mode-map

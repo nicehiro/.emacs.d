@@ -50,12 +50,13 @@ Straight.el is used for package management.
 
   (use-package exec-path-from-shell
     :ensure t
-    :init
-    (when (memq window-system '(mac ns x))
-      (exec-path-from-shell-initialize))
     :config
-    (exec-path-from-shell-copy-env "ANTHROPIC_BASE_URL")
-    (exec-path-from-shell-copy-env "ANTHROPIC_AUTH_TOKEN"))
+    (when (memq window-system '(mac ns x))
+      ;; Batch all env vars into single shell invocation for speed
+      (setq exec-path-from-shell-variables
+            (append exec-path-from-shell-variables
+                    '("ANTHROPIC_BASE_URL" "ANTHROPIC_AUTH_TOKEN")))
+      (exec-path-from-shell-initialize)))
 #+end_src
 
 * Better defaults
@@ -472,6 +473,9 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
     (global-corfu-mode))
 
   (use-package corfu-popupinfo
+    :straight nil
+    :ensure nil
+    :after corfu
     :config
     (corfu-popupinfo-mode)
     (setq corfu-popupinfo-delay (cons nil 1.0)))

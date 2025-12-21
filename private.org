@@ -27,13 +27,13 @@ Private configuration.
 #+end_src
 
 #+tblname: fonts
-| key    | font             | description                         |
-|--------+------------------+-------------------------------------|
-| mono   | Iosevka FY       | monospace font for ascii characters |
-| sans   | Iosevka FY       | sans font for ascii characters      |
-| serif  | Maple Mono NF    | serif font for ascii characters     |
-| cjk    | Maple Mono NF CN | default font for cjk characters     |
-| symbol | Maple Mono NF    | default font for unicode symbols    |
+| key    | font               | description                         |
+|--------+--------------------+-------------------------------------|
+| mono   | Input Mono         | monospace font for ascii characters |
+| sans   | Input Sans         | sans font for ascii characters      |
+| serif  | Input Serif Narrow | serif font for ascii characters     |
+| cjk    | Maple Mono NF CN   | default font for cjk characters     |
+| symbol | JuliaMono          | default font for unicode symbols    |
 
 ** COMMENT Pixel
 
@@ -118,7 +118,9 @@ Private configuration.
                 (add-to-list 'company-backends 'hledger-company))))
 
   (use-package hledger-input
-    ;; :load-path "straight/build/hledger-mode/"
+    :straight nil
+    :ensure nil
+    :after hledger-mode
     :bind (("C-c e" . hledger-capture)
            :map hledger-input-mode-map
            ("C-c C-b" . popup-balance-at-point))
