@@ -208,6 +208,13 @@ Set adaptive frame dimensions based on screen size.
 Load themes.
 
 #+begin_src emacs-lisp
+  ;; Add custom themes directory to load path
+  (add-to-list 'custom-theme-load-path
+               (expand-file-name "themes/" user-emacs-directory))
+  ;; Also add to load-path so we can require theme files
+  (add-to-list 'load-path
+               (expand-file-name "themes/" user-emacs-directory))
+
   ;; Modus themes - install via straight for full library support
   (straight-use-package 'modus-themes)
 
@@ -226,6 +233,11 @@ Load themes.
           (t . (regular 1.15))))
 
   (require 'modus-themes)
+
+  ;; Load custom hiro themes (registers them as modus derivatives)
+  (require 'hiro-one-dark-theme)
+  (require 'hiro-one-light-theme)
+
   (load-theme 'modus-operandi t)
 
   ;; Ef themes (additional theme options)
@@ -276,16 +288,9 @@ Hide unnecessary lighters.
   ;; Configure doom-modeline
   (require 'doom-modeline)
 
-  ;; Custom buffer position format: line:column
-  (doom-modeline-def-segment buffer-position
-    "The buffer position in format line:column."
-    (format "%d:%d"
-            (line-number-at-pos)
-            (current-column)))
-
   (doom-modeline-def-modeline 'hiro/modeline
     '(modals "  " buffer-info "  " remote-host "  " parrot "  " selection-info)
-    '(misc-info minor-modes matches input-method process vcs "  " check buffer-position "  "))
+    '(misc-info minor-modes matches input-method process vcs "  "))
 
   ;; Customize doom-modeline appearance
   (setq doom-modeline-height 25)
