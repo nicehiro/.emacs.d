@@ -54,8 +54,10 @@ Straight.el is used for package management.
     (when (memq window-system '(mac ns x))
       ;; Batch all env vars into single shell invocation for speed
       (setq exec-path-from-shell-variables
-            (append exec-path-from-shell-variables
-                    '("ANTHROPIC_BASE_URL" "ANTHROPIC_AUTH_TOKEN")))
+            (delete-dups
+             (append exec-path-from-shell-variables
+                     '("ANTHROPIC_BASE_URL" "ANTHROPIC_AUTH_TOKEN"
+                       "ANTHROPIC_API_KEY" "OPENAI_API_KEY"))))
       (exec-path-from-shell-initialize)))
 #+end_src
 
