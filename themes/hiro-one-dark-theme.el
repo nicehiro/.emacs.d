@@ -121,11 +121,12 @@
 
      ;; Special purpose
      (bg-completion       "#74ade83d")
+     (bg-popup            "#2f343e")
      (bg-hover            "#45605e")
      (bg-hover-secondary  "#654a39")
      (bg-hl-line          "#2f3849")
-     (bg-region           "#5a5a5a")
-     (fg-region           "#ffffff")
+     (bg-region           "#3e4451")
+     (fg-region           fg-main)
 
      (bg-mode-line-active        "#3b414d")
      (fg-mode-line-active        "#dce0e5")
@@ -332,12 +333,12 @@
 Based on Zed Editor's One Dark color scheme.")
 
 (modus-themes-theme
- hiro-one-dark
- hiro-themes
+ 'hiro-one-dark
+ 'ef-themes
  "Zed One Dark inspired theme with a dark background.
 Built on modus-themes for comprehensive face coverage."
- dark
- hiro-one-dark-palette
+ 'dark
+ 'hiro-one-dark-palette
  nil
  nil)
 

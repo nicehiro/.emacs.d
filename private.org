@@ -27,13 +27,13 @@ Private configuration.
 #+end_src
 
 #+tblname: fonts
-| key    | font               | description                         |
-|--------+--------------------+-------------------------------------|
-| mono   | Input Mono         | monospace font for ascii characters |
-| sans   | Input Sans         | sans font for ascii characters      |
-| serif  | Input Serif Narrow | serif font for ascii characters     |
-| cjk    | Maple Mono NF CN   | default font for cjk characters     |
-| symbol | JuliaMono          | default font for unicode symbols    |
+| key    | font                   | description                         |
+|--------+------------------------+-------------------------------------|
+| mono   | IoskeleyMono Nerd Font | monospace font for ascii characters |
+| sans   | Geist                  | sans font for ascii characters      |
+| serif  | IoskeleyMono Nerd Font | serif font for ascii characters     |
+| cjk    | Maple Mono NF CN       | default font for cjk characters     |
+| symbol | GeistMono Nerd Font    | default font for unicode symbols    |
 
 ** COMMENT Pixel
 

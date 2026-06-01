@@ -121,10 +121,11 @@
 
      ;; Special purpose
      (bg-completion       "#5c79e23d")
+     (bg-popup            "#ebebec")
      (bg-hover            "#b2e4dc")
      (bg-hover-secondary  "#f5d0a0")
      (bg-hl-line          "#ebebec")
-     (bg-region           "#bdbdbd")
+     (bg-region           "#d4e5ff")
      (fg-region           "#000000")
 
      (bg-mode-line-active        "#dcdcdd")
@@ -169,6 +170,7 @@
      ;; Paren match
      (bg-paren-match        "#5fcfff")
      (bg-paren-expression   "#efd3f5")
+     (underline-paren-match unspecified)
 
      ;; General mappings (Zed semantic style)
      (cursor blue)
@@ -332,12 +334,12 @@
 Based on Zed Editor's One Light color scheme.")
 
 (modus-themes-theme
- hiro-one-light
- hiro-themes
+ 'hiro-one-light
+ 'ef-themes
  "Zed One Light inspired theme with a light background.
 Built on modus-themes for comprehensive face coverage."
- light
- hiro-one-light-palette
+ 'light
+ 'hiro-one-light-palette
  nil
  nil)
 

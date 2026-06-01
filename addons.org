@@ -6,6 +6,32 @@ Configuration for addons, additional features provided by individual packages.
   ;;; -*- lexical-binding: t -*-
 #+end_src
 
+* Org Tree Slide
+
+#+begin_src emacs-lisp
+  (straight-use-package 'org-tree-slide)
+
+  ;; Simple, writing-focused org presentations
+  (with-eval-after-load "org-tree-slide"
+    (org-tree-slide-simple-profile)
+
+    ;; Enter/exit presentation: toggle Writeroom and inline images
+    (add-hook 'org-tree-slide-play-hook
+              (lambda ()
+                (when (derived-mode-p 'org-mode)
+                  (writeroom-mode 1)
+                  (org-display-inline-images))))
+    (add-hook 'org-tree-slide-stop-hook
+              (lambda ()
+                (when (derived-mode-p 'org-mode)
+                  (writeroom-mode -1)
+                  (org-remove-inline-images)))))
+
+  ;; Start/stop slideshow in Org buffers
+  (with-eval-after-load "org"
+    (keymap-set org-mode-map "C-c t s" #'org-tree-slide-mode))
+#+end_src
+
 * Git integration with magit & diff-hl & smerge
 
 To manage the git repository, use builtin package ~vc~.
@@ -30,36 +56,35 @@ Enable diff-hl in based on major modes.
   (add-hook 'conf-mode-hook 'diff-hl-mode)
 #+end_src
 
-* COMMENT Input method with emacs-rime
+* Input method with emacs-rime
 
-~librime~ is required for this feature.
+~librime~ is required for this feature. Using librime from Squirrel.app.
 
 ~emacs-rime~ is the frontend of rime built with emacs input method API.
 
 #+begin_src emacs-lisp
   (straight-use-package 'rime)
-
-  (require 'rime)
+  (straight-use-package 'posframe)
 
   (setq default-input-method "rime"
-        rime-emacs-module-header-root (file-name-directory (getenv "EMACS_MODULE_HEADER"))
-        rime-show-candidate 'sidewindow
-        rime-librime-root (meomacs-read-var "rime-librime-root")
-        rime-share-data-dir (expand-file-name "~/.config/rime"))
+        ;; librime from Homebrew (provides headers for compilation)
+        rime-librime-root "/opt/homebrew"
+        ;; Separate user data (avoids database conflicts)
+        rime-user-data-dir "~/.config/emacs-rime"
+        ;; Use rime-ice config as shared data (schemas, dicts, lua)
+        rime-share-data-dir "~/Library/Rime"
+        ;; Candidate display
+        rime-show-candidate 'posframe)
 
   (with-eval-after-load "rime"
-    (define-key rime-mode-map (kbd "C-`") 'rime-send-keybinding)
+    ;; Navigation keys when composing
+    (dolist (k '("TAB" "C-p" "C-n" "M-v" "C-v"))
+      (define-key rime-active-mode-map (kbd k) 'rime-send-keybinding)))
 
-    (dolist (k '("TAB" "C-p" "C-n" "M-v" "C-v" "C-y" "<escape>"))
-      (define-key rime-active-mode-map (kbd k) 'rime-send-keybinding))
-
-    (define-key rime-active-mode-map (kbd "C-a") 'rime-inline-ascii))
-#+end_src
-
-Auto switch to inline ascii state when after a space after a non-ascii character.
-
-#+begin_src emacs-lisp
-  (setq rime-inline-predicates '(rime-predicate-space-after-cc-p))
+  ;; Auto-disable in code and evil normal mode
+  (setq rime-disable-predicates
+        '(rime-predicate-prog-in-code-p
+          rime-predicate-evil-mode-p))
 #+end_src
 
 * Directory environment support with direnv

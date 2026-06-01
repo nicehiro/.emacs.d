@@ -20,3 +20,7 @@ bookmarks
 .org-id-locations
 eshell/
 *.tex
+pi-active-sessions.eld
+projects.eld
+tramp
+url/

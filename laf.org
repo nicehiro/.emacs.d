@@ -238,20 +238,16 @@ Load themes.
   (require 'hiro-one-dark-theme)
   (require 'hiro-one-light-theme)
 
-  (load-theme 'modus-operandi t)
+  (load-theme 'hiro-one-light t)
 
   ;; Ef themes (additional theme options)
   (straight-use-package 'ef-themes)
 
   (use-package ef-themes
-    :ensure t
     :init
     ;; Include ef-themes in modus rotation/selection
-    (modus-themes-include-derivatives-mode 1)
-    :bind
-    (("<f5>" . modus-themes-rotate)
-     ("C-<f5>" . modus-themes-select)
-     ("M-<f5>" . modus-themes-load-random)))
+    ;; (modus-themes-include-derivatives-mode 1)
+    (ef-themes-take-over-modus-themes-mode 1))
 #+end_src
 
 * Paren face
@@ -358,8 +354,8 @@ Hide unnecessary lighters.
             :foreground ,(modus-themes-get-color-value 'fg-active)
             :weight bold
             :box (:line-width 4 :color ,(modus-themes-get-color-value 'bg-dim)))
-        `(:background unspecified
-          :foreground ,(modus-themes-get-color-value 'fg-dim)
+        `(:background ,(modus-themes-get-color-value 'bg-inactive)
+          :foreground ,(modus-themes-get-color-value 'fg-inactive)
           :weight normal
           :box (:line-width 4 :color ,(modus-themes-get-color-value 'bg-inactive)))))
 
@@ -395,7 +391,6 @@ Hide unnecessary lighters.
   (straight-use-package 'spacious-padding)
 
   (use-package spacious-padding
-    :ensure t
     :config
     ;; These are the default values, but I keep them here for visibility.
     ;; Also check `spacious-padding-subtle-frame-lines'.
@@ -415,4 +410,15 @@ Hide unnecessary lighters.
 
     ;; Set a key binding if you need to toggle spacious padding.
     (define-key global-map (kbd "<f8>") #'spacious-padding-mode))
+#+end_src
+
+* Vertical Center Line Height
+
+Copied from: https://github.com/syl20bnr/spacemacs/issues/10502#issuecomment-404453194.
+
+#+begin_src emacs-lisp
+(defun set-bigger-spacing ()
+  (setq-local default-text-properties '(line-spacing 0.2 line-height 1.2)))
+(add-hook 'text-mode-hook 'set-bigger-spacing)
+(add-hook 'prog-mode-hook 'set-bigger-spacing)
 #+end_src

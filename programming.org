@@ -346,5 +346,28 @@ Use eglot as LSP client.
     (setopt vterm-min-window-width 40)
 
     (custom-set-faces
-     '(claude-code-repl-face ((t (:family "JuliaMono"))))))
+     '(claude-code-repl-face ((t (:family "Input Mono"))))))
+#+end_src
+
+* Pi coding agent
+
+#+begin_src emacs-lisp
+  (use-package pi
+    :straight (:host github :repo "nicehiro/pi.el")
+    :custom
+    (pi-ui-prompt-major-mode #'markdown-mode)
+    (pi-ui-window-side 'right)
+    (pi-ui-window-size 0.38)
+    (pi-ui-prompt-window-side 'bottom)
+    (pi-ui-prompt-window-size 14)
+    (pi-ui-tool-display-style 'verbose)
+    (pi-ui-tool-result-max-lines 8)
+    (pi-ui-show-thinking t)
+    (pi-ui-auto-scroll t)
+    (pi-ui-enable-streaming t)
+    (pi-ui-follow-current-buffer t)
+    (pi-ui-include-active-region t)
+    (pi-ui-region-context-max-chars 12000)
+    (pi-session-idle-timeout-seconds (* 30 60))
+    (pi-rpc-debug-buffer nil))
 #+end_src

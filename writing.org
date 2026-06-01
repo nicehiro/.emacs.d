@@ -15,11 +15,25 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
   (add-hook 'org-mode-hook 'hl-line-mode)
   (add-hook 'org-mode-hook (lambda () (setq-local line-spacing 0.2)))
 
-  ;; org downlaod
+  ;; org-download
   (straight-use-package 'org-download)
   (use-package org-download
+    :hook (org-mode . org-download-enable)
     :config
-    (setq org-download-image-dir "~/Pictures/Org-Download"))
+    ;; Save images to ./img/ relative to org file
+    (setq-default org-download-image-dir "./img")
+    ;; Don't append heading name to path
+    (setq-default org-download-heading-lvl nil)
+    ;; macOS screenshot method
+    (setq org-download-screenshot-method "screencapture -i %s")
+
+    ;; Fix: org-download-clipboard uses "pngpaste" without full path,
+    ;; but macOS zsh subshell doesn't inherit Emacs PATH.
+    (defun org-download-clipboard (&optional basename)
+      "Capture the image from the clipboard and insert the resulting file."
+      (interactive)
+      (let ((org-download-screenshot-method "/opt/homebrew/bin/pngpaste %s"))
+        (org-download-screenshot basename))))
 #+end_src
 
 ** Org LaTeX
@@ -92,6 +106,9 @@ Using tecosaur's org-mode fork with the new =org-latex-preview= system.
         '(("" "amsmath" t)
           ("" "libertinus" t)
           ("ruled,vlined" "algorithm2e" t)))
+
+  (straight-use-package 'auctex)
+  (straight-use-package 'cdlatex)
 
   ;; Enable org-latex-preview-mode in org buffers
   (add-hook 'org-mode-hook #'org-latex-preview-mode)
@@ -267,7 +284,7 @@ Using tecosaur's org-mode fork with the new =org-latex-preview= system.
   (setq org-roam-db-gc-threshold most-positive-fixnum)
 #+end_src
 
-*** Ox-Hugo export to Quartz
+*** COMMENT Ox-Hugo export to Quartz
 
 For more details refer to [[https://www.asterhu.com/post/20240220-publish-org-roam-with-quartz-oxhugo/][Publish org-roam notes to personal wiki using ox-hugo and Quartz]].
 
@@ -383,16 +400,67 @@ Enable ~variable-pitch-mode~.
 
 * Markdown
 
+Pretty markdown editing (Typora-like). Features: hidden markup, scaled headings, inline images, syntax-highlighted code blocks.
+
 #+begin_src emacs-lisp
   (straight-use-package 'markdown-mode)
   (straight-use-package 'edit-indirect)
-#+end_src
+  (straight-use-package 'grip-mode)
 
-** Keybindings
+  (use-package markdown-mode
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . gfm-mode)
+           ("\\.markdown\\'" . gfm-mode))
+    :init
+    ;; WYSIWYG-like visual features
+    (setq markdown-hide-markup t
+          markdown-hide-urls t
+          markdown-fontify-code-blocks-natively t
+          markdown-fontify-whole-heading-line t
+          markdown-enable-math t
 
-#+begin_src emacs-lisp
-  (with-eval-after-load "markdown-mode"
-    (define-key markdown-mode-map (kbd "C-c v") 'markdown-toggle-markup-hiding))
+          ;; Scaled headings (matching modus-themes org headings)
+          markdown-header-scaling t
+          markdown-header-scaling-values '(1.4 1.3 1.2 1.1 1.0 1.0)
+
+          ;; GFM features
+          markdown-asymmetric-header t
+          markdown-italic-underscore t
+          markdown-make-gfm-checkboxes-buttons t
+          markdown-gfm-uppercase-checkbox t
+
+          ;; Images
+          markdown-display-remote-images nil
+          markdown-max-image-size '(600 . 400)
+
+          ;; Unicode list bullets
+          markdown-list-item-bullets '("•" "◦" "▸"))
+
+    :config
+    ;; Match org-mode visual setup
+    (add-hook 'markdown-mode-hook 'variable-pitch-mode)
+    (add-hook 'markdown-mode-hook 'visual-line-mode)
+    (add-hook 'markdown-mode-hook (lambda () (setq-local line-spacing 0.2)))
+    (add-hook 'markdown-mode-hook 'markdown-display-inline-images)
+
+    :bind (:map markdown-mode-map
+           ("C-c v" . markdown-toggle-markup-hiding)
+           ("C-c C-i" . markdown-toggle-inline-images)))
+
+  ;; Keep code/tables monospaced
+  (with-eval-after-load 'markdown-mode
+    (set-face-attribute 'markdown-code-face nil :inherit 'fixed-pitch)
+    (set-face-attribute 'markdown-inline-code-face nil :inherit 'fixed-pitch)
+    (set-face-attribute 'markdown-pre-face nil :inherit 'fixed-pitch)
+    (set-face-attribute 'markdown-table-face nil :inherit 'fixed-pitch))
+
+  ;; Live preview with grip (GitHub-flavored rendering)
+  (use-package grip-mode
+    :after markdown-mode
+    :config
+    (setq grip-preview-use-webkit t)
+    :bind (:map markdown-mode-map
+           ("C-c g" . grip-mode)))
 #+end_src
 
 * Blog
@@ -416,26 +484,28 @@ Enable ~variable-pitch-mode~.
     (setq easy-hugo-org-header t))
 #+end_src
 
-** COMMENT Writeroom
+** Writeroom
 
 #+begin_src emacs-lisp
   (straight-use-package 'writeroom-mode)
 
   (use-package writeroom-mode                 ;requires MELPA
     ;; Activate automatically in text-heavy buffers
-    :hook ((text-mode   . writeroom-mode)
+    :hook (
+           ;; (text-mode   . writeroom-mode)
            (markdown-mode . writeroom-mode)
-           (org-mode . writeroom-mode)
-           (LaTeX-mode . writeroom-mode))
+           ;; (org-mode . writeroom-mode)
+           (LaTeX-mode . writeroom-mode)
+           )
     :custom
     ;; --- Look & feel ---
-    (writeroom-width 80)
+    (writeroom-width 100)
     (writeroom-maximize-window nil)
     ;; --- Optional extras ---
     (writeroom-restore-window-config t)
     (writeroom-fringes-outside-margins 3)
     (writeroom-extra-line-spacing 4)
-    (writeroom-mode-line t)
+    (writeroom-mode-line nil)
     (writeroom-fullscreen-effect nil))
 
   ;; Nice companion tweaks

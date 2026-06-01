@@ -84,7 +84,7 @@ Use AUCTeX to preview.
 
   (use-package tex-site
     :straight nil
-    :ensure auctex
+    :ensure nil
     :config
     ;; Use SVG for preview
     (setq preview-image-type 'svg)
@@ -104,7 +104,7 @@ Use AUCTeX to preview.
 
   (use-package latex
     :straight nil
-    :ensure auctex
+    :ensure nil
     ;; :hook ((LaTeX-mode . prettify-symbols-mode))
     :bind (:map LaTeX-mode-map
                 ("C-S-e" . latex-math-from-calc))
@@ -164,7 +164,6 @@ Use AUCTeX to preview.
             (run-with-idle-timer 1.5 t #'my/preview-environment-on-idle))))
 
   (use-package cdlatex
-    :ensure t
     :hook (LaTeX-mode . turn-on-cdlatex)
     :bind (:map cdlatex-mode-map
                 ("<tab>" . cdlatex-tab)))

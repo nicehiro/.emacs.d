@@ -49,7 +49,6 @@ Straight.el is used for package management.
   (straight-use-package 'exec-path-from-shell)
 
   (use-package exec-path-from-shell
-    :ensure t
     :config
     (when (memq window-system '(mac ns x))
       ;; Batch all env vars into single shell invocation for speed
@@ -806,8 +805,8 @@ To find files/buffers and apply commands on project, use builtin package ~projec
      :preview-key '(:debounce 0.2 any)
      consult-ripgrep consult-git-grep consult-grep
      consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-recent-file
-     consult--source-project-recent-file
+     consult-source-bookmark consult-source-recent-file
+     consult-source-project-recent-file
      :preview-key (kbd "M-."))
     (advice-add #'register-preview :override #'consult-register-window)
     :preface
